@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\PermissionName;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -37,16 +38,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if ($panel->getId() === 'admin') {
-            return $this->hasAnyRole([
-                'super_admin',
-                'admin',
-                'content_manager',
-                'support',
-                'finance',
-            ]);
-        }
-
-        return false;
+        return match ($panel->getId()) {
+            'admin' => $this->can(PermissionName::AccessAdminPanel->value),
+            'mentor' => $this->can(PermissionName::AccessMentorPanel->value),
+            default => false,
+        };
     }
 }
