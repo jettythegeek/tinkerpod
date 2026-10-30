@@ -1,0 +1,1317 @@
+openapi: 3.1.0
+info:
+  title: TinkerPod API
+  version: 1.0.0-m1
+  description: >-
+    TinkerPod v1 REST API specification for Milestone M1 (Roles, Parent Auth,
+    Child Profile Management, Two-Step Kid Login, PIN Lockout, and Parent Controls).
+    All responses follow the standard `{ success, message, data, errors? }` envelope.
+  contact:
+    name: TinkerPod Engineering
+    url: https://www.tinkerpod.ng
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local Laravel 11 development server
+  - url: https://api.tinkerpod.ng/api/v1
+    description: Production API server
+
+tags:
+  - name: Health
+    description: Service health and readiness checks
+  - name: Parent Auth
+    description: Parent registration, email/phone login, OTP password reset, and session endpoints
+  - name: Parent Children
+    description: Parent-scoped CRUD and security controls (PIN, username, unlock) for child profiles
+  - name: Kid Auth
+    description: Privacy-safe two-step child profile lookup, PIN login, and child profile endpoints
+  - name: Billing
+    description: Parent-scoped billing status endpoints
+
+components:
+  securitySchemes:
+    ParentBearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: SanctumToken
+      description: Sanctum personal access token issued to a parent (`parent:*` abilities).
+    ChildBearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: SanctumToken
+      description: Sanctum personal access token issued to a child (`child:*` abilities, 7-day expiry).
+
+  parameters:
+    ChildPublicId:
+      name: child
+      in: path
+      required: true
+      description: Child public ULID (`public_id`), never the internal auto-increment integer ID.
+      schema:
+        type: string
+        example: 01jb9x7k6m8n2p4q6r8s0t2v4w
+
+  schemas:
+    ApiErrorEnvelope:
+      type: object
+      required:
+        - success
+        - message
+        - data
+      properties:
+        success:
+          type: boolean
+          const: false
+        message:
+          type: string
+          example: The given data was invalid.
+        data:
+          type: "null"
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+    ParentUser:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - phone
+        - roles
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ngozi Okafor
+        email:
+          type: string
+          format: email
+          example: ngozi@example.com
+        phone:
+          type:
+            - string
+            - "null"
+          description: Normalized E.164 Nigerian phone number (+234...)
+          example: "+2348031234567"
+        roles:
+          type: array
+          items:
+            type: string
+          example:
+            - parent
+
+    ParentChild:
+      type: object
+      required:
+        - id
+        - first_name
+        - last_name
+        - birth_date
+        - age_band
+        - theme_flag
+        - avatar
+        - username
+        - pin_failed_attempts
+        - is_locked
+        - locked_until
+      properties:
+        id:
+          type: string
+          description: Public ULID (`public_id`)
+          example: 01jb9x7k6m8n2p4q6r8s0t2v4w
+        first_name:
+          type: string
+          example: Tobi
+        last_name:
+          type:
+            - string
+            - "null"
+          example: Okafor
+        birth_date:
+          type: string
+          format: date
+          example: "2016-05-14"
+        age_band:
+          type: string
+          enum:
+            - 5-7
+            - 8-11
+            - 12-14
+            - 15-18
+          example: 8-11
+        theme_flag:
+          type: string
+          enum:
+            - junior
+            - senior
+          example: junior
+        avatar:
+          type: string
+          enum:
+            - av1.png
+            - av2.png
+            - av3.png
+            - av4.png
+            - av5.png
+            - av6.png
+            - av-girl.png
+          example: av1.png
+        username:
+          type: string
+          example: tobi_codes
+        pin_failed_attempts:
+          type: integer
+          example: 0
+        is_locked:
+          type: boolean
+          example: false
+        locked_until:
+          type:
+            - string
+            - "null"
+          format: date-time
+          example: null
+
+    KidPickerProfile:
+      type: object
+      description: Privacy-safe child summary returned during lookup (never includes last_name or birth_date).
+      required:
+        - id
+        - first_name
+        - avatar
+      properties:
+        id:
+          type: string
+          description: Public ULID (`public_id`)
+          example: 01jb9x7k6m8n2p4q6r8s0t2v4w
+        first_name:
+          type: string
+          example: Tobi
+        avatar:
+          type: string
+          enum:
+            - av1.png
+            - av2.png
+            - av3.png
+            - av4.png
+            - av5.png
+            - av6.png
+            - av-girl.png
+          example: av1.png
+
+    KidAuthenticatedProfile:
+      type: object
+      description: Child profile returned to an authenticated kid session (never includes last_name or birth_date).
+      required:
+        - id
+        - first_name
+        - username
+        - avatar
+        - age_band
+        - theme_flag
+      properties:
+        id:
+          type: string
+          example: 01jb9x7k6m8n2p4q6r8s0t2v4w
+        first_name:
+          type: string
+          example: Tobi
+        username:
+          type: string
+          example: tobi_codes
+        avatar:
+          type: string
+          example: av1.png
+        age_band:
+          type: string
+          enum:
+            - 5-7
+            - 8-11
+            - 12-14
+            - 15-18
+          example: 8-11
+        theme_flag:
+          type: string
+          enum:
+            - junior
+            - senior
+          example: junior
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Service health check
+      operationId: getHealth
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: TinkerPod API is healthy.
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: ok
+                      service:
+                        type: string
+                        example: tinkerpod-api
+                      version:
+                        type: string
+                        example: v1
+
+  /auth/register:
+    post:
+      tags:
+        - Parent Auth
+      summary: Register a new parent account
+      operationId: registerParent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - phone
+                - password
+              properties:
+                name:
+                  type: string
+                  maxLength: 120
+                  example: Ngozi Okafor
+                email:
+                  type: string
+                  format: email
+                  example: ngozi@example.com
+                phone:
+                  type: string
+                  description: Nigerian mobile number in 080..., 234..., or +234... format
+                  example: "08031234567"
+                password:
+                  type: string
+                  minLength: 8
+                  example: SecretPass123!
+                password_confirmation:
+                  type: string
+                  example: SecretPass123!
+      responses:
+        "201":
+          description: Parent account created and parent-scoped Sanctum token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: Parent account created.
+                  data:
+                    type: object
+                    required:
+                      - token
+                      - abilities
+                      - user
+                    properties:
+                      token:
+                        type: string
+                      abilities:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - "parent:*"
+                      user:
+                        $ref: "#/components/schemas/ParentUser"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /auth/login:
+    post:
+      tags:
+        - Parent Auth
+      summary: Sign in as a parent with email or Nigerian phone plus password
+      operationId: loginParent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                identifier:
+                  type: string
+                  description: Parent email address or Nigerian phone number (080..., 234..., +234...)
+                  example: "08031234567"
+                email:
+                  type: string
+                  format: email
+                  description: Optional alias when `identifier` is omitted
+                phone:
+                  type: string
+                  description: Optional alias when `identifier` is omitted
+                password:
+                  type: string
+                  example: SecretPass123!
+      responses:
+        "200":
+          description: Signed in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: Signed in successfully.
+                  data:
+                    type: object
+                    required:
+                      - token
+                      - abilities
+                      - user
+                    properties:
+                      token:
+                        type: string
+                      abilities:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - "parent:*"
+                      user:
+                        $ref: "#/components/schemas/ParentUser"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "429":
+          description: Too many login attempts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /auth/logout:
+    post:
+      tags:
+        - Parent Auth
+      summary: Revoke current parent Sanctum token
+      operationId: logoutParent
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Signed out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: Signed out successfully.
+                  data:
+                    type: "null"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "403":
+          description: Forbidden (e.g. child token used on parent endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /auth/me:
+    get:
+      tags:
+        - Parent Auth
+      summary: Fetch authenticated parent profile
+      operationId: getParentMe
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Authenticated parent profile
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - user
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/ParentUser"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "403":
+          description: Forbidden (requires parent token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /auth/password/forgot:
+    post:
+      tags:
+        - Parent Auth
+      summary: Request a 6-digit password reset code via email or SMS
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: Parent email or Nigerian phone number
+                  example: ngozi@example.com
+                channel:
+                  type: string
+                  enum:
+                    - email
+                    - phone
+      responses:
+        "200":
+          description: Generic confirmation response (hashes 6-digit OTP with 10-minute expiry)
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: If an account matches, we sent a 6-digit reset code.
+                  data:
+                    type: object
+                    properties:
+                      expires_in_minutes:
+                        type: integer
+                        example: 10
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /auth/password/reset:
+    post:
+      tags:
+        - Parent Auth
+      summary: Reset parent password using a 6-digit OTP code
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - password
+              properties:
+                identifier:
+                  type: string
+                  example: ngozi@example.com
+                code:
+                  type: string
+                  pattern: "^[0-9]{6}$"
+                  example: "123456"
+                password:
+                  type: string
+                  minLength: 8
+                  example: BrandNewSecret99!
+      responses:
+        "200":
+          description: Password reset completed and existing tokens revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: Password has been reset. You can now sign in.
+                  data:
+                    type: "null"
+        "422":
+          description: Invalid or expired reset code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /parent/children:
+    get:
+      tags:
+        - Parent Children
+      summary: List all children belonging to the authenticated parent
+      operationId: listParentChildren
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Children list retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - children
+                    properties:
+                      children:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ParentChild"
+    post:
+      tags:
+        - Parent Children
+      summary: Create a child profile under the authenticated parent
+      operationId: createParentChild
+      security:
+        - ParentBearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - birth_date
+                - avatar
+                - username
+                - pin
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 80
+                  example: Tobi
+                last_name:
+                  type:
+                    - string
+                    - "null"
+                  maxLength: 80
+                  example: Okafor
+                birth_date:
+                  type: string
+                  format: date
+                  example: "2016-05-14"
+                age_band:
+                  type: string
+                  enum:
+                    - 5-7
+                    - 8-11
+                    - 12-14
+                    - 15-18
+                theme_flag:
+                  type: string
+                  enum:
+                    - junior
+                    - senior
+                avatar:
+                  type: string
+                  enum:
+                    - av1.png
+                    - av2.png
+                    - av3.png
+                    - av4.png
+                    - av5.png
+                    - av6.png
+                    - av-girl.png
+                  example: av1.png
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 20
+                  example: tobi_codes
+                pin:
+                  type: string
+                  pattern: "^[0-9]{4,6}$"
+                  example: "4829"
+      responses:
+        "201":
+          description: Child profile created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/ParentChild"
+        "422":
+          description: Validation failed (weak PIN, rude/personal username, unapproved avatar)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /parent/children/{child}:
+    parameters:
+      - $ref: "#/components/parameters/ChildPublicId"
+    get:
+      tags:
+        - Parent Children
+      summary: Get a single child profile owned by the parent
+      operationId: getParentChild
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Child profile retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/ParentChild"
+        "403":
+          description: Forbidden (child belongs to another parent)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+    patch:
+      tags:
+        - Parent Children
+      summary: Update a child profile owned by the parent
+      operationId: updateParentChild
+      security:
+        - ParentBearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type:
+                    - string
+                    - "null"
+                birth_date:
+                  type: string
+                  format: date
+                age_band:
+                  type: string
+                  enum:
+                    - 5-7
+                    - 8-11
+                    - 12-14
+                    - 15-18
+                theme_flag:
+                  type: string
+                  enum:
+                    - junior
+                    - senior
+                avatar:
+                  type: string
+                username:
+                  type: string
+                pin:
+                  type: string
+      responses:
+        "200":
+          description: Child profile updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/ParentChild"
+    delete:
+      tags:
+        - Parent Children
+      summary: Remove a child profile owned by the parent
+      operationId: deleteParentChild
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Child profile removed
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+
+  /parent/children/{child}/pin:
+    parameters:
+      - $ref: "#/components/parameters/ChildPublicId"
+    put:
+      tags:
+        - Parent Children
+      summary: Set or reset a child's 4-6 digit PIN (resets lockout state and audit-logs)
+      operationId: updateParentChildPin
+      security:
+        - ParentBearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pin
+              properties:
+                pin:
+                  type: string
+                  pattern: "^[0-9]{4,6}$"
+                  description: 4-6 digit PIN (rejects trivial sequences like 0000 or 1234)
+                  example: "7392"
+      responses:
+        "200":
+          description: Child PIN updated and lockout cleared
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/ParentChild"
+        "422":
+          description: Weak or invalid PIN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /parent/children/{child}/username:
+    parameters:
+      - $ref: "#/components/parameters/ChildPublicId"
+    put:
+      tags:
+        - Parent Children
+      summary: Set or update a child's username (validated by ChildUsernameRule and audit-logged)
+      operationId: updateParentChildUsername
+      security:
+        - ParentBearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 20
+                  example: galaxy_builder
+      responses:
+        "200":
+          description: Child username updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/ParentChild"
+        "422":
+          description: Username rejected by ChildUsernameRule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /parent/children/{child}/unlock:
+    parameters:
+      - $ref: "#/components/parameters/ChildPublicId"
+    post:
+      tags:
+        - Parent Children
+      summary: Unlock a locked child profile and reset failed PIN counters
+      operationId: unlockParentChild
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Child profile unlocked and audit-logged
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/ParentChild"
+
+  /kid/lookup:
+    post:
+      tags:
+        - Kid Auth
+      summary: Step 1 of kid login — resolve child profile(s) by username or parent email/phone
+      operationId: lookupKidProfiles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - identifier
+              properties:
+                identifier:
+                  type: string
+                  description: Child username OR parent email / Nigerian phone number
+                  example: tobi_codes
+      responses:
+        "200":
+          description: Matching privacy-safe child profile(s) returned
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - mode
+                      - profiles
+                    properties:
+                      mode:
+                        type: string
+                        enum:
+                          - single
+                          - picker
+                      profiles:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/KidPickerProfile"
+        "404":
+          description: Unknown identifier (kind, generic message with no account enumeration detail)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/login:
+    post:
+      tags:
+        - Kid Auth
+      summary: Step 2 of kid login — verify PIN and issue a 7-day child-scoped Sanctum token
+      operationId: loginKid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pin
+              properties:
+                profile_id:
+                  type: string
+                  description: Child public ULID returned by `/kid/lookup`
+                  example: 01jb9x7k6m8n2p4q6r8s0t2v4w
+                username:
+                  type: string
+                  description: Child username (alternative to `profile_id`)
+                  example: tobi_codes
+                pin:
+                  type: string
+                  pattern: "^[0-9]{4,6}$"
+                  example: "4829"
+      responses:
+        "200":
+          description: Kid signed in with a `child:*` token
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                    example: Welcome back! Let's start coding.
+                  data:
+                    type: object
+                    required:
+                      - token
+                      - abilities
+                      - expires_at
+                      - child
+                    properties:
+                      token:
+                        type: string
+                      abilities:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - "child:*"
+                      expires_at:
+                        type: string
+                        format: date-time
+                      child:
+                        $ref: "#/components/schemas/KidAuthenticatedProfile"
+        "401":
+          description: Incorrect PIN (increments failed attempt counter)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "423":
+          description: Profile locked after 5 failed attempts (escalating 15m, 1h, 24h)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/me:
+    get:
+      tags:
+        - Kid Auth
+      summary: Get the authenticated child's privacy-safe profile
+      operationId: getKidMe
+      security:
+        - ChildBearerToken: []
+      responses:
+        "200":
+          description: Authenticated child profile
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/KidAuthenticatedProfile"
+        "403":
+          description: Forbidden (requires child token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/username:
+    patch:
+      tags:
+        - Kid Auth
+      summary: Update the authenticated child's own username (validated by ChildUsernameRule and audit-logged)
+      operationId: updateKidUsername
+      security:
+        - ChildBearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 20
+                  example: pixel_pioneer
+      responses:
+        "200":
+          description: Username updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    required:
+                      - child
+                    properties:
+                      child:
+                        $ref: "#/components/schemas/KidAuthenticatedProfile"
+        "422":
+          description: Username rejected with kid-friendly message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /billing/status:
+    get:
+      tags:
+        - Billing
+      summary: Retrieve parent subscription status (blocked for child tokens)
+      operationId: getBillingStatus
+      security:
+        - ParentBearerToken: []
+      responses:
+        "200":
+          description: Billing status retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: none
+        "403":
+          description: Forbidden (child tokens are strictly blocked from billing endpoints)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
