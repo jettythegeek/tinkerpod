@@ -10,6 +10,7 @@ use App\Http\Resources\Api\V1\ParentChildResource;
 use App\Models\Child;
 use App\Models\User;
 use App\Rules\ChildPinRule;
+use App\Rules\ChildUsernameRule;
 use App\Support\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -185,20 +186,9 @@ class ParentChildController extends Controller
      */
     protected function usernameRules(string $firstName, ?string $lastName, ?int $ignoreChildId = null): array
     {
-        unset($firstName, $lastName);
-
-        $uniqueRule = Rule::unique('children', 'username');
-        if ($ignoreChildId !== null) {
-            $uniqueRule = $uniqueRule->ignore($ignoreChildId);
-        }
-
         return [
             'required',
-            'string',
-            'min:3',
-            'max:20',
-            'regex:/^[a-zA-Z0-9_.]+$/',
-            $uniqueRule,
+            new ChildUsernameRule($firstName, $lastName, $ignoreChildId),
         ];
     }
 

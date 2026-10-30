@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\Auth\ParentAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\Kid\KidProfileController;
 use App\Http\Controllers\Api\V1\Parent\ParentChildController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,5 +43,13 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/children/{child}', [ParentChildController::class, 'show'])->name('api.v1.parent.children.show');
             Route::match(['put', 'patch'], '/children/{child}', [ParentChildController::class, 'update'])->name('api.v1.parent.children.update');
             Route::delete('/children/{child}', [ParentChildController::class, 'destroy'])->name('api.v1.parent.children.destroy');
+        });
+
+    Route::prefix('kid')
+        ->middleware(['auth:sanctum', 'ability:child:*'])
+        ->group(function (): void {
+            Route::get('/me', [KidProfileController::class, 'me'])->name('api.v1.kid.me');
+            Route::match(['put', 'patch'], '/username', [KidProfileController::class, 'updateUsername'])->name('api.v1.kid.username');
+            Route::match(['put', 'patch'], '/profile/username', [KidProfileController::class, 'updateUsername']);
         });
 });
