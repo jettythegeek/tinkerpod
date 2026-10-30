@@ -1,0 +1,171 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  commit-identity:
+    name: Commit Identity & Design Manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Verify all commits authored & committed by jettythegeek without Co-authored-by
+        run: sh ./scripts/check-commit-identity.sh HEAD
+
+      - name: Verify commit-msg hook rejects fixture commit with Co-authored-by trailer
+        run: |
+          TMP_TRAILER=$(mktemp)
+          printf "M0.2 fixture commit\n\nCo-authored-by: Bot <bot@example.com>\n" > "$TMP_TRAILER"
+          if GIT_AUTHOR_NAME="jettythegeek" GIT_AUTHOR_EMAIL="jettythegeek@users.noreply.github.com" \
+             GIT_COMMITTER_NAME="jettythegeek" GIT_COMMITTER_EMAIL="jettythegeek@users.noreply.github.com" \
+             sh ./.githooks/commit-msg "$TMP_TRAILER"; then
+            echo "ERROR: commit-msg hook failed to reject Co-authored-by fixture!" >&2
+            rm -f "$TMP_TRAILER"
+            exit 1
+          fi
+          rm -f "$TMP_TRAILER"
+
+      - name: Verify commit-msg hook rejects fixture commit with non-jettythegeek author
+        run: |
+          TMP_CLEAN=$(mktemp)
+          printf "M0.2 fixture commit\n" > "$TMP_CLEAN"
+          if GIT_AUTHOR_NAME="Cursor Agent" GIT_AUTHOR_EMAIL="cursoragent@cursor.com" \
+             GIT_COMMITTER_NAME="Cursor Agent" GIT_COMMITTER_EMAIL="cursoragent@cursor.com" \
+             sh ./.githooks/commit-msg "$TMP_CLEAN"; then
+            echo "ERROR: commit-msg hook failed to reject non-jettythegeek fixture!" >&2
+            rm -f "$TMP_CLEAN"
+            exit 1
+          fi
+          rm -f "$TMP_CLEAN"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify design/MANIFEST.md sha256 checksums
+        run: node ./scripts/verify-design-manifest.mjs
+
+  secret-scan:
+    name: Gitleaks Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install and run Gitleaks
+        run: |
+          GITLEAKS_VERSION="8.24.0"
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" -o /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /usr/local/bin gitleaks
+          gitleaks version
+          gitleaks git --verbose --redact .
+          gitleaks dir --verbose --redact .
+
+  api:
+    name: API (Pint, PHPStan, PHPUnit)
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: tinkerpod_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, curl, zip, pcntl, posix, redis
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run Laravel Pint
+        run: ./vendor/bin/pint --test
+
+      - name: Run PHPStan (level 6)
+        run: ./vendor/bin/phpstan analyse --memory-limit=1G
+
+      - name: Run PHPUnit on MySQL + Redis
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: tinkerpod_test
+          DB_USERNAME: root
+          DB_PASSWORD: ''
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+        run: php artisan test
+
+  app:
+    name: App (TypeScript, ESLint, Jest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Unit tests (Jest)
+        run: npm test
