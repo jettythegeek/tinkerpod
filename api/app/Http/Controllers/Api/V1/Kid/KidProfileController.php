@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\KidProfileResource;
 use App\Models\Child;
 use App\Rules\ChildUsernameRule;
+use App\Services\AuditLogger;
 use App\Support\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +29,7 @@ class KidProfileController extends Controller
         );
     }
 
-    public function updateUsername(Request $request): JsonResponse
+    public function updateUsername(Request $request, AuditLogger $auditLogger): JsonResponse
     {
         $child = $this->requireChild();
 
@@ -44,8 +45,21 @@ class KidProfileController extends Controller
             ],
         ]);
 
+        $previousUsername = $child->username;
         $child->username = $validated['username'];
         $child->save();
+
+        $auditLogger->log(
+            action: 'child.username.updated',
+            actor: $child,
+            subject: $child,
+            metadata: [
+                'old_username' => $previousUsername,
+                'new_username' => $child->username,
+                'source' => 'kid.self',
+            ],
+            request: $request,
+        );
 
         return ApiResponse::success(
             message: 'Your new username is ready!',
