@@ -131,8 +131,25 @@ class ChildUsernameRule implements ValidationRule
     private function containsProfanity(string $username): bool
     {
         $variants = $this->normalizedVariants($username);
+        $tokenVariants = $this->tokenizedVariants($username);
 
         foreach (self::profanityWords() as $badWord) {
+            if (strlen($badWord) <= 3) {
+                foreach ($tokenVariants as $token) {
+                    if ($token === $badWord) {
+                        return true;
+                    }
+                }
+
+                foreach ($variants as $variant) {
+                    if ($variant === $badWord) {
+                        return true;
+                    }
+                }
+
+                continue;
+            }
+
             foreach ($variants as $variant) {
                 if (str_contains($variant, $badWord)) {
                     return true;
@@ -141,6 +158,40 @@ class ChildUsernameRule implements ValidationRule
         }
 
         return false;
+    }
+
+    /**
+     * Extract individual word tokens (split by `_`, `.`, or digits) with look-alike normalization.
+     *
+     * @return list<string>
+     */
+    private function tokenizedVariants(string $raw): array
+    {
+        $parts = preg_split('/[_.0-9]+/', strtolower($raw)) ?: [];
+        $tokens = [];
+
+        foreach ($parts as $part) {
+            if ($part !== '') {
+                $tokens[] = $part;
+            }
+        }
+
+        $rawTokens = preg_split('/[_.]+/', strtolower($raw)) ?: [];
+        foreach ($rawTokens as $rawToken) {
+            if ($rawToken === '') {
+                continue;
+            }
+            $tokens[] = strtr($rawToken, [
+                '0' => 'o',
+                '1' => 'i',
+                '3' => 'e',
+                '4' => 'a',
+                '5' => 's',
+                '@' => 'a',
+            ]);
+        }
+
+        return array_values(array_unique($tokens));
     }
 
     /**

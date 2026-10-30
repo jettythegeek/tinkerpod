@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\Kid\KidAuthController;
 use App\Http\Controllers\Api\V1\Kid\KidProfileController;
 use App\Http\Controllers\Api\V1\Parent\ParentChildController;
+use App\Support\ApiResponse;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -30,14 +31,14 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/reset-password', [ParentAuthController::class, 'resetPassword'])
             ->middleware('throttle:password-reset-verify');
 
-        Route::middleware(['auth:sanctum', 'ability:parent:*'])->group(function (): void {
+        Route::middleware(['auth:sanctum', 'parent.token'])->group(function (): void {
             Route::post('/logout', [ParentAuthController::class, 'logout'])->name('api.v1.auth.logout');
             Route::get('/me', [ParentAuthController::class, 'me'])->name('api.v1.auth.me');
         });
     });
 
     Route::prefix('parent')
-        ->middleware(['auth:sanctum', 'ability:parent:*'])
+        ->middleware(['auth:sanctum', 'parent.token'])
         ->group(function (): void {
             Route::get('/children', [ParentChildController::class, 'index'])->name('api.v1.parent.children.index');
             Route::post('/children', [ParentChildController::class, 'store'])->name('api.v1.parent.children.store');
@@ -49,6 +50,15 @@ Route::prefix('v1')->group(function (): void {
             Route::delete('/children/{child}', [ParentChildController::class, 'destroy'])->name('api.v1.parent.children.destroy');
         });
 
+    Route::prefix('billing')
+        ->middleware(['auth:sanctum', 'parent.token'])
+        ->group(function (): void {
+            Route::get('/status', static fn () => ApiResponse::success(
+                data: ['status' => 'none'],
+                message: 'Billing status retrieved.',
+            ))->name('api.v1.billing.status');
+        });
+
     Route::prefix('kid')->group(function (): void {
         Route::post('/lookup', [KidAuthController::class, 'lookup'])
             ->middleware('throttle:kid-lookup')
@@ -57,7 +67,7 @@ Route::prefix('v1')->group(function (): void {
             ->middleware('throttle:kid-login')
             ->name('api.v1.kid.login');
 
-        Route::middleware(['auth:sanctum', 'ability:child:*'])->group(function (): void {
+        Route::middleware(['auth:sanctum', 'child.token'])->group(function (): void {
             Route::get('/me', [KidProfileController::class, 'me'])->name('api.v1.kid.me');
             Route::match(['put', 'patch'], '/username', [KidProfileController::class, 'updateUsername'])->name('api.v1.kid.username');
             Route::match(['put', 'patch'], '/profile/username', [KidProfileController::class, 'updateUsername']);

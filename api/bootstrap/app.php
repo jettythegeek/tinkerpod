@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\EnsureChildToken;
+use App\Http\Middleware\EnsureParentToken;
 use App\Support\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -25,6 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
+            'parent.token' => EnsureParentToken::class,
+            'child.token' => EnsureChildToken::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
