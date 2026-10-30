@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/nunito';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider } from './src/features/auth/AuthContext';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { ThemeProvider } from './src/theme';
 
@@ -36,8 +37,10 @@ export default function App(): React.JSX.Element {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider initialMode="junior">
-          <RootNavigator />
-          <StatusBar style="light" />
+          <AuthProvider>
+            <RootNavigator />
+            <StatusBar style="light" />
+          </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
