@@ -46,6 +46,23 @@ jobs:
           fi
           rm -f "$TMP_CLEAN"
 
+      - name: Verify check-commit-identity.sh rejects a throwaway commit with Co-authored-by in a temp repo
+        run: |
+          REPO_ROOT="$(pwd)"
+          TMP_REPO="$(mktemp -d)"
+          (
+            cd "$TMP_REPO"
+            git init -q
+            git config user.name "jettythegeek"
+            git config user.email "jettythegeek@users.noreply.github.com"
+            git commit --allow-empty -q -m "$(printf 'Throwaway fixture\n\nCo-authored-by: Bot <bot@example.com>')"
+            if sh "$REPO_ROOT/scripts/check-commit-identity.sh" HEAD; then
+              echo "ERROR: check-commit-identity.sh failed to reject throwaway commit with Co-authored-by trailer!" >&2
+              exit 1
+            fi
+          )
+          rm -rf "$TMP_REPO"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -109,7 +126,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.3'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, curl, zip, pcntl, posix, redis
           coverage: none
           tools: composer:v2

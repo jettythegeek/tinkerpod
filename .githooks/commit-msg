@@ -22,21 +22,15 @@ if [ "$COMMITTER_NAME" != "jettythegeek" ]; then
   exit 1
 fi
 
-case "$AUTHOR_EMAIL" in
-  *jettythegeek*) ;;
-  *)
-    echo "ERROR: Commit author email must belong to jettythegeek (got '${AUTHOR_EMAIL}')." >&2
-    exit 1
-    ;;
-esac
+if [ "$AUTHOR_EMAIL" != "jettythegeek@users.noreply.github.com" ]; then
+  echo "ERROR: Commit author email must be 'jettythegeek@users.noreply.github.com' (got '${AUTHOR_EMAIL}')." >&2
+  exit 1
+fi
 
-case "$COMMITTER_EMAIL" in
-  *jettythegeek*) ;;
-  *)
-    echo "ERROR: Committer email must belong to jettythegeek (got '${COMMITTER_EMAIL}')." >&2
-    exit 1
-    ;;
-esac
+if [ "$COMMITTER_EMAIL" != "jettythegeek@users.noreply.github.com" ]; then
+  echo "ERROR: Committer email must be 'jettythegeek@users.noreply.github.com' (got '${COMMITTER_EMAIL}')." >&2
+  exit 1
+fi
 
 if grep -iqE '(^|[[:space:]])co-authored-by:' "$MSG_FILE"; then
   echo "ERROR: 'Co-authored-by' trailers are forbidden in this repository." >&2

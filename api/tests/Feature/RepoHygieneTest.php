@@ -219,6 +219,14 @@ class RepoHygieneTest extends TestCase
             $badAuthorProcess->run();
             $this->assertNotSame(0, $badAuthorProcess->getExitCode(), 'Hook must reject non-jettythegeek author.');
 
+            // 2b. Rejects non-exact email even if it contains jettythegeek
+            $badEmailEnv = array_merge($baseEnv, [
+                'GIT_AUTHOR_EMAIL' => 'jettythegeek@example.com',
+            ]);
+            $badEmailProcess = new Process([$shBinary, $hookPath, $fixtureClean], $root, $badEmailEnv);
+            $badEmailProcess->run();
+            $this->assertNotSame(0, $badEmailProcess->getExitCode(), 'Hook must require exact jettythegeek@users.noreply.github.com email.');
+
             // 3. Accepts clean jettythegeek commit
             $cleanProcess = new Process([$shBinary, $hookPath, $fixtureClean], $root, $baseEnv);
             $cleanProcess->run();

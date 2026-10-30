@@ -20,21 +20,15 @@ for sha in $(git rev-list "$RANGE"); do
     exit 1
   fi
 
-  case "$AE" in
-    *jettythegeek*) ;;
-    *)
-      echo "ERROR: Commit $sha has invalid author email '$AE'." >&2
-      exit 1
-      ;;
-  esac
+  if [ "$AE" != "jettythegeek@users.noreply.github.com" ]; then
+    echo "ERROR: Commit $sha has invalid author email '$AE' (expected 'jettythegeek@users.noreply.github.com')." >&2
+    exit 1
+  fi
 
-  case "$CE" in
-    *jettythegeek*) ;;
-    *)
-      echo "ERROR: Commit $sha has invalid committer email '$CE'." >&2
-      exit 1
-      ;;
-  esac
+  if [ "$CE" != "jettythegeek@users.noreply.github.com" ]; then
+    echo "ERROR: Commit $sha has invalid committer email '$CE' (expected 'jettythegeek@users.noreply.github.com')." >&2
+    exit 1
+  fi
 
   if printf '%s\n' "$BODY" | grep -iqE '(^|[[:space:]])co-authored-by:'; then
     echo "ERROR: Commit $sha contains a forbidden Co-authored-by trailer." >&2
