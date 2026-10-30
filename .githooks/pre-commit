@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+set -eu
+
+AUTHOR_NAME="${GIT_AUTHOR_NAME:-$(git config user.name || true)}"
+AUTHOR_EMAIL="${GIT_AUTHOR_EMAIL:-$(git config user.email || true)}"
+COMMITTER_NAME="${GIT_COMMITTER_NAME:-$(git config user.name || true)}"
+COMMITTER_EMAIL="${GIT_COMMITTER_EMAIL:-$(git config user.email || true)}"
+
+if [ "$AUTHOR_NAME" != "jettythegeek" ] || [ "$COMMITTER_NAME" != "jettythegeek" ]; then
+  echo "ERROR: Git user.name must be 'jettythegeek' (author='${AUTHOR_NAME}', committer='${COMMITTER_NAME}')." >&2
+  exit 1
+fi
+
+case "$AUTHOR_EMAIL" in
+  *jettythegeek*) ;;
+  *)
+    echo "ERROR: Git author email must belong to jettythegeek (got '${AUTHOR_EMAIL}')." >&2
+    exit 1
+    ;;
+esac
+
+case "$COMMITTER_EMAIL" in
+  *jettythegeek*) ;;
+  *)
+    echo "ERROR: Git committer email must belong to jettythegeek (got '${COMMITTER_EMAIL}')." >&2
+    exit 1
+    ;;
+esac
+
+STAGED_ENV=$(git diff --cached --name-only | grep -E '(^|/)(\.env|\.env\..*)$' | grep -vE '\.env\.example$' || true)
+if [ -n "$STAGED_ENV" ]; then
+  echo "ERROR: Refusing to commit .env file(s):" >&2
+  echo "$STAGED_ENV" >&2
+  exit 1
+fi
+
+exit 0
