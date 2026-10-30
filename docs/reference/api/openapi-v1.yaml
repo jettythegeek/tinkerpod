@@ -1,0 +1,269 @@
+openapi: 3.1.0
+info:
+  title: TinkerPod API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8001/api/v1
+paths:
+  /plans:
+    get:
+      summary: List active subscription plans
+      responses:
+        '200': { description: Active plans with display prices and minor-unit amounts }
+  /tracks:
+    get:
+      summary: Public read-only catalogue of published learning tracks
+      parameters:
+        - { name: per_page, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 50, default: 15 } }
+      responses:
+        '200':
+          description: >
+            Published tracks ordered by sort_order, wrapped in the success/message/data
+            envelope with meta (current_page, per_page, total, last_page) and links.
+            Drafts and archived tracks are never returned. No child data is exposed.
+  /courses:
+    get:
+      summary: Public read-only catalogue of published courses
+      parameters:
+        - { name: pod, in: query, required: false, schema: { type: string, maxLength: 140 }, description: Filter by Pod slug }
+        - { name: track, in: query, required: false, schema: { type: string, maxLength: 140 }, description: Filter by Track slug }
+        - { name: level, in: query, required: false, schema: { type: string, enum: [beginner, intermediate, advanced] }, description: Filter by learning level }
+        - { name: age, in: query, required: false, schema: { type: integer, minimum: 5, maximum: 18 }, description: Only courses whose minimum_age <= age <= maximum_age }
+        - { name: per_page, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 50, default: 15 } }
+      responses:
+        '200':
+          description: >
+            Published courses ordered by sort_order, wrapped in the success/message/data
+            envelope with meta and links. Only published content is returned.
+        '422': { description: Invalid filter value (level, age, or length) }
+  /courses/{slug}:
+    get:
+      summary: Public course detail with ordered published modules and lessons
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string, pattern: '[A-Za-z0-9-]+' } }
+      responses:
+        '200':
+          description: >
+            Course with its published modules and their published lessons (each ordered by
+            sort_order). Lesson media bodies and storage paths are never exposed; access.requires_subscription
+            is fixed true for P2.1. No child data is returned.
+        '404': { description: Course not found (unknown OR unpublished slugs share this response so drafts cannot be probed) }
+  /parent/subscription:
+    get:
+      summary: Get the authenticated parent's current access-granting subscription and entitlement gates
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: >
+            Subscription or null when no access, plus has_access, can_add_child,
+            active_children_count, max_children, and max_active_pods. Without paid
+            access, onboarding defaults are max_children=1 and max_active_pods=1.
+        '403': { description: Not an active parent }
+  /subscriptions/initialize:
+    post:
+      summary: Create a pending transaction and Paystack authorization URL
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [plan_id]
+              properties:
+                plan_id: { type: integer }
+                callback_url: { type: string, format: uri }
+      responses:
+        '201': { description: Checkout initialized; access not yet granted }
+        '422': { description: Plan unavailable or validation failed }
+        '502': { description: Paystack initialize failed }
+  /subscriptions/verify:
+    post:
+      summary: Confirm payment with Paystack and settle access idempotently
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reference]
+              properties:
+                reference: { type: string }
+      responses:
+        '200': { description: Settled or already settled }
+        '409': { description: Payment not confirmed or amount mismatch }
+  /subscriptions/cancel:
+    post:
+      summary: Cancel renewal while preserving paid access until ends_at
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Renewal cancelled }
+        '409': { description: No cancellable subscription }
+  /payments/paystack/webhook:
+    post:
+      summary: Idempotent Paystack webhook settlement
+      parameters:
+        - { name: x-paystack-signature, in: header, required: true, schema: { type: string } }
+      responses:
+        '200': { description: Webhook accepted }
+        '403': { description: Invalid signature }
+        '409': { description: Amount/currency conflict }
+  /parent/children/{child}/pod-recommendation:
+    get:
+      summary: Get an explainable, age-eligible primary Pod recommendation
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: child, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200': { description: Recommendation and eligible alternatives }
+        '403': { description: Child is not owned by this parent }
+  /parent/children/{child}/pod-membership:
+    post:
+      summary: Join an eligible primary Pod idempotently
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: child, in: path, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pod_id]
+              properties:
+                pod_id: { type: integer }
+      responses:
+        '201': { description: Primary membership and starting ranks created }
+        '200': { description: Existing matching membership returned }
+        '409':
+          description: >
+            A different primary Pod already exists, Pod capacity is unavailable,
+            or plan max_active_pods would be exceeded
+  /parent/children/{child}/enrollments:
+    get:
+      summary: List the child's course enrollments
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: child, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200':
+          description: >
+            Enrollments ordered by started_at descending with pagination meta/links.
+            Returns only owned child enrollments.
+        '403': { description: Child not owned by this parent }
+    post:
+      summary: Enroll child in a published course (idempotent)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: child, in: path, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [course_id]
+              properties:
+                course_id: { type: integer }
+                source: { type: string, enum: [subscription, manual] }
+      responses:
+        '201': { description: Child enrolled successfully }
+        '200': { description: Child already enrolled (idempotent) }
+        '403':
+          description: >
+            Enrollment not allowed. errors.reason contains a machine code:
+            not_published, age_mismatch, no_pod_membership, or no_subscription
+        '422': { description: Validation failed (missing/invalid course_id) }
+  /parent/children/{child}/available-courses:
+    get:
+      summary: Published courses the child is eligible to enroll in right now
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: child, in: path, required: true, schema: { type: integer } }
+        - { name: per_page, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 50, default: 15 } }
+      responses:
+        '200':
+          description: >
+            Filtered catalogue: published, age-eligible, within child's active Pods,
+            excludes already-enrolled courses. Without subscription only free-preview
+            courses appear. Paginated with meta/links.
+        '403': { description: Child not owned by this parent }
+  /parent/children:
+    get:
+      summary: List the authenticated parent's child profiles
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Owned child profiles }
+    post:
+      summary: Create a child profile within plan or onboarding child limits
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201': { description: Child profile created }
+        '422':
+          description: >
+            Validation failed, or children limit reached (errors.children).
+            One active child is allowed before payment; plan.max_children applies after.
+  /parent/children/{child}:
+    parameters:
+      - { name: child, in: path, required: true, schema: { type: integer } }
+    get:
+      summary: View an owned child profile
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Child profile }
+        '403': { description: Not owned by this household }
+    put:
+      summary: Update an owned child profile
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Child profile updated }
+    delete:
+      summary: Archive an owned child profile
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Child profile archived }
+  /auth/register:
+    post:
+      summary: Register a parent account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+      responses:
+        '201': { description: Parent account and bearer token created }
+        '422': { description: Validation failed }
+  /auth/login:
+    post:
+      summary: Create a bearer-token session
+      responses:
+        '200': { description: Authenticated }
+        '401': { description: Invalid credentials or inactive account }
+  /me:
+    get:
+      summary: Return the authenticated account
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Current user }
+        '401': { description: Unauthenticated }
+  /auth/logout:
+    post:
+      summary: Revoke the current bearer token
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Logged out }
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer }
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [name, email, password, password_confirmation]
+      properties:
+        name: { type: string, maxLength: 120 }
+        email: { type: string, format: email }
+        phone: { type: [string, 'null'] }
+        password: { type: string, minLength: 8 }
+        password_confirmation: { type: string }
+        device_name: { type: string }

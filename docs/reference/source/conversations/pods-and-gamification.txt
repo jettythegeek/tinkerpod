@@ -1,0 +1,1243 @@
+Exactly. This is where TinkerPod can become very unique.
+
+A **Pod** should not just mean “a group of children assigned to a mentor.”
+
+That is too basic.
+
+In TinkerPod, a **Pod should be a learning tribe around a skill path**.
+
+So when a child joins TinkerPod, they do not just join “the app.” They join a world.
+
+Examples:
+
+* **Coding Pod**
+* **AI Pod**
+* **Design Pod**
+* **Robotics Pod**
+* **Game Builder Pod**
+* **Young Founders Pod**
+* **Animation Pod**
+* **Web/App Pod**
+* **Problem Solvers Pod**
+
+Each Pod has its own learning journey, mentor support, projects, challenges, badges, ranks, leaderboard, and community identity.
+
+That makes the product feel alive.
+
+# What is a Pod?
+
+A **Pod** is a structured learning community where kids learn a specific tech skill, complete projects, get mentor support, earn badges/ranks, and compete on leaderboards.
+
+In simple terms:
+
+> A Pod is where a child belongs, learns, builds, competes, and grows.
+
+So the Pod contains:
+
+1. **A skill focus**
+2. **A learning pathway**
+3. **Courses**
+4. **Projects**
+5. **Mentors**
+6. **Live classes**
+7. **Challenges**
+8. **Badges**
+9. **Ranks**
+10. **Leaderboard**
+11. **Progress system**
+12. **Community/showcase**
+13. **Recommended kits/tools**
+
+That is much richer.
+
+---
+
+# How Pods should work
+
+When a parent adds a child, the app should ask:
+
+* What is your child interested in?
+* What age group is your child?
+* What level is your child?
+* What would your child love to build?
+
+Example interests:
+
+* Games
+* Websites
+* Robots
+* AI tools
+* Designs
+* Animations
+* Apps
+* Business ideas
+* Problem-solving
+
+Based on the answer, the app recommends a Pod.
+
+Example:
+
+> Your child looks like a great fit for the **Coding Pod**.
+
+Parent can accept or choose another Pod.
+
+A child can start with one main Pod, then later join more Pods depending on the subscription plan.
+
+---
+
+# Pod types
+
+## 1. Coding Pod
+
+For kids learning programming, logic, Scratch, HTML/CSS, JavaScript, and games.
+
+Contains:
+
+* Scratch basics
+* Game building
+* HTML/CSS
+* JavaScript basics
+* Logic challenges
+* Coding projects
+
+Example projects:
+
+* Build your first animation
+* Build a catching game
+* Build a quiz app
+* Build your first website
+
+## 2. AI Pod
+
+For kids learning how to use AI creatively and responsibly.
+
+Contains:
+
+* What is AI?
+* Prompting for kids
+* AI storytelling
+* AI image ideas
+* AI research
+* AI project building
+* Simple AI tools
+
+Example projects:
+
+* Create an AI storybook
+* Build an AI study assistant idea
+* Design an AI helper for your school
+* Create prompts for a useful problem
+
+## 3. Design Pod
+
+For kids learning visual design, UI/UX, digital creativity, Canva, app screens, and product thinking.
+
+Contains:
+
+* Design basics
+* Colour and layout
+* Poster design
+* App screen design
+* User experience
+* Digital storytelling
+
+Example projects:
+
+* Design a school event poster
+* Design your first app screen
+* Redesign a simple mobile app
+* Create a brand for your idea
+
+## 4. Robotics Pod
+
+For kids learning robotics, electronics, hardware thinking, sensors, movement, and STEM projects.
+
+Contains:
+
+* Robotics basics
+* Parts of a robot
+* Sensors
+* Motion
+* Logic
+* Robot challenges
+
+Example projects:
+
+* Build a simple robot car
+* Create an obstacle detector
+* Design a smart bin idea
+* Build a movement challenge
+
+## 5. Young Founders Pod
+
+For older kids/teens learning how to identify problems, ideate, build solutions, and pitch.
+
+Contains:
+
+* Problem identification
+* Ideation
+* Product thinking
+* App idea development
+* Business model basics
+* Pitching
+* Prototype building
+
+Example projects:
+
+* Find a problem in your school/community
+* Design a tech solution
+* Create a simple prototype
+* Pitch your idea
+
+This one is powerful because it turns TinkerPod from just a learning app into an innovation pipeline.
+
+---
+
+# What should be inside every Pod?
+
+Each Pod should have the same structure so the app is consistent.
+
+## 1. Pod Identity
+
+Each Pod should have:
+
+* Pod name
+* Pod icon
+* Pod colour
+* Pod description
+* Age range
+* Skill level
+* Main outcome
+* Pod slogan
+
+Example:
+
+**Coding Pod**
+Slogan: *Build games, websites and apps with code.*
+Colour: Blue/Purple
+Icon: Code brackets
+
+**AI Pod**
+Slogan: *Use smart tools to create and solve problems.*
+Colour: Green/Teal
+Icon: Robot/brain
+
+**Robotics Pod**
+Slogan: *Build machines that move, think and respond.*
+Colour: Yellow/Orange
+Icon: Robot/gear
+
+**Design Pod**
+Slogan: *Create beautiful digital ideas and app experiences.*
+Colour: Coral/Purple
+Icon: Pencil/layout
+
+---
+
+## 2. Pod Learning Path
+
+Each Pod should have a structured learning path.
+
+Example:
+
+### Coding Pod Path
+
+**Level 1: Starter**
+
+* What is coding?
+* Commands and logic
+* Build your first animation
+
+**Level 2: Builder**
+
+* Loops
+* Events
+* Game mechanics
+* Build your first game
+
+**Level 3: Creator**
+
+* Variables
+* Scores
+* Simple websites
+* Build a quiz app
+
+**Level 4: Champion**
+
+* Advanced project
+* Debugging
+* Present your project
+
+This is where ranks can connect beautifully.
+
+---
+
+## 3. Courses
+
+A Pod contains courses.
+
+Example:
+
+**Coding Pod Courses**
+
+* Scratch Starter
+* Game Builder Basics
+* HTML & CSS for Kids
+* JavaScript Starter
+* Mini App Projects
+
+**AI Pod Courses**
+
+* AI for Kids
+* Prompting Basics
+* AI Storytelling
+* AI for School Projects
+* Build with AI
+
+**Design Pod Courses**
+
+* Design Basics
+* Canva for Kids
+* UI/UX Starter
+* App Screen Design
+* Digital Art Projects
+
+A course belongs to one or more Pods, but for MVP, one course can belong to one Pod first.
+
+---
+
+## 4. Projects
+
+Every Pod should have projects.
+
+Types of Pod projects:
+
+* Weekly mini tasks
+* Monthly build project
+* Pod challenge
+* Capstone project
+* Team project
+* Showcase project
+
+This is what makes TinkerPod different from normal course apps.
+
+A child should always have a current project.
+
+Example:
+
+> Current Project: Build a simple game that teaches road safety.
+
+Or:
+
+> Current Project: Design an app that helps students report bullying.
+
+---
+
+## 5. Mentors
+
+Each Pod should have mentors.
+
+There are two levels here:
+
+### Pod Mentor
+
+The mentor assigned to a Pod.
+
+Their work:
+
+* Guide learners
+* Review projects
+* Give feedback
+* Host live classes
+* Encourage inactive kids
+* Recommend next steps
+
+### Pod Lead
+
+For bigger pods later, one senior mentor can manage multiple mentors.
+
+Example:
+
+* AI Pod Lead
+* Coding Pod Lead
+* Robotics Pod Lead
+
+A Pod can have:
+
+* One lead mentor
+* Multiple support mentors
+* Many children
+
+For MVP:
+
+> 1 mentor can handle 20–30 children in one Pod group.
+
+---
+
+## 6. Live Classes
+
+Each Pod should have its own live classes.
+
+Example:
+
+**Coding Pod Live**
+
+* Saturday 10am: Scratch/Game class
+* Sunday 4pm: Project review session
+
+**AI Pod Live**
+
+* Saturday 12pm: AI creativity class
+* Sunday 5pm: Build with AI session
+
+Live classes should be attached to:
+
+* A Pod
+* A course
+* A project
+* A mentor/instructor
+
+So the app can show:
+
+> Your next Coding Pod Live class is Saturday by 10am.
+
+---
+
+## 7. Challenges
+
+This is important for gamification.
+
+Each Pod should have challenges.
+
+Examples:
+
+### Coding Pod Challenges
+
+* 7-Day Code Streak
+* Build a Game Challenge
+* Debug This Code
+* Add a Scoreboard Challenge
+
+### Design Pod Challenges
+
+* Redesign This App
+* Poster Challenge
+* Colour Match Challenge
+* UI Card Design Challenge
+
+### AI Pod Challenges
+
+* Best Prompt Challenge
+* AI Story Challenge
+* AI Helper Idea Challenge
+
+### Robotics Pod Challenges
+
+* Make It Move Challenge
+* Obstacle Avoidance Challenge
+* Sensor Challenge
+
+Challenges help kids earn points faster.
+
+---
+
+# Gamification: badges, ranks, points and leaderboard
+
+Yes. We should add ranks.
+
+Badges alone are good, but ranks make the child want to climb.
+
+The gamification system should have four parts:
+
+1. **XP Points**
+2. **Badges**
+3. **Ranks**
+4. **Leaderboards**
+
+---
+
+# 1. XP Points
+
+XP means experience points.
+
+Kids earn XP for actions.
+
+Example:
+
+| Action                           |          XP |
+| -------------------------------- | ----------: |
+| Complete a lesson                |       10 XP |
+| Complete a quiz                  |       15 XP |
+| Score above 80% in quiz          | 10 bonus XP |
+| Submit a project                 |       50 XP |
+| Project approved                 |      100 XP |
+| Project rated excellent          |      150 XP |
+| Attend live class                |       25 XP |
+| Complete weekly challenge        |       75 XP |
+| Maintain 7-day streak            |       50 XP |
+| Help/participate in pod activity |       20 XP |
+| Complete a course                |      200 XP |
+| Complete a Pod level             |      500 XP |
+
+XP drives ranking and leaderboard position.
+
+---
+
+# 2. Badges
+
+Badges are achievements for specific milestones.
+
+Examples:
+
+## General Badges
+
+* First Lesson Badge
+* First Project Badge
+* 7-Day Streak Badge
+* Live Class Star
+* Project Finisher
+* Mentor’s Pick
+* Creative Thinker
+* Problem Solver
+* Fast Learner
+
+## Pod-Specific Badges
+
+### Coding Pod
+
+* Code Starter
+* Scratch Builder
+* Game Maker
+* Debug Hero
+* Website Starter
+
+### AI Pod
+
+* Prompt Explorer
+* AI Story Maker
+* Smart Tool Builder
+* Responsible AI Learner
+
+### Robotics Pod
+
+* Robot Rookie
+* Sensor Starter
+* Motion Maker
+* Circuit Builder
+
+### Design Pod
+
+* Colour Explorer
+* Layout Builder
+* UI Starter
+* Creative Designer
+
+### Young Founders Pod
+
+* Idea Hunter
+* Problem Solver
+* Prototype Builder
+* Pitch Starter
+* Young Founder
+
+Badges should be visual and shareable.
+
+---
+
+# 3. Ranks
+
+Ranks show the child’s growth level.
+
+A rank is broader than a badge.
+
+A badge says:
+
+> You achieved this thing.
+
+A rank says:
+
+> This is your current level in the TinkerPod world.
+
+Recommended TinkerPod rank structure:
+
+## Overall TinkerPod Ranks
+
+1. **Tinker Starter**
+2. **Curious Builder**
+3. **Skill Explorer**
+4. **Project Maker**
+5. **Problem Solver**
+6. **Pod Champion**
+7. **Tech Creator**
+8. **Innovation Leader**
+9. **Young Founder**
+10. **TinkerPod Legend**
+
+Each rank is unlocked by XP + required achievements.
+
+Example:
+
+| Rank              | Requirement                               |
+| ----------------- | ----------------------------------------- |
+| Tinker Starter    | Join TinkerPod                            |
+| Curious Builder   | 100 XP + complete 3 lessons               |
+| Skill Explorer    | 300 XP + complete 1 mini project          |
+| Project Maker     | 700 XP + submit 2 projects                |
+| Problem Solver    | 1,200 XP + complete 1 challenge           |
+| Pod Champion      | 2,000 XP + project approved by mentor     |
+| Tech Creator      | 3,500 XP + complete 1 full course         |
+| Innovation Leader | 5,000 XP + complete 3 projects            |
+| Young Founder     | 7,500 XP + pitch/build a solution project |
+| TinkerPod Legend  | 10,000 XP + complete a capstone project   |
+
+This gives kids something to chase.
+
+---
+
+# Pod-specific ranks
+
+This is where it becomes rich.
+
+Each Pod can also have its own rank identity.
+
+## Coding Pod Ranks
+
+1. Code Rookie
+2. Logic Explorer
+3. Scratch Builder
+4. Game Maker
+5. Web Starter
+6. Code Champion
+7. App Creator
+
+## AI Pod Ranks
+
+1. AI Rookie
+2. Prompt Explorer
+3. Smart Creator
+4. AI Builder
+5. Automation Thinker
+6. Responsible AI Champion
+7. AI Innovator
+
+## Design Pod Ranks
+
+1. Design Rookie
+2. Colour Explorer
+3. Layout Builder
+4. Visual Creator
+5. UI Designer
+6. Product Designer
+7. Design Champion
+
+## Robotics Pod Ranks
+
+1. Robot Rookie
+2. Circuit Explorer
+3. Motion Builder
+4. Sensor Maker
+5. Robot Programmer
+6. STEM Champion
+7. Robotics Innovator
+
+## Young Founders Pod Ranks
+
+1. Idea Explorer
+2. Problem Hunter
+3. Solution Designer
+4. Prototype Builder
+5. Pitch Maker
+6. Young Innovator
+7. Future Founder
+
+This means a child can have:
+
+* Overall TinkerPod Rank
+* Pod Rank
+
+Example:
+
+> Amara is a **Project Maker** on TinkerPod and a **Game Maker** in the Coding Pod.
+
+That is beautiful.
+
+---
+
+# 4. Leaderboards
+
+Leaderboards should be handled carefully so younger kids are encouraged, not discouraged.
+
+We should have multiple leaderboard types.
+
+## Pod Leaderboard
+
+Shows top learners inside a Pod.
+
+Example:
+
+> Coding Pod Leaderboard
+
+Ranking based on XP earned in that Pod.
+
+## Weekly Leaderboard
+
+Resets weekly.
+
+This gives everyone a fresh chance.
+
+## Monthly Leaderboard
+
+For monthly challenges and projects.
+
+## Project Leaderboard
+
+For a specific project or challenge.
+
+## Age Group Leaderboard
+
+So 7-year-olds are not competing with 17-year-olds.
+
+Examples:
+
+* Junior Creators Leaderboard
+* Young Builders Leaderboard
+* Teen Innovators Leaderboard
+* Young Founders Leaderboard
+
+## Personal Leaderboard
+
+Shows:
+
+> You are #12 this week. Complete one project to enter Top 10.
+
+This is motivating.
+
+---
+
+# How ranking should affect the app experience
+
+The child dashboard should show:
+
+* Current rank
+* XP progress bar
+* Next rank target
+* Current Pod
+* Current Pod rank
+* Badges earned
+* Leaderboard position
+* Current project
+* Streak
+
+Example:
+
+> You are a **Skill Explorer**
+> 220 XP to become **Project Maker**
+> Complete your current project to earn +100 XP
+
+That message alone can keep kids going.
+
+---
+
+# What happens when a child joins TinkerPod?
+
+Here is the best flow:
+
+## Step 1: Parent creates child profile
+
+Parent enters:
+
+* Name
+* Age
+* Level
+* Interests
+
+## Step 2: App recommends a Pod
+
+Example:
+
+> Based on your child’s interest in games and apps, we recommend the **Coding Pod**.
+
+Parent can choose:
+
+* Accept recommendation
+* Choose another Pod
+
+## Step 3: Child joins Pod
+
+Child gets:
+
+* Pod welcome screen
+* Pod mentor
+* Pod learning path
+* First course
+* First badge opportunity
+* First project
+* First live class
+* Leaderboard entry
+
+## Step 4: Child starts at Rank 1
+
+Example:
+
+> Welcome, David. You are now a **Tinker Starter** in the Coding Pod.
+
+## Step 5: Child begins learning
+
+They complete lessons, earn XP, submit projects, receive mentor feedback, earn badges, climb ranks, and move up the leaderboard.
+
+---
+
+# What consists of a Pod?
+
+Let’s define it cleanly.
+
+A Pod should contain:
+
+## 1. Pod Profile
+
+* Name
+* Description
+* Icon
+* Colour
+* Skill category
+* Age group
+* Level
+* Capacity
+* Status
+
+## 2. Learning Path
+
+* Levels
+* Courses
+* Modules
+* Lessons
+* Quizzes
+* Completion rules
+
+## 3. Projects
+
+* Mini projects
+* Monthly projects
+* Capstone projects
+* Pod challenges
+
+## 4. Mentors
+
+* Lead mentor
+* Support mentors
+* Mentor review queue
+* Mentor notes
+
+## 5. Live Classes
+
+* Weekend class schedule
+* Special masterclasses
+* Project review sessions
+* Recordings
+
+## 6. Gamification
+
+* XP rules
+* Badges
+* Pod ranks
+* Overall ranks
+* Leaderboard
+* Streaks
+* Achievements
+
+## 7. Community/Showcase
+
+* Pod announcements
+* Featured projects
+* Demo days
+* Pod challenge winners
+
+## 8. Tools/Kits
+
+* Recommended software
+* Required hardware
+* TinkerPod Kit links
+* Downloadable worksheets
+* Build guides
+
+## 9. Reports
+
+* Pod progress
+* Mentor performance
+* Learner activity
+* Project completion
+* Leaderboard performance
+
+---
+
+# Pod data model update
+
+In the PRD, we should expand the pod model.
+
+Instead of Pods being just:
+
+* name
+* mentor
+* age group
+* max learners
+
+We need richer tables.
+
+## pods
+
+* id
+* name
+* slug
+* description
+* icon
+* colour
+* skill_category
+* age_group
+* learning_level
+* max_learners
+* status
+* sort_order
+
+## pod_mentors
+
+Because a Pod can have multiple mentors.
+
+* id
+* pod_id
+* mentor_id
+* role: lead, support, reviewer, instructor
+* status
+
+## pod_courses
+
+Because a Pod can contain many courses.
+
+* id
+* pod_id
+* course_id
+* sort_order
+* required boolean
+
+## pod_projects
+
+Because a Pod can have many projects.
+
+* id
+* pod_id
+* project_id
+* project_role: starter, monthly, challenge, capstone
+* sort_order
+
+## pod_challenges
+
+* id
+* pod_id
+* title
+* description
+* start_date
+* end_date
+* xp_reward
+* badge_id optional
+* status
+
+## pod_members
+
+* id
+* pod_id
+* child_id
+* joined_at
+* status
+* current_pod_rank_id
+* pod_xp
+* pod_streak
+
+## ranks
+
+For overall and pod ranks.
+
+* id
+* name
+* description
+* rank_type: overall, pod
+* pod_id nullable
+* icon
+* level_number
+* required_xp
+* required_badges json
+* required_projects_count
+* required_courses_count
+* status
+
+## child_rank_progress
+
+* id
+* child_id
+* rank_id
+* pod_id nullable
+* status: locked, current, achieved
+* achieved_at
+
+## xp_transactions
+
+Every XP should be recorded.
+
+* id
+* child_id
+* pod_id nullable
+* source_type: lesson, quiz, project, live_class, challenge, streak, manual
+* source_id nullable
+* points
+* description
+* created_at
+
+## leaderboard_snapshots
+
+Optional, but useful later.
+
+* id
+* leaderboard_type: pod, weekly, monthly, age_group, project
+* pod_id nullable
+* age_group nullable
+* period_start
+* period_end
+* rankings json
+* created_at
+
+---
+
+# Should children join one Pod or many Pods?
+
+For MVP, I recommend:
+
+## Basic Plan
+
+1 active Pod.
+
+## Standard Plan
+
+1 active Pod + access to selected extra courses.
+
+## Premium Plan
+
+2 active Pods or 1 active Pod + premium mentor support.
+
+## Admin
+
+Can manually add a child to multiple Pods.
+
+Why?
+
+If you allow too many Pods immediately, the child may become scattered. It is better to give them a focused path first.
+
+Later, kids can unlock additional Pods.
+
+Example:
+
+> Complete Coding Pod Level 2 to unlock AI Pod basics.
+
+This makes the platform more gamified.
+
+---
+
+# How Pods, Courses and Tracks relate
+
+We should simplify it like this:
+
+## Track
+
+Broad category.
+
+Example:
+
+* Technology
+* Creativity
+* Innovation
+
+But we may not even need tracks strongly in the user-facing app.
+
+## Pod
+
+The main user-facing learning world.
+
+Example:
+
+* Coding Pod
+* AI Pod
+* Robotics Pod
+* Design Pod
+* Young Founders Pod
+
+## Course
+
+Structured learning inside a Pod.
+
+Example:
+
+Inside Coding Pod:
+
+* Scratch Starter
+* Game Builder
+* Web Basics
+
+## Module
+
+Sections inside a course.
+
+## Lesson
+
+Individual lesson.
+
+## Project
+
+What the child builds.
+
+So the hierarchy becomes:
+
+> Pod → Courses → Modules → Lessons → Projects → Badges/Ranks
+
+This is clear.
+
+In the app, children should mostly see **Pods**, not “tracks.”
+
+Parents can see:
+
+> Choose a Pod for your child.
+
+That is more branded and simpler.
+
+---
+
+# Pod homepage in the app
+
+Each Pod should have its own home screen.
+
+Example:
+
+## Coding Pod Home
+
+Show:
+
+* Pod icon and colour
+* Welcome message
+* Current Pod rank
+* XP progress
+* Current course
+* Current project
+* Upcoming live class
+* Mentor
+* Pod leaderboard
+* Challenges
+* Featured builders
+* Badges to unlock
+
+This makes each Pod feel like a destination.
+
+---
+
+# Pod gamification flow
+
+Example:
+
+A child joins **Robotics Pod**.
+
+They start as:
+
+> Overall Rank: Tinker Starter
+> Robotics Pod Rank: Robot Rookie
+> XP: 0
+
+They complete 3 lessons:
+
+> +30 XP
+
+They attend live class:
+
+> +25 XP
+
+They submit first robot project:
+
+> +50 XP
+
+Mentor approves:
+
+> +100 XP
+> Badge unlocked: First Bot Builder
+> Rank upgraded: Circuit Explorer
+
+Leaderboard updates:
+
+> You moved from #18 to #9 in Robotics Pod this week.
+
+This is exactly the emotional loop we want.
+
+---
+
+# What makes this rich from day one?
+
+For MVP, I would include these Pod features from day one:
+
+1. Child joins a Pod first.
+2. Pod has courses.
+3. Pod has mentor.
+4. Pod has monthly projects.
+5. Pod has live classes.
+6. Pod has XP.
+7. Pod has badges.
+8. Pod has ranks.
+9. Pod has leaderboard.
+10. Pod has progress path.
+11. Pod has challenges.
+12. Parent can see Pod progress.
+
+Even if some things are simple at first, the structure should exist in the database from day one.
+
+That way, we will not rebuild later.
+
+---
+
+# Recommended MVP Pod setup
+
+Start with 5 Pods:
+
+## 1. Coding Pod
+
+For games, logic, Scratch, HTML/CSS.
+
+## 2. AI Pod
+
+For AI tools, prompts, smart creativity, simple AI projects.
+
+## 3. Design Pod
+
+For graphics, UI/UX, app screens, creativity.
+
+## 4. Robotics Pod
+
+For hardware, STEM, robot logic, kit-based projects.
+
+## 5. Young Founders Pod
+
+For teens, problem-solving, ideation, prototyping, pitching.
+
+Later add:
+
+* Animation Pod
+* Game Dev Pod
+* Web/App Pod
+* Cyber Safety Pod
+* Content Creation Pod
+* Data Pod
+
+---
+
+# Final definition
+
+This is the definition I would add to the PRD:
+
+> In TinkerPod, a Pod is a skill-based learning world where a child belongs to a mentor-guided community, follows a structured pathway, completes courses, builds projects, joins live classes, earns XP, unlocks badges and ranks, competes on leaderboards, and grows toward mastery.
+
+That is the core.
+
+Not just “group.”
+
+A Pod is the product.
