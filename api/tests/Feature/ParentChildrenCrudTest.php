@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\RoleName;
 use App\Models\Child;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ParentChildrenCrudTest extends TestCase
@@ -16,7 +18,10 @@ class ParentChildrenCrudTest extends TestCase
 
     public function test_parent_can_add_list_edit_and_remove_own_children_using_public_ulid(): void
     {
+        Role::findOrCreate(RoleName::Parent->value, 'web');
+
         $parent = User::factory()->create();
+        $parent->assignRole(RoleName::Parent->value);
         $token = $parent->createToken('parent-mobile', ['parent:*'])->plainTextToken;
 
         // Add child (junior age 8)
@@ -63,6 +68,7 @@ class ParentChildrenCrudTest extends TestCase
 
         // Another parent cannot view, edit, or delete this child
         $otherParent = User::factory()->create();
+        $otherParent->assignRole(RoleName::Parent->value);
         $otherToken = $otherParent->createToken('parent-mobile', ['parent:*'])->plainTextToken;
 
         $this->withToken($otherToken)

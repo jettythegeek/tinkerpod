@@ -48,7 +48,7 @@ export function KidHomeScreen(): React.JSX.Element {
             { color: tokens.colors.ink, fontFamily: tokens.fonts.semibold },
           ]}
         >
-          Your coding adventures are ready! Let’s build something awesome with Pip.
+          Your coding adventures are ready! Let’s build something awesome with Captain Jetty.
         </Text>
 
         <TpButton

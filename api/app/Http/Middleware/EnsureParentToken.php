@@ -27,7 +27,7 @@ class EnsureParentToken
             throw new AuthorizationException('Parent authorization is required for this route.');
         }
 
-        if ($actor->roles()->exists() && ! $actor->hasRole(RoleName::Parent->value)) {
+        if (! $actor->hasRole(RoleName::Parent->value)) {
             throw new AuthorizationException('Parent role is required for this route.');
         }
 

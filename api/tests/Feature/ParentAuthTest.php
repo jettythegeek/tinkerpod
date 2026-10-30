@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\RoleName;
 use App\Mail\PasswordResetCodeMail;
 use App\Models\PasswordResetCode;
 use App\Models\User;
 use App\Services\Sms\LogSmsSender;
 use App\Support\NigerianPhone;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Sanctum\PersonalAccessToken;
 use Tests\TestCase;
 
 class ParentAuthTest extends TestCase
@@ -76,6 +79,79 @@ class ParentAuthTest extends TestCase
             ->assertJsonPath('success', true);
 
         $this->assertDatabaseCount('personal_access_tokens', 3);
+
+        // Verify all issued parent tokens carry a 30-day default expiry
+        foreach (PersonalAccessToken::all() as $pat) {
+            $this->assertNotNull($pat->expires_at);
+            $this->assertGreaterThan(now()->addDays(29), $pat->expires_at);
+            $this->assertLessThanOrEqual(now()->addDays(31), $pat->expires_at);
+        }
+    }
+
+    public function test_parent_login_never_assigns_parent_role_and_rejects_non_parent_users_with_generic_error(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = User::factory()->create([
+            'email' => 'admin@tinkerpod.ng',
+            'password' => 'AdminSecret123!',
+        ]);
+        $admin->assignRole(RoleName::Admin->value);
+
+        $rolelessUser = User::factory()->create([
+            'email' => 'staff@tinkerpod.ng',
+            'password' => 'StaffSecret123!',
+        ]);
+
+        // Admin trying to sign in via mobile parent login is rejected with the same generic error as wrong password
+        $adminLoginRes = $this->postJson('/api/v1/auth/login', [
+            'identifier' => 'admin@tinkerpod.ng',
+            'password' => 'AdminSecret123!',
+        ]);
+
+        $adminLoginRes->assertStatus(422)
+            ->assertJsonPath('message', 'These sign-in details do not match our records.');
+
+        $this->assertFalse($admin->fresh()->hasRole(RoleName::Parent->value));
+
+        // Roleless user trying to sign in via mobile parent login is rejected and NOT given the parent role
+        $rolelessRes = $this->postJson('/api/v1/auth/login', [
+            'identifier' => 'staff@tinkerpod.ng',
+            'password' => 'StaffSecret123!',
+        ]);
+
+        $rolelessRes->assertStatus(422)
+            ->assertJsonPath('message', 'These sign-in details do not match our records.');
+
+        $this->assertFalse($rolelessUser->fresh()->hasRole(RoleName::Parent->value));
+
+        // EnsureParentToken also rejects a parent:* token if the user lacks the parent role
+        $forgedToken = $rolelessUser->createToken('forged', ['parent:*'])->plainTextToken;
+        $this->withToken($forgedToken)
+            ->getJson('/api/v1/parent/children')
+            ->assertForbidden();
+        $this->withToken($forgedToken)
+            ->getJson('/api/v1/auth/me')
+            ->assertForbidden();
+    }
+
+    public function test_register_endpoint_is_rate_limited(): void
+    {
+        for ($i = 1; $i <= 5; $i++) {
+            $this->postJson('/api/v1/auth/register', [
+                'name' => 'Test Parent '.$i,
+                'email' => "parent{$i}@example.com",
+                'phone' => sprintf('0803000000%d', $i),
+                'password' => 'ParentSecret123!',
+            ])->assertCreated();
+        }
+
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'Test Parent 6',
+            'email' => 'parent6@example.com',
+            'phone' => '08030000006',
+            'password' => 'ParentSecret123!',
+        ])->assertStatus(429);
     }
 
     public function test_password_reset_by_email_code_and_phone_code_with_expiry(): void

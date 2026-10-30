@@ -17,6 +17,7 @@ This document is the **authoritative source of truth** for product, architecture
 | **Kid Login** | **Parent-managed child profiles** (see [`ADR-002`](./adr/ADR-002-kid-login.md)). Kid signs in using a `username` (or the parent's phone or email) plus a bcrypt-hashed PIN set by the parent. When a parent identifier has multiple children, a privacy-safe profile picker (first name and avatar only) is shown before PIN entry. Issues a child-scoped Sanctum token (`child:*` abilities). |
 | **Landing Page** | The old landing site is dropped entirely. No landing folder exists until **M10**, where a new landing page will be scoped and built from approved `design/` assets and API-driven plans. |
 | **Theme & Tokens** | Font **Nunito**; primary teal `#00BFAE` (fills/illustrations, dark text `#0F172A` only), button teal `#007A70` (white text), ink `#0F172A`, kid purple `#7C3AED`, accents `#FFB700`, `#FF6B6B`, `#2563EB`, success `#63C132`, background `#F8FAFC`, admin navy `#101B4D`; per-child `junior` (ages 5–11) or `senior` (ages 12–18) theme flag. |
+| **Mascot Naming** | The official mascot name is **Captain Jetty** (short form **"Captain"**). All user-facing copy and accessibility labels must use **Captain Jetty** (or **Captain**), never **"Pip"**. Asset filenames and internal code identifiers remain `pip-*`. |
 | **Plans & Prices** | **Placeholders only** in admin configuration until the founder sets final pricing. The old ₦15k / ₦25k / ₦40k seed is not a binding price decision, and no prices are hardcoded in the mobile client. |
 
 ---

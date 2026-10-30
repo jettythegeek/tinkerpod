@@ -80,7 +80,7 @@ export function PipIdleSvg({
     <Animated.View
       testID={testID}
       accessibilityRole="image"
-      accessibilityLabel="Pip the TinkerPod robot, Idle"
+      accessibilityLabel="Captain Jetty, the TinkerPod robot"
       style={[styles.container, { width: size, height: size }, animatedContainerStyle]}
     >
       <Svg

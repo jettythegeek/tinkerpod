@@ -14,7 +14,9 @@ Route::prefix('v1')->group(function (): void {
     Route::get('/health', HealthController::class)->name('api.v1.health');
 
     Route::prefix('auth')->group(function (): void {
-        Route::post('/register', [ParentAuthController::class, 'register'])->name('api.v1.auth.register');
+        Route::post('/register', [ParentAuthController::class, 'register'])
+            ->middleware('throttle:auth-register')
+            ->name('api.v1.auth.register');
         Route::post('/login', [ParentAuthController::class, 'login'])
             ->middleware('throttle:auth-login')
             ->name('api.v1.auth.login');

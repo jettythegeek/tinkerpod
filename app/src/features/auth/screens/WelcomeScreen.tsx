@@ -55,7 +55,7 @@ export function WelcomeScreen({
             },
           ]}
         >
-          Build games, solve puzzles, and code with Pip.
+          Build games, solve puzzles, and code with Captain Jetty.
         </Text>
 
         <View style={styles.actions}>

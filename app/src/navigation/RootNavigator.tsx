@@ -10,7 +10,6 @@ import { ParentRegisterScreen } from '../features/auth/screens/ParentRegisterScr
 import { PinPadScreen } from '../features/auth/screens/PinPadScreen';
 import { ProfilePickerScreen } from '../features/auth/screens/ProfilePickerScreen';
 import { WelcomeScreen } from '../features/auth/screens/WelcomeScreen';
-import { BootPlaceholderScreen } from '../features/boot/BootPlaceholderScreen';
 import { KidHomeScreen } from '../features/kid/KidHomeScreen';
 import { ParentHomeScreen } from '../features/parent/ParentHomeScreen';
 import { useTheme } from '../theme';
@@ -23,7 +22,6 @@ export type AuthStackParamList = {
   readonly KidLogin: undefined;
   readonly ProfilePicker: { readonly profiles: KidPickerProfileDto[] };
   readonly PinPad: { readonly profile: KidPickerProfileDto };
-  readonly BootPlaceholder: undefined;
 };
 
 export type ParentStackParamList = {
@@ -163,12 +161,6 @@ export function RootNavigator(): React.JSX.Element {
               />
             )}
           </AuthStack.Screen>
-
-          <AuthStack.Screen
-            name="BootPlaceholder"
-            component={BootPlaceholderScreen}
-            options={{ title: 'TinkerPod' }}
-          />
         </AuthStack.Navigator>
       )}
     </NavigationContainer>

@@ -23,6 +23,12 @@ use Spatie\Permission\Models\Role;
 
 class ParentAuthController extends Controller
 {
+    /**
+     * Constant-cost dummy bcrypt hash used when an identifier is unknown so
+     * login timing does not leak account existence.
+     */
+    private const DUMMY_BCRYPT_HASH = '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+
     public function register(Request $request): JsonResponse
     {
         $rawPhone = (string) $request->input('phone', '');
@@ -63,7 +69,9 @@ class ParentAuthController extends Controller
 
         $user->assignRole(RoleName::Parent->value);
 
-        $token = $user->createToken('parent-mobile', ['parent:*'])->plainTextToken;
+        $ttlDays = max(1, (int) config('tinkerpod.auth.parent_token_ttl_days', 30));
+        $expiresAt = now()->addDays($ttlDays);
+        $token = $user->createToken('parent-mobile', ['parent:*'], $expiresAt)->plainTextToken;
 
         return ApiResponse::success(
             message: 'Account created successfully.',
@@ -71,6 +79,7 @@ class ParentAuthController extends Controller
                 'token' => $token,
                 'token_type' => 'Bearer',
                 'abilities' => ['parent:*'],
+                'expires_at' => $expiresAt->toIso8601String(),
                 'user' => (new ParentUserResource($user))->resolve(),
             ],
             status: 201,
@@ -91,18 +100,26 @@ class ParentAuthController extends Controller
 
         $user = $this->resolveParentByIdentifier($validated['identifier']);
 
-        if ($user === null || ! Hash::check($validated['password'], $user->password)) {
+        if ($user === null) {
+            Hash::check($validated['password'], self::DUMMY_BCRYPT_HASH);
+
             throw ValidationException::withMessages([
                 'identifier' => ['These sign-in details do not match our records.'],
             ]);
         }
 
-        if (! $user->hasRole(RoleName::Parent->value)) {
-            Role::findOrCreate(RoleName::Parent->value, 'web');
-            $user->assignRole(RoleName::Parent->value);
+        $passwordMatches = Hash::check($validated['password'], $user->password);
+        $hasParentRole = $user->hasRole(RoleName::Parent->value);
+
+        if (! $passwordMatches || ! $hasParentRole) {
+            throw ValidationException::withMessages([
+                'identifier' => ['These sign-in details do not match our records.'],
+            ]);
         }
 
-        $token = $user->createToken('parent-mobile', ['parent:*'])->plainTextToken;
+        $ttlDays = max(1, (int) config('tinkerpod.auth.parent_token_ttl_days', 30));
+        $expiresAt = now()->addDays($ttlDays);
+        $token = $user->createToken('parent-mobile', ['parent:*'], $expiresAt)->plainTextToken;
 
         return ApiResponse::success(
             message: 'Signed in successfully.',
@@ -110,6 +127,7 @@ class ParentAuthController extends Controller
                 'token' => $token,
                 'token_type' => 'Bearer',
                 'abilities' => ['parent:*'],
+                'expires_at' => $expiresAt->toIso8601String(),
                 'user' => (new ParentUserResource($user))->resolve(),
             ],
         );
@@ -270,7 +288,7 @@ class ParentAuthController extends Controller
     {
         $user = $request->user();
 
-        if (! $user instanceof User || ! $user->tokenCan('parent:*')) {
+        if (! $user instanceof User || ! $user->tokenCan('parent:*') || ! $user->hasRole(RoleName::Parent->value)) {
             throw new AuthorizationException('Parent authentication is required for this endpoint.');
         }
 

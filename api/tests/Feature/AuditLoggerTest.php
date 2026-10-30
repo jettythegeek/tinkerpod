@@ -23,6 +23,7 @@ class AuditLoggerTest extends TestCase
         $this->seed(RolesAndPermissionsSeeder::class);
 
         $parent = User::factory()->create();
+        $parent->assignRole(RoleName::Parent->value);
         $parentToken = $parent->createToken('parent-mobile', ['parent:*'])->plainTextToken;
 
         $child = Child::factory()->for($parent, 'parent')->create([
