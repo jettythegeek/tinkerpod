@@ -1,0 +1,129 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:40px 40px 30px;background:#E9EEF5">
+<div class="flex gap-12">
+<!-- STEP 1 -->
+<div>
+<div class="stepl"><b>1</b> Child's age</div>
+<div class="phone theme-senior" style="background:#fff">
+ <div class="screen">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:4px 22px">
+   <i data-lucide="chevron-left"></i>
+   <div class="flex-1 flex gap-1.5"><i class="seg on"></i><i class="seg"></i><i class="seg"></i></div>
+   <span class="cap">1 of 3</span>
+  </div>
+  <div style="padding:18px 22px 0">
+   <img src="../assets/logo.png" style="height:30px">
+   <div class="h1 mt-5" style="font-size:27px">How old is your child?</div>
+   <p class="mt-2" style="color:var(--ink-2);font-weight:600;line-height:1.45">We'll tune lessons, look and feel to their age. You can add more children later.</p>
+   <label class="cap mt-5 block" style="color:var(--ink-2)">Child's first name</label>
+   <div style="margin-top:6px;height:52px;border-radius:12px;box-shadow:0 0 0 1.5px #CBD5E1 inset;display:flex;align-items:center;padding:0 14px;font-weight:700">Amara</div>
+   <label class="cap mt-4 block" style="color:var(--ink-2)">Age</label>
+   <div class="grid grid-cols-7 gap-2 mt-2" id="ages"></div>
+   <div class="mt-5 flex items-center gap-3" style="padding:12px;border-radius:16px;background:linear-gradient(90deg,#F3EEFF,#E6F9F7)">
+    <img src="../assets/mascot-happy.png" style="width:58px">
+    <div class="flex-1"><div style="font-weight:900">Junior track · ages 5–11</div><div style="font-size:13px;font-weight:600;color:var(--ink-2);line-height:1.35">Playful worlds, big buttons and a friendly robot guide.</div></div>
+   </div>
+  </div>
+  <div class="btn teal" style="position:absolute;left:22px;right:22px;bottom:36px">See plans for Amara</div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<!-- STEP 2 -->
+<div>
+<div class="stepl"><b>2</b> Choose a plan</div>
+<div class="phone theme-senior" style="background:#fff">
+ <div class="screen">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:4px 22px">
+   <i data-lucide="chevron-left"></i>
+   <div class="flex-1 flex gap-1.5"><i class="seg on"></i><i class="seg on"></i><i class="seg"></i></div>
+   <span class="cap">2 of 3</span>
+  </div>
+  <div style="padding:16px 22px 0">
+   <div class="h1" style="font-size:26px">Pick Amara's plan</div>
+   <p class="mt-1" style="color:var(--ink-2);font-weight:600">Every plan starts with a free trial.</p>
+   <div class="mt-4 flex" style="padding:4px;border-radius:12px;background:#F1F5F9;font-weight:800;font-size:14px">
+    <div class="flex-1 text-center" style="padding:8px;border-radius:9px;color:var(--muted)">Monthly</div>
+    <div class="flex-1 text-center" style="padding:8px;border-radius:9px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)">Yearly <span style="color:var(--green-text)">· save X%</span></div>
+   </div>
+   <div class="flex flex-col gap-3 mt-4">
+    <div class="plan"><div class="flex justify-between items-start"><div><div class="h3">Starter</div><div class="cap">1 child · core lessons</div></div><div class="price">₦XX,XXX<small>/yr</small></div></div></div>
+    <div class="plan sel"><span class="flag">Most popular</span><div class="flex justify-between items-start"><div><div class="h3">Pro</div><div class="cap">1 child · everything</div></div><div class="price">₦XX,XXX<small>/yr</small></div></div>
+     <div class="feat"><span><i data-lucide="check"></i>All worlds & live classes</span><span><i data-lucide="check"></i>Tournaments & leagues</span><span><i data-lucide="check"></i>Monthly free content pack</span></div></div>
+    <div class="plan"><div class="flex justify-between items-start"><div><div class="h3">Family</div><div class="cap">Up to X children</div></div><div class="price">₦XX,XXX<small>/yr</small></div></div></div>
+   </div>
+   <div class="flex items-center gap-2 mt-4 cap"><i data-lucide="shield-check" style="width:16px;color:var(--teal-btn)"></i>Prices in naira · cancel anytime</div>
+  </div>
+  <div class="btn teal" style="position:absolute;left:22px;right:22px;bottom:36px">Continue with Pro</div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<!-- STEP 3 -->
+<div>
+<div class="stepl"><b>3</b> Start free trial</div>
+<div class="phone theme-senior" style="background:#fff">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:270px;background:linear-gradient(160deg,#00BFAE,#007A70)"></div>
+  <div data-statusbar="light"></div>
+  <div class="flex items-center gap-3" style="padding:4px 22px;color:#fff;position:relative">
+   <i data-lucide="chevron-left"></i>
+   <div class="flex-1 flex gap-1.5"><i class="seg on w"></i><i class="seg on w"></i><i class="seg on w"></i></div>
+   <span style="font-size:13px;font-weight:700">3 of 3</span>
+  </div>
+  <div style="position:relative;padding:14px 22px 0;color:#fff">
+   <img src="../assets/mascot-cheering.png" style="position:absolute;right:14px;top:-4px;width:118px">
+   <div class="over" style="opacity:.9">Pro · Yearly</div>
+   <div class="h1 mt-1" style="font-size:27px;max-width:220px">Try free for X days</div>
+   <p class="mt-1" style="font-weight:600;opacity:.92;max-width:210px">No charge today. We'll remind you before it ends.</p>
+  </div>
+  <div class="card" style="position:relative;margin:30px 16px 0;padding:18px">
+   <div class="tl"><i class="dot on"><i data-lucide="unlock" style="width:14px"></i></i><div><b>Today</b><div class="cap">Amara unlocks every world, pack and league.</div></div></div>
+   <div class="tl"><i class="dot"><i data-lucide="bell" style="width:14px"></i></i><div><b>Day X</b><div class="cap">We send a reminder by email & SMS.</div></div></div>
+   <div class="tl last"><i class="dot"><i data-lucide="credit-card" style="width:14px"></i></i><div><b>Day X</b><div class="cap">₦XX,XXX/yr starts. Cancel any time before.</div></div></div>
+  </div>
+  <div style="padding:16px 22px 0">
+   <div class="cap" style="color:var(--ink-2)">Pay with</div>
+   <div class="flex gap-2 mt-2">
+    <div class="pay sel"><i data-lucide="credit-card"></i>Card</div><div class="pay"><i data-lucide="landmark"></i>Bank</div><div class="pay"><i data-lucide="smartphone"></i>USSD</div>
+   </div>
+  </div>
+  <div style="position:absolute;left:22px;right:22px;bottom:36px">
+   <div class="btn teal">Start free trial</div>
+   <div class="text-center mt-3" style="font-size:12px;font-weight:600;color:var(--muted)">By continuing you agree to the Terms and Privacy Policy.</div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+</div>
+</div>
+<style>
+.stepl{font-weight:900;font-size:18px;margin:0 0 18px 6px;display:flex;align-items:center;gap:10px;color:#0F172A}
+.stepl b{width:30px;height:30px;border-radius:99px;background:#007A70;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.seg{flex:1;height:6px;border-radius:9px;background:#E2E8F0}.seg.on{background:#007A70}.seg.w{background:rgba(255,255,255,.35)}.seg.on.w{background:#fff}
+.age{height:44px;border-radius:12px;box-shadow:0 0 0 1.5px #E2E8F0 inset;display:flex;align-items:center;justify-content:center;font-weight:800}
+.age.sel{background:#007A70;color:#fff;box-shadow:0 0 0 3px #B3ECE6}
+.plan{position:relative;border-radius:16px;padding:14px 16px;box-shadow:0 0 0 1.5px #E2E8F0 inset}
+.plan.sel{box-shadow:0 0 0 2.5px #007A70 inset;background:#F3FCFB}
+.flag{position:absolute;top:-11px;left:14px;background:#FFB700;color:#0F172A;font-size:11px;font-weight:900;padding:3px 10px;border-radius:99px}
+.price{font-weight:900;font-size:19px}.price small{font-size:12px;color:#64748B;font-weight:700}
+.feat{display:flex;flex-direction:column;gap:6px;margin-top:10px;font-size:13px;font-weight:700;color:#334155}.feat span{display:flex;align-items:center;gap:8px}.feat svg{width:16px;height:16px;color:#007A70;stroke-width:3}
+.tl{display:flex;gap:12px;position:relative;padding-bottom:16px}.tl.last{padding-bottom:0}
+.tl:not(.last):before{content:"";position:absolute;left:14px;top:30px;bottom:2px;width:2px;background:#E2E8F0}
+.dot{width:30px;height:30px;border-radius:99px;flex:none;background:#F1F5F9;color:#64748B;display:flex;align-items:center;justify-content:center}.dot.on{background:#007A70;color:#fff}
+.pay{flex:1;height:52px;border-radius:12px;box-shadow:0 0 0 1.5px #E2E8F0 inset;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14px}.pay svg{width:18px}
+.pay.sel{box-shadow:0 0 0 2.5px #007A70 inset;color:#007A70;background:#F3FCFB}
+</style>
+<script>
+document.getElementById('ages').innerHTML=[5,6,7,8,9,10,11,12,13,14,15,16,17,18].map(a=>`<div class="age ${a===8?'sel':''}">${a}</div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

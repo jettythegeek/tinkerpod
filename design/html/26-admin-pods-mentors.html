@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:pods"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">People / Pods & mentors</div><div class="ptitle">Pods & mentors</div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="user-plus"></i>Invite mentor</span><span class="wbtn"><i data-lucide="plus"></i>New pod</span></div>
+   </div>
+   <div class="flex items-center gap-2 mt-3"><div class="tabs" style="border:0"><span class="on">All pods 42</span><span>Lagos 24</span><span>Abuja 10</span><span>Port Harcourt 4</span><span>Online 4</span></div><div style="flex:1"></div><span class="wbtn sec sm"><i data-lucide="layout-grid"></i>Cards</span><span class="wbtn sec sm"><i data-lucide="list"></i>List</span></div>
+   <div class="grid grid-cols-4 gap-3 mt-3" id="pods"></div>
+   <div class="panel mt-4"><div class="ph"><b>Mentors</b><span style="font-size:12px;font-weight:800;color:#64748B">11 active · 2 invited</span></div>
+    <table class="tbl" id="m"></table><style>#m td{padding-top:7px;padding-bottom:7px}</style></div>
+  </div>
+ </div>
+</div></div>
+<script>
+const P=[['Lekki A','Sat 10am · in person','Lekki, Lagos','Junior',16,18,'Mr. Femi A.','av5',92,'#00BFAE'],['Ikeja Juniors','Wed & Sat · hybrid','Ikeja, Lagos','Junior',18,18,'Ms. Tolu B.','av-girl',84,'#7C3AED'],['Abuja Wuse Seniors','Tue & Thu · in person','Wuse 2, Abuja','Senior',12,16,'Mr. Musa D.','av4',71,'#2563EB'],['Online · PH','Mon & Fri · Zoom','Port Harcourt','Senior',9,20,'Mrs. Ify K.','av6',58,'#FF6B6B'],['Yaba Makers','Sat 2pm · in person','Yaba, Lagos','Senior',14,16,'Mr. Femi A.','av5',88,'#FFB700'],['Gwarinpa Kids','Sun 3pm · in person','Gwarinpa, Abuja','Junior',11,18,'Ms. Hauwa S.','av2',79,'#63C132'],['Ikeja Seniors','Thu 5pm · hybrid','Ikeja, Lagos','Senior',15,16,'Ms. Tolu B.','av-girl',90,'#101B4D'],['Online · Lekki B','Tue 5pm · Meet','Online','Junior',6,20,'Unassigned','',0,'#94A3B8']];
+document.getElementById('pods').innerHTML=P.map(p=>`<div class="panel" style="padding:12px 14px;border-top:4px solid ${p[9]}"><div class="flex justify-between items-start"><div><div style="font-weight:900;font-size:14.5px">${p[0]}</div><div style="font-size:11.5px;font-weight:700;color:#64748B">${p[1]}</div></div><span class="st nodot ${p[3]=='Junior'?'p':'b'}">${p[3]}</span></div>
+<div class="flex items-center justify-between mt-2" style="font-size:12px;font-weight:800"><span style="color:#64748B">${p[4]}/${p[5]} kids</span><span style="color:${p[8]>80?'#2F7D16':p[8]>65?'#8A5A00':p[8]?'#B42318':'#94A3B8'}">${p[8]?p[8]+'% attend.':'Not started'}</span></div>
+<div class="bar teal mt-1" style="height:6px;background:#EEF1F5"><i style="width:${p[4]/p[5]*100}%"></i></div>
+<div class="flex items-center gap-2 mt-2.5" style="font-size:12.5px;font-weight:800">${p[7]?`<img src="../assets/${p[7]}.png" class="mini-av" style="width:24px;height:24px">`:'<span style="width:24px;height:24px;border-radius:50%;border:1.5px dashed #CBD5E1;display:inline-block"></span>'}<span style="color:${p[7]?'#0F172A':'#B42318'}">${p[6]}</span>${p[7]?'':'<span class="wbtn sm" style="margin-left:auto;height:24px">Assign</span>'}</div></div>`).join('');
+let h='<tr><th>Mentor</th><th>Pods</th><th>Kids</th><th>Reviews waiting</th><th>Avg review time</th><th>Rating</th><th>Status</th></tr>';
+[['av5','Mr. Femi Adebayo','femi@… · Lagos','Lekki A, Yaba Makers +1',42,6,'14h','4.9','g','Active'],['av-girl','Ms. Tolu Bankole','tolu@… · Lagos','Ikeja Juniors, Ikeja Seniors',33,4,'9h','4.8','g','Active'],['av4','Mr. Musa Danladi','musa@… · Abuja','Abuja Wuse Seniors',12,7,'31h','4.6','y','Overloaded'],['av6','Mrs. Ify Kalu','ify@… · PH','Online · PH',9,1,'6h','4.9','g','Active']].forEach(r=>h+=`<tr><td><div class="flex items-center gap-2.5"><img src="../assets/${r[0]}.png" class="mini-av" style="width:30px;height:30px"><div><div>${r[1]}</div><div class="sub">${r[2]}</div></div></div></td><td class="sub" style="color:#334155">${r[3]}</td><td>${r[4]}</td><td>${r[5]>5?`<span class="st r">${r[5]}</span>`:r[5]}</td><td>${r[6]}</td><td><span class="flex items-center gap-1"><i data-lucide="star" style="width:14px;color:#FFB700;fill:#FFB700"></i>${r[7]}</span></td><td><span class="st ${r[8]}">${r[9]}</span></td></tr>`);
+document.getElementById('m').innerHTML=h;
+</script>
+<script>tpInit()</script></body></html>

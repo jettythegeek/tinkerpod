@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:300px;background:url(../assets/adventure-ngodo.jpg) center 40%/cover"></div>
+  <div style="position:absolute;inset:0 0 auto 0;height:300px;background:linear-gradient(rgba(16,27,77,.55),rgba(16,27,77,0) 34%,rgba(16,27,77,0) 70%,rgba(16,27,77,.35))"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0" class="flex justify-between">
+   <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;color:#0F172A"><i data-lucide="chevron-left"></i></div>
+   <div class="flex gap-2"><span class="st nodot" style="background:rgba(255,255,255,.92);color:#0F172A;height:30px"><i data-lucide="download" style="width:14px"></i>Offline ready · 38 MB</span></div>
+  </div>
+  <div style="position:absolute;top:262px;left:0;right:0;bottom:0;background:#F8FAFC;border-radius:30px 30px 0 0;padding:18px 18px 0">
+   <div class="flex items-center gap-2"><span class="st p" style="height:24px">Adventure · 5 stops</span><span class="st g" style="height:24px">Ages 7–11</span><span class="st nodot s" style="height:24px">Loops · Events</span></div>
+   <div style="font-size:28px;font-weight:900;line-height:1.1;margin-top:8px">Trip to Ngodo</div>
+   <div style="font-size:14.5px;font-weight:700;color:#475569;margin-top:4px;line-height:1.4">Ride the danfo to Ngodo, Isuikwuato. Code past the market and river, into the famous cave.</div>
+   <div class="flex items-center gap-3 mt-3 card" style="padding:10px 12px;border-radius:18px">
+    <div class="flex-1"><div class="flex justify-between" style="font-size:12.5px;font-weight:800"><span>Stop 2 of 5</span><span style="color:#7C3AED">40%</span></div><div class="bar mt-1.5"><i style="width:40%"></i></div></div>
+    <div class="flex items-center gap-1" style="font-weight:900;font-size:13px"><span data-ic="star" data-s="18"></span>4/15</div>
+   </div>
+   <div class="mt-3" id="stops"></div>
+  </div>
+  <div style="position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:10px;align-items:center">
+   <div class="btn" style="flex:1;height:56px"><i data-lucide="bus" style="width:20px"></i>Continue: Market maths</div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const S=[['Pack the danfo','Sequence the luggage',1,'luggage'],['Market maths','Loop to count 20 oranges',2,'shopping-basket'],['Cross the river','Events: jump on the stones',0,'waves'],['Waterfall selfie','Draw with repeat',0,'camera'],['Into Ngodo cave','Boss: escape the maze',0,'mountain']];
+document.getElementById('stops').innerHTML=S.map(([n,d,st,ic],i)=>`<div class="flex items-center gap-3" style="position:relative;padding:4px 0">
+${i<S.length-1?`<i style="position:absolute;left:20px;top:44px;width:3px;height:12px;border-radius:3px;background:${st==1?'#63C132':'#E2E8F0'}"></i>`:''}
+<div style="width:42px;height:42px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;${st==1?'background:#EAF7E2;color:#2F7D16':st==2?'background:#7C3AED;color:#fff;box-shadow:0 4px 0 #5B21B6':'background:#F1F5F9;color:#94A3B8'}"><i data-lucide="${ic}"></i></div>
+<div class="flex-1"><div style="font-weight:900;font-size:15px;${st==0?'color:#64748B':''}">${n}</div><div class="cap">${d}</div></div>
+${st==1?'<span data-ic="check" data-s="24"></span>':st==2?'<span class="st p nodot" style="height:24px">Now</span>':'<span data-ic="lock" data-s="20"></span>'}</div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

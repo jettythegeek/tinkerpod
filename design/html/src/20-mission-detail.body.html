@@ -1,0 +1,39 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-senior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:300px;background:url(../assets/mission-lost-key.jpg) center 55%/cover"></div>
+  <div style="position:absolute;inset:0 0 auto 0;height:300px;background:linear-gradient(rgba(15,23,42,.5),rgba(15,23,42,0) 35%)"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0" class="flex justify-between">
+   <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;color:#0F172A"><i data-lucide="chevron-left"></i></div>
+   <span class="st nodot" style="background:#FFB700;color:#0F172A;height:30px"><i data-lucide="rocket" style="width:14px"></i>Startup mission</span>
+  </div>
+  <div style="position:absolute;top:270px;left:0;right:0;bottom:0;background:#F8FAFC;border-radius:24px 24px 0 0;padding:16px 18px 0">
+   <div class="flex items-center gap-2"><span class="st t" style="height:24px">Ages 12–18</span><span class="st nodot s" style="height:24px">Team of 3 · 2 weeks</span><span class="st nodot b" style="height:24px">JavaScript</span></div>
+   <div style="font-size:25px;font-weight:800;line-height:1.12;margin-top:8px">The Lost Key</div>
+   <div class="card mt-2.5" style="padding:11px 12px;display:flex;gap:10px">
+    <img src="../assets/av4.png" style="width:38px;height:38px;border-radius:99px">
+    <div class="flex-1"><div style="font-size:12px;font-weight:800;color:#64748B">Client brief · Mrs. Adeyemi, estate manager</div><div style="font-size:13.5px;font-weight:700;color:#1E293B;line-height:1.4;margin-top:2px">“Residents lose gate keys every week and the guard can't track who has which. Build us a simple key tracker.”</div></div>
+   </div>
+   <div class="over mt-3" style="color:#64748B">Your startup sprint</div>
+   <div class="grid grid-cols-4 gap-1.5 mt-2" id="ph"></div>
+   <div class="card mt-3" style="padding:10px 12px">
+    <div class="flex justify-between items-center"><span style="font-weight:800;font-size:14px">Team “KeyHub”</span><span class="cap">Mentor: Mr. Femi</span></div>
+    <div class="flex items-center gap-2 mt-2"><div class="flex" style="margin-right:4px"><img src="../assets/av1.png" class="mini-av" style="box-shadow:0 0 0 2px #fff"><img src="../assets/av6.png" class="mini-av" style="margin-left:-8px;box-shadow:0 0 0 2px #fff"><img src="../assets/av5.png" class="mini-av" style="margin-left:-8px;box-shadow:0 0 0 2px #fff"></div><span style="font-size:12.5px;font-weight:700;color:#475569">You, Zainab, Emeka</span></div>
+   </div>
+   <div class="flex gap-2 mt-3">
+    <div style="flex:1;border-radius:14px;background:#FFF6DB;padding:8px 10px"><div style="font-size:11px;font-weight:800;color:#8A5A00">Reward</div><div style="font-weight:800;font-size:13.5px">+800 XP · Founder badge</div></div>
+    <div style="flex:.8;border-radius:14px;background:#EAF1FF;padding:8px 10px"><div style="font-size:11px;font-weight:800;color:#1D4ED8">Demo day</div><div style="font-weight:800;font-size:13.5px">Fri, Nov 14</div></div>
+   </div>
+  </div>
+  <div style="position:absolute;left:16px;right:16px;bottom:30px"><div class="btn teal" style="height:54px"><i data-lucide="pen-tool" style="width:18px"></i>Continue: Design the app</div></div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const P=[['Research','Interview the guard','check',1],['Design','Sketch 3 screens','pen-tool',2],['Build','Key check-in app','code-2',0],['Pitch','Demo to the client','presentation',0]];
+document.getElementById('ph').innerHTML=P.map(([n,d,ic,s],i)=>`<div style="border-radius:14px;padding:8px 6px;text-align:center;${s==1?'background:#EAF7E2':s==2?'background:#007A70;color:#fff':'background:#fff;box-shadow:inset 0 0 0 1px #E2E8F0'}">
+<div style="width:28px;height:28px;margin:0 auto;border-radius:9px;display:flex;align-items:center;justify-content:center;${s==1?'background:#63C132;color:#fff':s==2?'background:rgba(255,255,255,.2)':'background:#F1F5F9;color:#94A3B8'}"><i data-lucide="${ic}" style="width:16px"></i></div>
+<div style="font-weight:800;font-size:12.5px;margin-top:4px">${i+1}. ${n}</div><div style="font-size:10.5px;font-weight:700;line-height:1.2;${s==2?'opacity:.85':'color:#64748B'}">${d}</div></div>`).join('');
+</script>

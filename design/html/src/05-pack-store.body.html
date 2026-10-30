@@ -1,0 +1,60 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:4px 20px 0">
+   <div style="width:44px;height:44px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #E2E8F0 inset"><i data-lucide="chevron-left"></i></div>
+   <div class="h2 flex-1">Pack Store</div>
+   <span class="stat"><span data-ic="coin" data-s="24"></span>1,250</span>
+  </div>
+  <div style="padding:12px 20px 0">
+   <!-- downloading -->
+   <div style="border-radius:28px;padding:16px;background:linear-gradient(135deg,#00BFAE,#00857A 60%,#005E56);color:#fff;position:relative;overflow:hidden;box-shadow:0 16px 30px -16px rgba(0,94,86,.8)">
+    <svg style="position:absolute;right:-30px;top:-30px;opacity:.16" width="180" height="180"><circle cx="90" cy="90" r="80" fill="none" stroke="#fff" stroke-width="18"/><circle cx="90" cy="90" r="40" fill="#fff"/></svg>
+    <div class="flex items-center gap-3" style="position:relative">
+     <div style="width:58px;height:58px;border-radius:18px;background:#FFB700;display:flex;align-items:center;justify-content:center;color:#0F172A;box-shadow:0 4px 0 #C98F00"><i data-lucide="tent-tree" style="width:30px;height:30px"></i></div>
+     <div class="flex-1">
+      <div class="over" style="opacity:.85">Adventure · Downloading</div>
+      <div style="font-size:20px;font-weight:900;line-height:1.15">Trip to Ngodo</div>
+      <div style="font-size:12px;font-weight:700;opacity:.9">12 lessons · 3 mini-games</div>
+     </div>
+     <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center"><i data-lucide="pause" style="fill:#fff;width:18px"></i></div>
+    </div>
+    <div style="position:relative;margin-top:14px;height:22px;border-radius:999px;background:rgba(0,0,0,.22);overflow:hidden">
+     <div style="width:64%;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#FFD25E 0 10px,#FFB700 10px 20px);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)"></div>
+     <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#0F172A">64%</div>
+    </div>
+    <div class="flex justify-between mt-2" style="font-size:12px;font-weight:800;opacity:.95;position:relative"><span>38 MB of 60 MB</span><span>About 1 min left · Wi-Fi</span></div>
+   </div>
+   <div class="flex gap-2 mt-3">
+    <span class="chip on">All</span><span class="chip">Adventures</span><span class="chip">Missions</span><span class="chip">Free</span>
+   </div>
+   <div class="flex flex-col gap-2 mt-3" id="packs"></div>
+   <div class="flex items-center gap-3 mt-3" style="font-size:12px;font-weight:800;color:var(--muted)">
+    <i data-lucide="hard-drive" style="width:16px"></i>
+    <div class="bar flex-1" style="height:8px;background:#E2E8F0"><i style="width:42%;background:#94A3B8"></i></div>
+    <span>1.4 GB free</span>
+   </div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const P=[
+ ['Silicon Valley Quest','Adventure','rocket','#2563EB','#60A5FA','paid'],
+ ['Wakanda Challenge','Adventure','shield','#7C3AED','#C084FC','installed'],
+ ['Guangzhou','Adventure','landmark','#FF6B6B','#FDBA74','free'],
+ ['The Lost Key','Mission','key-round','#00857A','#2EE6D2','plan'],
+ ['Golden Gate of Codazanga','Mission','door-open','#B45309','#FFB700','paid'],
+ ['A Man of the People','Mission','users-round','#16A34A','#86EFAC','free'],
+];
+const act={paid:`<span class="chip" style="height:30px;font-size:12px;background:#FFF6DB;color:#8A5A00;box-shadow:none"><i data-lucide="lock-keyhole" style="width:13px"></i>Ask parent</span>`,
+installed:`<span class="chip" style="height:30px;font-size:12px;background:#EAF7E2;color:#2F7D16;box-shadow:none"><i data-lucide="check" style="width:14px"></i>Installed</span>`,
+free:`<span class="btn sm teal" style="height:30px;font-size:12px;padding:0 12px"><i data-lucide="download" style="width:14px"></i>Free</span>`,
+plan:`<span class="btn sm" style="height:30px;font-size:12px;padding:0 12px"><i data-lucide="download" style="width:14px"></i>Get</span>`};
+const meta={paid:'₦X,XXX',installed:'Ready to play',free:'Free pack',plan:'In your plan'};
+document.getElementById('packs').innerHTML=P.map(([n,t,i,a,b,s])=>`<div class="card flex items-center gap-3" style="padding:6px 10px 6px 6px;border-radius:20px">
+<div style="width:50px;height:50px;flex:none;border-radius:16px;background:linear-gradient(135deg,${a},${b});display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15)"><i data-lucide="${i}" style="width:28px;height:28px"></i></div>
+<div class="flex-1 min-w-0"><div style="font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:${a==='#FF6B6B'?'#C93A3A':a==='#16A34A'?'#2F7D16':a==='#00857A'?'#007A70':a}">${t}</div><div style="font-weight:900;font-size:15px;line-height:1.2">${n}</div><div style="font-size:12px;font-weight:800;color:var(--muted)">${meta[s]}</div></div>${act[s]}</div>`).join('');
+</script>

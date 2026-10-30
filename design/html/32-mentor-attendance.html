@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web" style="background:#F6F9FB">
+ <div data-side="mentor:attendance"></div>
+ <div class="main"><div data-top="mentor"></div>
+  <div class="content" style="padding-top:18px">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Attendance / Lekki A</div><div class="ptitle">Attendance</div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="users-round"></i>Lekki A <i data-lucide="chevron-down"></i></span><span class="wbtn sec"><i data-lucide="calendar"></i>Term 1 · Sep–Dec</span><span class="wbtn sec"><i data-lucide="download"></i>Export</span></div>
+   </div>
+   <div class="grid gap-4 mt-3" style="grid-template-columns:1fr 360px">
+    <div class="panel"><div class="ph"><b>Register · last 10 sessions</b><div class="flex gap-3" style="font-size:12px;font-weight:800;color:#64748B" id="leg"></div></div>
+     <table class="tbl" id="reg"></table><style>#reg td,#reg th{padding:6px 8px;text-align:center}#reg td:first-child,#reg th:first-child{text-align:left;padding-left:16px}</style></div>
+    <div class="flex flex-col gap-4">
+     <div class="panel" style="padding:14px 16px">
+      <div class="flex justify-between items-center"><b style="font-size:15px">Today · 3:30 PM</b><span class="st r">Live in 25 min</span></div>
+      <div style="font-size:12.5px;font-weight:700;color:#64748B">Loops Valley L7 · Google Meet · auto-marks from Meet join log</div>
+      <div class="flex flex-col gap-1.5 mt-3" id="today"></div>
+      <div class="wbtn mt-3" style="width:100%;justify-content:center"><i data-lucide="check"></i>Save register</div>
+     </div>
+     <div class="panel" style="padding:14px 16px">
+      <b style="font-size:15px">Term summary</b>
+      <div class="grid grid-cols-2 gap-2 mt-2.5 text-center">
+       <div style="background:#E6F9F7;border-radius:10px;padding:8px"><div style="font-weight:900;font-size:22px;color:#005E56">92%</div><div style="font-size:11px;font-weight:800;color:#64748B">pod attendance</div></div>
+       <div style="background:#FFF6DB;border-radius:10px;padding:8px"><div style="font-weight:900;font-size:22px;color:#8A5A00">2</div><div style="font-size:11px;font-weight:800;color:#64748B">kids below 75%</div></div>
+      </div>
+      <div class="flex items-center gap-2 mt-3" style="font-size:12.5px;font-weight:700;color:#334155"><div class="tog"></div>Auto-message parents after 2 missed classes</div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+const S=['Sep 5','Sep 12','Sep 19','Sep 26','Oct 3','Oct 10','Oct 17','Oct 24','Oct 27','Oct 30'];
+const K=[['av2','Amara Okafor','PPPPPLPPPP'],['av1','Chidi Obi','PPPPPPPPPP'],['av4','David Eze','PPPPAPPPAA'],['av-girl','Ada Nwosu','PPLPPPPPPP'],['av6','Kemi Ojo','PPPPPPEPPP'],['av3','Ike Balogun','PPAPPPLPPP'],['av5','Emeka Nnaji','PAPPAPPAPA'],['av1','Tunde Bakare','PPPPPPPPLP'],['av-girl','Halima Yusuf','PPPPPPPPPP'],['av4','Seyi Coker','PPPEPPPPPP'],['av6','Uche Obi','PPPPLPPPPP'],['av2','Bisi Ade','PPPPPPPPPP']];
+const M={P:['#63C132','check'],L:['#FFB700','clock'],A:['#FF6B6B','x'],E:['#2563EB','file-text']};
+document.getElementById('leg').innerHTML=[['P','Present'],['L','Late'],['A','Absent'],['E','Excused']].map(([k,l])=>`<span class="flex items-center gap-1.5"><i style="width:10px;height:10px;border-radius:3px;background:${M[k][0]}"></i>${l}</span>`).join('');
+let h='<tr><th>Child</th>'+S.map((s,i)=>`<th style="${i==9?'color:#007A70':''}">${s}${i==8?'<br><span style="font-size:9.5px;color:#7C3AED">extra</span>':''}</th>`).join('')+'<th>Rate</th></tr>';
+K.forEach(k=>{const p=k[2].split('').filter(x=>x=='P'||x=='L').length*10;h+=`<tr><td><div class="flex items-center gap-2"><img src="../assets/${k[0]}.png" class="mini-av" style="width:24px;height:24px">${k[1]}</div></td>`+k[2].split('').map((x,i)=>i==9?`<td><span style="display:inline-block;width:24px;height:24px;border-radius:7px;border:1.5px dashed #CBD5E1"></span></td>`:`<td><span style="display:inline-flex;width:24px;height:24px;border-radius:7px;background:${M[x][0]};color:#fff;align-items:center;justify-content:center"><i data-lucide="${M[x][1]}" style="width:13px;stroke-width:3"></i></span></td>`).join('')+`<td style="font-weight:900;color:${p>=80?'#2F7D16':'#B42318'}">${p}%</td></tr>`});
+document.getElementById('reg').innerHTML=h;
+document.getElementById('today').innerHTML=K.slice(0,7).map((k,i)=>{const st=['P','P','A','P','L','','P'][i];return `<div class="flex items-center gap-2" style="font-size:12.5px;font-weight:800"><img src="../assets/${k[0]}.png" class="mini-av" style="width:22px;height:22px"><span class="flex-1">${k[1]}</span>${['P','L','A','E'].map(x=>`<span style="width:24px;height:22px;border-radius:6px;font-size:11px;display:flex;align-items:center;justify-content:center;${st==x?`background:${M[x][0]};color:#fff`:'background:#F1F5F9;color:#94A3B8'}">${x}</span>`).join('')}</div>`}).join('')+'<div style="font-size:12px;font-weight:700;color:#94A3B8">+ 9 more · scroll</div>';
+</script>
+<script>tpInit()</script></body></html>

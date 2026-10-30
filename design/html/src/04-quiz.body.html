@@ -1,0 +1,39 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen" style="background:linear-gradient(#F3EEFF,#F8FAFC 40%)">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:6px 20px">
+   <i data-lucide="x" style="width:26px;height:26px;color:var(--muted)"></i>
+   <div class="bar flex-1" style="height:14px"><i style="width:30%"></i></div>
+   <span class="stat"><i data-lucide="heart" style="width:20px;color:#FF6B6B;fill:#FF6B6B;margin-left:6px"></i>4</span>
+  </div>
+  <div style="padding:14px 20px 0">
+   <div class="over" style="color:var(--purple)">Question 3 of 10</div>
+   <div class="h1 mt-1" style="font-size:25px">What will this loop print?</div>
+   <div style="margin-top:14px;border-radius:24px;background:#1E1B4B;padding:16px 18px;font-family:ui-monospace,'JetBrains Mono',Menlo,monospace;font-size:17px;line-height:1.7;color:#E2E8F0;box-shadow:0 12px 24px -12px rgba(30,27,75,.6)">
+    <div class="flex gap-1.5 mb-2"><i style="width:10px;height:10px;border-radius:9px;background:#FF6B6B"></i><i style="width:10px;height:10px;border-radius:9px;background:#FFB700"></i><i style="width:10px;height:10px;border-radius:9px;background:#63C132"></i></div>
+    <div><span style="color:#C4B5FD">for</span> i <span style="color:#C4B5FD">in</span> <span style="color:#5EEAD4">range</span>(<span style="color:#FFD25E">3</span>):</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5EEAD4">print</span>(i)</div>
+   </div>
+   <div class="grid grid-cols-2 gap-3 mt-5" id="opts"></div>
+  </div>
+  <!-- mascot -->
+  <div style="position:absolute;left:14px;bottom:118px;display:flex;align-items:flex-end;gap:4px">
+   <img src="../assets/mascot-thinking.png" style="width:104px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.18))">
+   <div style="background:#fff;border-radius:22px 22px 22px 6px;padding:12px 14px;max-width:220px;font-weight:800;font-size:14px;line-height:1.35;box-shadow:0 10px 24px -10px rgba(76,29,149,.35);margin-bottom:56px"><span style="color:var(--purple)">Hint:</span> computers start counting from <b>0</b>, not 1!</div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;bottom:36px" class="flex gap-3">
+   <div class="btn ghost" style="width:64px;padding:0;flex:none"><i data-lucide="lightbulb"></i></div>
+   <div class="btn yellow flex-1" style="height:60px;font-size:19px">Check answer</div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const O=[['A','0  1  2',1],['B','1  2  3',0],['C','0  1  2  3',0],['D','3  2  1',0]];
+const col=['#7C3AED','#2563EB','#007A70','#C93A3A'];
+document.getElementById('opts').innerHTML=O.map(([k,t,sel],i)=>`<div style="height:84px;border-radius:24px;background:${sel?'#F3EEFF':'#fff'};box-shadow:${sel?'0 0 0 3px #7C3AED inset,0 5px 0 #5B21B6':'0 0 0 2px #E2E8F0 inset,0 5px 0 #E2E8F0'};display:flex;align-items:center;gap:12px;padding:0 14px">
+<span style="width:36px;height:36px;border-radius:12px;background:${sel?'#7C3AED':'#F1F5F9'};color:${sel?'#fff':col[i]};display:flex;align-items:center;justify-content:center;font-weight:900">${k}</span>
+<span style="font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:17px;white-space:pre">${t}</span></div>`).join('');
+</script>

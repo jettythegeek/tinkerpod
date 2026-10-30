@@ -1,0 +1,19 @@
+<div class="capture" style="width:2200px;padding:60px 52px 64px;background:#E9EEF5">
+ <div class="flex items-center justify-between">
+  <div class="flex items-center gap-6"><img src="../assets/logo.png" style="height:72px"><div style="width:2px;height:56px;background:#CBD5E1"></div><div><div style="font-size:40px;font-weight:900;line-height:1">Admin & Mentor dashboards · v1</div><div style="font-weight:700;color:#475569;margin-top:6px;font-size:18px">Web · 1440 × 900 · Filament-style console · sample data, all ₦ amounts and plan names are placeholders</div></div></div>
+  <div class="flex gap-3 items-center"><span class="chip" style="height:40px;font-size:15px"><i style="width:14px;height:14px;border-radius:4px;background:#101B4D"></i>Admin sidebar #101B4D</span><span class="chip" style="height:40px;font-size:15px"><i style="width:14px;height:14px;border-radius:4px;background:#fff;box-shadow:0 0 0 1px #CBD5E1"></i>Mentor sidebar white</span><span class="chip" style="height:40px;font-size:15px"><i style="width:14px;height:14px;border-radius:4px;background:#007A70"></i>Primary #007A70</span></div>
+ </div>
+ <div class="rowh"><b>Admin</b><span>Navy sidebar · overview, content packs, tournaments, people, billing, reviews</span></div>
+ <div class="grid grid-cols-2 gap-6" id="a"></div>
+ <div class="rowh"><b>Mentor</b><span>Lighter variant, same components · today, review with rubric, child progress, attendance</span></div>
+ <div class="grid grid-cols-2 gap-6" id="m"></div>
+</div>
+<style>
+.rowh{display:flex;align-items:baseline;gap:14px;margin:52px 0 20px}.rowh b{font-size:28px;font-weight:900}.rowh span{font-size:17px;font-weight:700;color:#475569}
+figure{margin:0}figure img{display:block;width:100%;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.12)}figcaption{font-weight:900;font-size:18px;margin-top:10px;color:#0F172A}
+</style>
+<script>
+const f=(n,c)=>`<figure><img src="../png/${n}.png"><figcaption>${c}</figcaption></figure>`;
+document.getElementById('a').innerHTML=[['21-admin-overview','21 · Overview KPIs'],['22-admin-packs','22 · Content packs manager'],['23-admin-pack-editor','23 · Pack editor · upload, manifest, publish'],['24-admin-tournaments','24 · Tournaments manager'],['25-admin-children-parents','25 · Children & parents'],['26-admin-pods-mentors','26 · Pods & mentors'],['27-admin-billing','27 · Billing · Paystack'],['28-admin-reviews','28 · Project reviews queue']].map(x=>f(...x)).join('');
+document.getElementById('m').innerHTML=[['29-mentor-today','29 · Today · pods & live classes'],['30-mentor-review','30 · Project review · rubric & feedback'],['31-mentor-child-progress','31 · Child progress drill-down'],['32-mentor-attendance','32 · Attendance register']].map(x=>f(...x)).join('');
+</script>

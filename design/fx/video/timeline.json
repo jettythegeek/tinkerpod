@@ -1,0 +1,36 @@
+{
+ "fps": 30,
+ "lead": 0.4,
+ "sections": [
+  {
+   "name": "fx01-xp-coins",
+   "start_s": 1.6,
+   "frames": 117,
+   "audio_at_s": 2.0
+  },
+  {
+   "name": "fx02-level-up",
+   "start_s": 5.5,
+   "frames": 141,
+   "audio_at_s": 5.9
+  },
+  {
+   "name": "fx03-correct-wrong",
+   "start_s": 10.2,
+   "frames": 165,
+   "audio_at_s": 10.6
+  },
+  {
+   "name": "fx04-pack-unlock",
+   "start_s": 15.7,
+   "frames": 165,
+   "audio_at_s": 16.099999999999998
+  },
+  {
+   "name": "fx05-streak-mission",
+   "start_s": 21.2,
+   "frames": 159,
+   "audio_at_s": 21.599999999999998
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:410px;background:radial-gradient(110% 120% at 85% 0%,#3B2A99 0%,#101B4D 72%);border-radius:0 0 32px 32px"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:4px 20px 0;color:#fff">
+   <div class="flex items-center gap-3">
+    <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center"><i data-lucide="chevron-left"></i></div>
+    <div class="flex-1"><div style="font-size:20px;font-weight:900;line-height:1.1">League lobby</div><div style="font-size:12px;font-weight:700;opacity:.8">AfriTech League · Season 4 · Junior (5–11)</div></div>
+    <span data-emb="league" data-s="40"></span>
+   </div>
+   <div style="text-align:center;margin-top:16px">
+    <div class="over" style="color:#5EEAD4">Your cohort is filling up</div>
+    <div style="font-size:46px;font-weight:900;line-height:1.05;margin-top:4px">14<span style="font-size:24px;opacity:.6"> / 20</span></div>
+    <div style="font-size:14px;font-weight:700;opacity:.85">kids joined · season starts when full</div>
+   </div>
+   <div id="seats" style="display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-top:14px"></div>
+   <div class="bar mt-3" style="height:12px;background:rgba(255,255,255,.14)"><i style="width:70%;background:linear-gradient(90deg,#00BFAE,#5EEAD4)"></i></div>
+   <div class="flex justify-between mt-1.5" style="font-size:12px;font-weight:800;opacity:.85"><span>6 seats left</span><span>Usually fills in ~2 days</span></div>
+  </div>
+  <div class="card" style="position:relative;margin:16px 14px 0;padding:12px 14px;border-radius:22px;display:flex;align-items:center;gap:10px">
+   <img src="../assets/pip/pip-happy-t.svg" style="height:62px;margin:-4px 0">
+   <div class="flex-1"><div style="font-weight:900;font-size:15px;line-height:1.2">Warm up while you wait!</div><div class="cap">Prep exercises = bonus XP on match day 1</div></div>
+  </div>
+  <div style="position:relative;padding:12px 14px 0">
+   <div class="flex justify-between items-baseline"><span class="h3">Prep exercises</span><span class="cap" style="color:#7C3AED">1 of 3 done</span></div>
+   <div class="flex flex-col gap-2 mt-2">
+    <div class="card" style="padding:10px 12px;border-radius:18px;display:flex;align-items:center;gap:10px">
+     <div style="width:40px;height:40px;border-radius:13px;background:#EAF7E2;display:flex;align-items:center;justify-content:center;color:#2F7D16"><i data-lucide="repeat"></i></div>
+     <div class="flex-1"><div style="font-weight:900;font-size:14.5px;text-decoration:line-through;color:#64748B">Loop speed run</div><div class="cap">5 puzzles · 3 min</div></div><span data-ic="check" data-s="26"></span></div>
+    <div class="card" style="padding:10px 12px;border-radius:18px;display:flex;align-items:center;gap:10px;box-shadow:0 0 0 2px #7C3AED,0 10px 20px -12px rgba(124,58,237,.5)">
+     <div style="width:40px;height:40px;border-radius:13px;background:#F3EEFF;display:flex;align-items:center;justify-content:center;color:#7C3AED"><i data-lucide="bug"></i></div>
+     <div class="flex-1"><div style="font-weight:900;font-size:14.5px">Bug hunt: fix the robot</div><div class="cap">Debugging · 4 min</div></div><span class="stat" style="height:28px;font-size:12px;box-shadow:none;background:#F3EEFF;color:#6D28D9"><span data-ic="xp" data-s="18"></span>+30</span></div>
+    <div class="card" style="padding:10px 12px;border-radius:18px;display:flex;align-items:center;gap:10px">
+     <div style="width:40px;height:40px;border-radius:13px;background:#FFF6DB;display:flex;align-items:center;justify-content:center;color:#B45309"><i data-lucide="timer"></i></div>
+     <div class="flex-1"><div style="font-weight:900;font-size:14.5px">Practice match vs Pip bot</div><div class="cap">Beat the clock · 5 min</div></div><span class="stat" style="height:28px;font-size:12px;box-shadow:none;background:#F3EEFF;color:#6D28D9"><span data-ic="xp" data-s="18"></span>+50</span></div>
+   </div>
+   <div class="btn mt-3" style="height:52px"><i data-lucide="share-2" style="width:18px"></i>Invite a friend to fill a seat</div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const av=['av1','av2','av3','av6','av-girl','av5','av4','av3','av2','av1','av6','av5','av4','av1'];
+let h='';for(let i=0;i<20;i++){h+= i<14?`<img src="../assets/${av[i]}.png" style="width:100%;aspect-ratio:1;border-radius:99px;${i==4?'box-shadow:0 0 0 2.5px #FFB700':'box-shadow:0 0 0 2px rgba(255,255,255,.25)'}">`:`<div style="width:100%;aspect-ratio:1;border-radius:99px;border:2px dashed rgba(255,255,255,.35)"></div>`}
+document.getElementById('seats').innerHTML=h;
+</script>

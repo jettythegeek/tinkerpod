@@ -1,0 +1,54 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <img src="../assets/journey-map-bg.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+  <!-- locked fog -->
+  <div style="position:absolute;left:0;right:0;top:0;height:310px;backdrop-filter:grayscale(.85) brightness(1.08);-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);background:rgba(248,250,252,.25)"></div>
+  <div style="position:absolute;left:0;right:0;top:0;height:150px;background:linear-gradient(rgba(15,23,42,.45),transparent)"></div>
+  <svg id="trail" style="position:absolute;inset:0" width="390" height="844"></svg>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:4px 16px 0" class="flex items-center gap-2">
+   <div class="card flex items-center gap-2" style="padding:8px 14px 8px 8px;border-radius:999px">
+    <div style="width:34px;height:34px;border-radius:999px;background:var(--purple);display:flex;align-items:center;justify-content:center;color:#fff"><i data-lucide="code-xml" style="width:18px"></i></div>
+    <div><div style="font-weight:900;font-size:15px;line-height:1">Coding Pod</div><div style="font-size:11px;font-weight:800;color:var(--muted)">3 of 6 worlds cleared</div></div>
+   </div>
+   <div class="flex-1"></div>
+   <span class="stat"><span data-ic="star" data-s="24"></span>34</span>
+   <span class="stat"><span data-ic="coin" data-s="24"></span>1,250</span>
+  </div>
+  <div id="nodes"></div>
+  <img src="../assets/mascot-happy.png" style="position:absolute;width:80px;left:300px;top:218px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.35));z-index:6">
+  <!-- current card -->
+  <div class="card" style="position:absolute;left:16px;right:16px;bottom:108px;padding:14px;display:flex;align-items:center;gap:12px;z-index:20">
+   <div style="width:54px;height:54px;border-radius:18px;background:var(--purple-soft);display:flex;align-items:center;justify-content:center;color:var(--purple)"><i data-lucide="repeat" style="width:28px;height:28px"></i></div>
+   <div class="flex-1 min-w-0">
+    <div class="over" style="color:var(--purple)">World 4 · Loops Valley</div>
+    <div class="h3">Lesson 2 of 5</div>
+    <div class="flex gap-0.5 mt-1"><span data-ic="star" data-s="16"></span><span data-ic="star" data-s="16"></span><span data-ic="staroff" data-s="16"></span><span data-ic="staroff" data-s="16"></span><span data-ic="staroff" data-s="16"></span></div>
+   </div>
+   <div class="btn sm" style="height:46px;padding:0 20px">Play</div>
+  </div>
+  <div data-nav="map"></div>
+ </div>
+</div>
+</div>
+<script>
+const N=[
+ {n:'Welcome Island',x:150,y:582,s:'done',i:'palmtree'},
+ {n:'Logic Land',x:92,y:494,s:'done',i:'git-branch'},
+ {n:'Functions Forest',x:180,y:414,s:'done',i:'trees'},
+ {n:'Loops Valley',x:258,y:324,s:'now',i:'repeat'},
+ {n:'Game Builder',x:205,y:232,s:'lock',i:'gamepad-2'},
+ {n:'Project Lab',x:118,y:152,s:'lock',i:'flask-conical'},
+];
+let h='',d='M'+N.map(p=>p.x+' '+p.y).join(' L');
+N.forEach((p,k)=>{const big=p.s==='now';const sz=big?64:52;
+ const bg=p.s==='done'?'#63C132':p.s==='now'?'#7C3AED':'#CBD5E1';const sh=p.s==='done'?'#3E8F18':p.s==='now'?'#5B21B6':'#94A3B8';
+ h+=`<div style="position:absolute;left:${p.x-sz/2}px;top:${p.y-sz/2}px;width:${sz}px;height:${sz}px;z-index:5">
+  ${big?`<div style="position:absolute;inset:-10px;border-radius:999px;background:rgba(124,58,237,.28);box-shadow:0 0 0 8px rgba(124,58,237,.14)"></div>`:''}
+  <div style="position:relative;width:100%;height:100%;border-radius:999px;background:${bg};box-shadow:0 5px 0 ${sh},0 10px 16px rgba(0,0,0,.3);border:4px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:${big?24:20}px">${p.s==='lock'?'<span data-ic="lock" data-s="22"></span>':p.s==='done'?`<i data-lucide="${p.i}" style="width:22px;height:22px"></i>`:'4'}</div>
+  <div style="position:absolute;top:${sz+6}px;left:50%;transform:translateX(-50%);white-space:nowrap;background:${p.s==='lock'?'rgba(241,245,249,.95)':'#fff'};color:${p.s==='lock'?'#64748B':'#0F172A'};font-weight:900;font-size:12px;padding:4px 10px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.18)">${p.n}${p.s==='done'?' ✓':''}</div>
+ </div>`});
+document.getElementById('nodes').innerHTML=h;
+document.getElementById('trail').innerHTML=`<path d="${d}" fill="none" stroke="rgba(15,23,42,.35)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#fff" stroke-width="6" stroke-dasharray="1 14" stroke-linecap="round"/>`;
+</script>

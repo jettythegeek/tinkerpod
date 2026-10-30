@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:172px;background:radial-gradient(100% 120% at 80% 0%,#1F3A8A 0%,#101B4D 70%);border-radius:0 0 32px 32px"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0;color:#fff">
+   <div class="flex items-center gap-3">
+    <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center"><i data-lucide="chevron-left"></i></div>
+    <div class="flex-1"><div style="font-size:21px;font-weight:900;line-height:1.1">Champions League</div><div style="font-size:12px;font-weight:700;opacity:.8">Season 3 · top 4 of every league · MD 2/3</div></div>
+    <span data-emb="ucl" data-s="42"></span>
+   </div>
+   <div class="flex mt-4" style="background:rgba(255,255,255,.1);border-radius:99px;padding:4px">
+    <span style="flex:1;text-align:center;background:#fff;color:#101B4D;border-radius:99px;font-weight:900;font-size:13px;padding:7px 0">Junior 5–11</span>
+    <span style="flex:1;text-align:center;font-weight:800;font-size:13px;padding:7px 0">Senior 12–18</span>
+   </div>
+
+  </div>
+  <div style="position:relative;padding:18px 14px 0">
+   <div class="grid grid-cols-2 gap-2" id="groups"></div>
+   <div class="flex justify-between items-baseline mt-3"><span class="h3">Knockout bracket</span><span class="cap">Top 2 per group · Dec 20</span></div>
+   <div class="card mt-2" style="padding:12px 10px;border-radius:22px">
+    <div class="flex" style="font-size:10px;font-weight:900;color:#94A3B8;letter-spacing:.06em"><span style="width:122px">QUARTER-FINAL</span><span style="width:122px;padding-left:12px">SEMI-FINAL</span><span style="flex:1;text-align:center">FINAL</span></div>
+    <div style="position:relative;height:200px;margin-top:6px" id="br"></div>
+   </div>
+  </div>
+  <div data-nav="league"></div>
+ </div>
+</div>
+</div>
+<script>
+const G=[['A',[['Tobi','av1',6],['Amara (you)','av-girl',4],['Femi','av5',1],['Rita','av2',0]]],['B',[['Zainab','av6',6],['Kayode','av3',3],['Chika','av4',3],['Sam','av1',0]]],
+['C',[['Halima','av6',4],['Bayo','av5',4],['Efe','av2',3],['Kunle','av3',0]]],['D',[['Ada','av2',6],['Jide','av1',3],['Nneka','av4',1],['Ola','av5',1]]]];
+document.getElementById('groups').innerHTML=G.map(([g,r])=>`<div class="card" style="padding:7px 8px 5px;border-radius:18px"><div class="flex justify-between" style="font-size:11px;font-weight:900;color:#64748B;padding:0 2px 4px"><span>GROUP ${g}</span><span>PTS</span></div>
+${r.map((x,i)=>`<div class="flex items-center gap-1.5" style="height:22px;padding:0 4px;border-radius:9px;${x[0].includes('you')?'background:#7C3AED;color:#fff':''}"><i style="width:3px;height:14px;border-radius:3px;background:${i<2?'#00BFAE':'transparent'}"></i><img src="../assets/${x[1]}.png" style="width:17px;height:17px;border-radius:99px"><span style="flex:1;font-size:12px;font-weight:800;white-space:nowrap">${x[0]}</span><b style="font-size:12.5px">${x[2]}</b></div>`).join('')}</div>`).join('');
+// bracket
+const qf=[['Tobi','?'],['Zainab','?'],['Halima','?'],['Ada','?']];
+const slot=(a,b,y,x,w,hl)=>`<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;border-radius:11px;background:${hl?'#F3EEFF':'#F8FAFC'};box-shadow:inset 0 0 0 1.5px ${hl?'#7C3AED':'#E2E8F0'};font-size:11.5px;font-weight:800;overflow:hidden">
+<div style="height:22px;display:flex;align-items:center;padding:0 7px;border-bottom:1px solid #E2E8F0;${hl?'color:#6D28D9':''}">${a}</div><div style="height:22px;display:flex;align-items:center;padding:0 7px;color:${hl?"#6D28D9;background:#EDE4FF":"#94A3B8"}">${b}</div></div>`;
+let h='';const QF=[['A1 Tobi','B2 Kayode'],['C1 Halima','D2 Jide'],['B1 Zainab','A2 You (Amara)'],['D1 Ada','C2 Bayo']];
+QF.forEach((m,i)=>h+=slot(m[0],m[1],i*52,0,112,i==2));
+['W QF1','W QF3'].forEach((m,i)=>h+=slot('Winner QF'+(i*2+1),'Winner QF'+(i*2+2),26+i*104,134,104));
+h+=`<div style="position:absolute;left:252px;top:0px;width:96px;text-align:center"><span data-ic="trophy" data-s="44"></span><div style="font-size:11px;font-weight:900;margin-top:2px">Grand final</div><div style="font-size:10px;font-weight:800;color:#64748B">Jan 10 · live</div></div>`;
+h+=slot('SF1 winner','SF2 winner',96,252,92);
+// connectors
+h+=`<svg style="position:absolute;inset:0;pointer-events:none" width="340" height="200"><g fill="none" stroke="#CBD5E1" stroke-width="1.5">
+<path d="M112 22 h11 v52 h-11 M123 48 h11"/><path d="M112 126 h11 v52 h-11 M123 152 h11"/><path d="M238 48 h7 v104 h-7 M245 118 h7"/></g></svg>`;
+document.getElementById('br').innerHTML=h;
+</script>
+<script>tpInit()</script></body></html>

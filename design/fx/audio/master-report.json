@@ -1,0 +1,22 @@
+{
+ "fx01-xp-coins": {
+  "lufs": -16.0,
+  "dbtp": -2.05
+ },
+ "fx02-level-up": {
+  "lufs": -16.0,
+  "dbtp": -1.51
+ },
+ "fx03-correct-wrong": {
+  "lufs": -16.0,
+  "dbtp": -4.6
+ },
+ "fx04-pack-unlock": {
+  "lufs": -16.0,
+  "dbtp": -1.44
+ },
+ "fx05-streak-mission": {
+  "lufs": -16.0,
+  "dbtp": -1.33
+ }
+}

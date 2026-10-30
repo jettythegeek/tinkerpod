@@ -1,0 +1,77 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:250px;background:radial-gradient(110% 120% at 85% 0%,#3B2A99 0%,#101B4D 72%);border-radius:0 0 32px 32px"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:4px 20px 0;color:#fff">
+   <div class="flex items-center justify-between">
+    <div><div class="over" style="color:#5EEAD4">Compete</div><div style="font-size:28px;font-weight:900;line-height:1.1">Tournaments</div></div>
+    <div class="flex gap-2"><span class="stat" style="color:#0F172A"><span data-ic="trophy" data-s="24"></span>3</span></div>
+   </div>
+   <div class="flex items-center gap-3 mt-4" style="background:rgba(255,255,255,.1);border-radius:22px;padding:12px 14px">
+    <img src="../assets/pip/pip-wave-t.svg" style="height:78px;margin:-6px 0 -8px -4px">
+    <div class="flex-1"><div style="font-weight:900;font-size:16px;line-height:1.2">Match day is Saturday!</div><div style="font-size:13px;font-weight:700;opacity:.85;margin-top:2px">You vs Chidi · AfriTech League · 4:00 PM</div>
+     <div class="flex gap-1.5 mt-2" style="font-weight:900;font-size:13px">
+      <span style="background:#fff;color:#101B4D;border-radius:9px;padding:3px 8px">2d</span><span style="background:#fff;color:#101B4D;border-radius:9px;padding:3px 8px">06h</span><span style="background:#fff;color:#101B4D;border-radius:9px;padding:3px 8px">41m</span></div></div>
+   </div>
+  </div>
+  <div style="position:relative;padding:14px 14px 0;display:flex;flex-direction:column;gap:10px">
+   <!-- League -->
+   <div class="card" style="padding:14px;border-radius:24px">
+    <div class="flex gap-3 items-center">
+     <span data-emb="league" data-s="50"></span>
+     <div class="flex-1" style="min-width:0"><div class="flex items-center gap-2"><span class="h3">AfriTech League</span><span class="st g" style="height:22px;font-size:11px">Live</span></div>
+      <div class="cap" style="margin-top:1px">Season 3 · Week 6 of 19 · 20 kids</div></div>
+     <i data-lucide="chevron-right" style="color:#94A3B8"></i>
+    </div>
+    <div class="flex gap-2 mt-3">
+     <div style="flex:1;background:#F3EEFF;border-radius:14px;padding:7px 10px"><div style="font-size:11px;font-weight:800;color:#6D28D9">Position</div><div style="font-weight:900;font-size:17px">5th <span style="color:#2F7D16;font-size:12px">▲2</span></div></div>
+     <div style="flex:1;background:#F3EEFF;border-radius:14px;padding:7px 10px"><div style="font-size:11px;font-weight:800;color:#6D28D9">Points</div><div style="font-weight:900;font-size:17px">13</div></div>
+     <div style="flex:1;background:#F3EEFF;border-radius:14px;padding:7px 10px"><div style="font-size:11px;font-weight:800;color:#6D28D9">Entry</div><div style="font-weight:900;font-size:17px">In plan</div></div>
+    </div>
+   </div>
+   <!-- UCL -->
+   <div class="card" style="padding:14px;border-radius:24px;background:linear-gradient(135deg,#fff 60%,#E6F9F7)">
+    <div class="flex gap-3 items-center">
+     <span data-emb="ucl" data-s="50"></span>
+     <div class="flex-1"><div class="flex items-center gap-2"><span class="h3">Champions League</span><span class="st b" style="height:22px;font-size:11px">Qualifying</span></div>
+      <div class="cap" style="margin-top:1px">Top 4 of each league · groups start Dec 6</div></div>
+    </div>
+    <div class="mt-3"><div class="flex justify-between" style="font-size:12px;font-weight:800"><span>You're <b style="color:#007A70">1 place</b> from a spot</span><span style="color:#64748B">5th / top 4</span></div>
+     <div class="bar teal mt-1.5" style="height:10px"><i style="width:80%"></i></div></div>
+   </div>
+   <!-- Cup -->
+   <div class="card" style="padding:14px;border-radius:24px">
+    <div class="flex gap-3 items-center">
+     <span data-emb="cup" data-s="50"></span>
+     <div class="flex-1"><div class="flex items-center gap-2"><span class="h3">TinkerPod Cup</span><span class="st y" style="height:22px;font-size:11px">Open · 9 days</span></div>
+      <div class="cap" style="margin-top:1px">Knockout · 64 kids · win or go home</div></div>
+    </div>
+    <div class="flex items-center gap-2 mt-3">
+     <div style="flex:1;font-size:12px;font-weight:800;color:#64748B">Entry <b style="color:#0F172A;font-size:14px">₦X,XXX</b> <span class="placeholder-note">placeholder</span></div>
+     <div class="btn sm yellow" style="height:38px"><i data-lucide="shield-check" style="width:16px"></i>Ask parent</div>
+    </div>
+   </div>
+   <!-- World Cup -->
+   <div class="card" style="padding:12px 14px;border-radius:24px;background:linear-gradient(120deg,#1D3FB8,#2563EB 55%,#3B82F6);color:#fff;position:relative;overflow:hidden">
+    <div style="position:absolute;right:-20px;top:-26px;width:120px;height:120px;border-radius:99px;background:rgba(255,255,255,.08)"></div>
+    <div class="flex gap-3 items-center" style="position:relative">
+     <span data-emb="wc" data-s="50"></span>
+     <div class="flex-1"><div class="flex items-center gap-2"><span class="h3">Code World Cup</span><span class="st nodot" style="height:22px;font-size:11px;background:rgba(255,255,255,.18);color:#fff">Coming 2027</span></div>
+      <div style="font-size:13px;font-weight:700;opacity:.88">Nations across Africa · team play</div></div>
+     <span data-ic="lock" data-s="24" style="filter:brightness(2)"></span>
+    </div>
+   </div>
+  </div>
+  <div data-nav="league"></div>
+ </div>
+</div>
+</div>
+<script>tpInit()</script></body></html>

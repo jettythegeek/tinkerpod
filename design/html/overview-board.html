@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture theme-junior" style="width:2200px;padding:60px 52px 64px;background:#E9EEF5">
+ <div class="flex items-center justify-between">
+  <div class="flex items-center gap-6"><img src="../assets/logo.png" style="height:72px"><div style="width:2px;height:56px;background:#CBD5E1"></div><div><div style="font-size:40px;font-weight:900;line-height:1">App UI · Key screens v1</div><div style="font-weight:700;color:#475569;margin-top:6px;font-size:18px">Kid mode (Junior 5–11 · Senior 12–18) and Parent mode · Nunito · 390 × 844</div></div></div>
+  <div class="flex gap-3 items-center"><span class="chip" style="height:40px;font-size:15px"><i style="width:14px;height:14px;border-radius:4px;background:#7C3AED"></i>Junior lead #7C3AED</span><span class="chip" style="height:40px;font-size:15px"><i style="width:14px;height:14px;border-radius:4px;background:#007A70"></i>Button teal #007A70 · 5.23:1</span><span class="chip" style="height:40px;font-size:15px"><i style="width:14px;height:14px;border-radius:4px;background:#00BFAE"></i>Brand #00BFAE</span></div>
+ </div>
+ <div class="rowh"><b>Kid mode</b><span>Junior theme · ages 5–11</span></div>
+ <div class="flex gap-6" id="r1"></div>
+ <div class="rowh"><b>Compete & identity</b><span>League · profile · Senior theme (ages 12–18) with the streak-broken mascot</span></div>
+ <div class="flex gap-6">
+  <div class="flex gap-6" id="r2"></div>
+  <div class="flex-1 flex flex-col gap-6">
+   <div class="card" style="border-radius:32px;padding:26px 28px;flex:1">
+    <div class="over" style="color:#007A70">Mascot · “Pip” (placeholder name)</div>
+    <div style="font-size:26px;font-weight:900;margin-top:4px">Mood follows progress</div>
+    <div class="grid grid-cols-4 gap-3 mt-5" id="moods"></div>
+    <div class="over mt-5" style="color:#7C3AED">Champions League · knockout (top 4 of each AfriTech division)</div>
+    <div class="flex items-center gap-5 mt-3" id="ko"></div>
+   </div>
+   <div class="card" style="border-radius:32px;padding:26px 28px">
+    <div class="over" style="color:#7C3AED">Naija title ladder</div>
+    <div class="flex flex-wrap gap-2 mt-3" id="lad"></div>
+    <div class="over mt-6" style="color:#7C3AED">Worlds on the journey</div>
+    <div class="flex flex-wrap gap-2 mt-3" style="font-weight:800">
+     <span class="chip">Welcome Island</span><span class="chip">Logic Land</span><span class="chip">Functions Forest</span><span class="chip on">Loops Valley</span><span class="chip" style="color:#94A3B8">Game Builder</span><span class="chip" style="color:#94A3B8">Project Lab</span>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div class="rowh"><b>Parent mode</b><span>Onboarding: age, then plans, then free trial · parent gate · dashboard</span></div>
+ <div class="flex gap-6 items-start">
+  <figure><img src="../png/08-parent-onboarding.png" style="height:860px"></figure>
+  <figure><img src="../png/09-parent-dashboard.png" style="height:860px"></figure>
+ </div>
+</div>
+<style>
+.rowh{display:flex;align-items:baseline;gap:14px;margin:52px 0 20px}.rowh b{font-size:28px;font-weight:900}.rowh span{font-size:17px;font-weight:700;color:#475569}
+figure{margin:0;text-align:center}figure img{display:block}figcaption{font-weight:900;font-size:17px;margin-top:6px;color:#0F172A}
+</style>
+<script>
+const ph=(f,c)=>`<figure><img src="../png/${f}.png" style="width:400px"><figcaption>${c}</figcaption></figure>`;
+document.getElementById('r1').innerHTML=[['01-kid-home','Home'],['02-journey-map','Journey map'],['03-lesson-detail','Lesson detail'],['04-quiz','Quiz + mascot'],['05-pack-store','Pack store · download']].map(a=>ph(...a)).join('');
+document.getElementById('r2').innerHTML=[['06-league-table','AfriTech League'],['07-profile','Profile · rank & badges'],['10-teen-home','Senior theme home']].map(a=>ph(...a)).join('');
+document.getElementById('moods').innerHTML=[['happy','Happy'],['cheering','Cheering'],['thinking','Thinking'],['sleepy','Sleepy']].map(([k,n])=>`<div style="text-align:center;background:#F8FAFC;border-radius:22px;padding:14px 6px"><img src="../assets/mascot-${k}.png" style="height:170px;margin:0 auto;object-fit:contain"><div style="font-weight:900;margin-top:6px">${n}</div></div>`).join('');
+document.getElementById('lad').innerHTML=['Cody Coda','…','Jango-Jango','Design Sultan','Eze Code','Code Dragon','Design Jango','Odogwu'].map((n,i,a)=>`<span class="chip" style="${n==='Odogwu'?'background:#FFB700;box-shadow:none':''}">${n}</span>${i<a.length-1?'<i data-lucide="chevron-right" style="width:16px;color:#94A3B8;align-self:center"></i>':''}`).join('');
+const team=(n,a,w,me)=>`<div class="flex items-center gap-2" style="height:28px;padding:0 8px;border-radius:10px;background:${me?'#7C3AED':'#F8FAFC'};color:${me?'#fff':'#0F172A'};font-weight:800;font-size:13px;${w?'':'opacity:.55'}"><img src="../assets/${a}.png" style="width:20px;height:20px;border-radius:99px">${n}</div>`;
+const col=(title,ms)=>`<div class="flex flex-col justify-around gap-2" style="width:168px"><div class="over" style="color:#64748B;font-size:10px">${title}</div>${ms.map(m=>`<div class="flex flex-col gap-1" style="padding:5px;border-radius:14px;box-shadow:0 0 0 1.5px #E2E8F0 inset">${m}</div>`).join('')}</div>`;
+document.getElementById('ko').innerHTML=col('Quarter-finals',[team('Tobi Coder','av1',1)+team('Bola Blocks','av4',0),team('You (Amara)','av-girl',1,1)+team('Zainab.js','av6',0),team('Ada Lovebytes','av2',1)+team('Kemi Loops','av5',0),team('Musa Robotix','av3',1)+team('Chidi Builds','av1',1)])+col('Semi-finals',[team('Tobi Coder','av1',1)+team('You (Amara)','av-girl',1,1),team('Ada Lovebytes','av2',1)+team('Musa / Chidi','av3',0)])+`<div class="flex flex-col items-center gap-2" style="flex:1"><span data-ic="trophy" data-s="88"></span><div style="font-weight:900;font-size:18px">Final</div><div class="cap">Sat · 4:00 PM · live</div><div class="btn sm yellow" style="margin-top:6px">Watch</div></div>`;
+</script>
+<script>tpInit()</script></body></html>

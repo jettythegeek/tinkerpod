@@ -1,0 +1,40 @@
+<div class="capture" style="padding:30px;display:inline-flex;gap:44px" id="wrap"></div>
+<script>
+const R=[
+ {k:'win',bg:'radial-gradient(100% 70% at 50% 18%,#8B5CF6 0%,#5B21B6 45%,#101B4D 100%)',over:'Full time · Home leg',title:'You won!',sub:'Amazing loops, Amara!',pip:'pip-cheer-t.svg',ph:258,score:[4,2],pts:'+3',xp:'+120',coins:'+40',title2:['Jango-Jango','Design Sultan',82,'+12%'],note:'You climbed to <b>3rd</b> · Champions League spot!',btn:'Share my win',btn2:'Back to league',acc:'#FFB700'},
+ {k:'draw',bg:'radial-gradient(100% 70% at 50% 18%,#14B8A6 0%,#007A70 45%,#0B3B3A 100%)',over:'Full time · Home leg',title:'It’s a draw!',sub:'Neck and neck with Chidi',pip:'pip-clap-t.svg',ph:232,score:[3,3],pts:'+1',xp:'+70',coins:'+20',title2:['Jango-Jango','Design Sultan',76,'+6%'],note:'Away leg decides it · <b>Sat, Dec 13</b>',btn:'Practise for the away leg',btn2:'Back to league',acc:'#5EEAD4'},
+ {k:'loss',bg:'radial-gradient(100% 70% at 50% 18%,#475B9A 0%,#1E2A5E 50%,#101B4D 100%)',over:'Full time · Home leg',title:'So close!',sub:'Every coder loses some. Let’s train!',pip:'pip-sad-t.svg',ph:232,score:[2,3],pts:'+0',xp:'+30',coins:'+10',title2:['Jango-Jango','Design Sultan',73,'+3%'],note:'Effort XP earned · your streak is safe',btn:'Train with Pip (5 min)',btn2:'Back to league',acc:'#93C5FD'}];
+document.getElementById('wrap').innerHTML=R.map(r=>`
+<div style="display:flex;flex-direction:column;align-items:center;gap:14px"><div class="over" style="color:#475569;font-size:13px">${r.k.toUpperCase()}</div>
+<div class="phone theme-junior"><div class="screen" style="background:${r.bg};color:#fff">
+ <div data-statusbar="light"></div>
+ <div style="text-align:center;padding:8px 22px 0">
+  <div class="over" style="opacity:.75">${r.over}</div>
+  <div style="font-size:38px;font-weight:900;line-height:1.05;margin-top:6px">${r.title}</div>
+  <div style="font-size:15px;font-weight:700;opacity:.85;margin-top:4px">${r.sub}</div>
+ </div>
+ <div style="height:246px;display:flex;align-items:flex-end;justify-content:center;margin-top:10px;position:relative">
+  ${r.k=='win'?'':`<div style="position:absolute;bottom:2px;width:170px;height:22px;border-radius:50%;background:rgba(0,0,0,.18)"></div>`}
+  <img src="../assets/pip/${r.pip}" style="height:${r.ph}px;position:relative">
+ </div>
+ <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px">
+  <div style="text-align:center"><img src="../assets/av-girl.png" style="width:50px;height:50px;border-radius:99px;box-shadow:0 0 0 3px ${r.k=='loss'?'rgba(255,255,255,.4)':r.acc}"><div style="font-size:12px;font-weight:800;margin-top:4px">You</div></div>
+  <div style="font-size:42px;font-weight:900;letter-spacing:.02em;width:120px;text-align:center">${r.score[0]}<span style="opacity:.4;margin:0 6px">–</span>${r.score[1]}</div>
+  <div style="text-align:center"><img src="../assets/av3.png" style="width:50px;height:50px;border-radius:99px;box-shadow:0 0 0 3px ${r.k=='loss'?'#FF6B6B':'rgba(255,255,255,.4)'}"><div style="font-size:12px;font-weight:800;margin-top:4px">Chidi</div></div>
+ </div>
+ <div style="position:absolute;left:14px;right:14px;bottom:22px;background:#fff;color:#0F172A;border-radius:28px;padding:14px 16px 16px">
+  <div class="flex gap-2">
+   <div class="rw"><span data-ic="trophy" data-s="22"></span><b>${r.pts}</b><span>league pts</span></div>
+   <div class="rw"><span data-ic="xp" data-s="22"></span><b>${r.xp}</b><span>XP</span></div>
+   <div class="rw"><span data-ic="coin" data-s="22"></span><b>${r.coins}</b><span>coins</span></div>
+  </div>
+  <div style="margin-top:12px;font-size:12.5px;font-weight:800;display:flex;justify-content:space-between"><span><span style="color:#64748B">Title</span> ${r.title2[0]} → <span style="color:#7C3AED">${r.title2[1]}</span></span><span style="color:#2F7D16">${r.title2[3]}</span></div>
+  <div class="bar xp mt-1.5"><i style="width:${r.title2[2]}%"></i></div>
+  <div style="font-size:13px;font-weight:700;color:#334155;margin-top:10px;text-align:center">${r.note}</div>
+  <div class="btn ${r.k=='win'?'yellow':r.k=='draw'?'teal':''} mt-3" style="height:52px">${r.btn}</div>
+  <div style="text-align:center;font-weight:900;color:#64748B;margin-top:10px;font-size:14px">${r.btn2}</div>
+ </div>
+ <div class="homebar"></div>
+</div></div></div>`).join('');
+</script>
+<style>.rw{flex:1;background:#F8FAFC;border-radius:16px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:1px}.rw b{font-size:18px;font-weight:900;line-height:1.1}.rw span:last-child{font-size:11px;font-weight:800;color:#64748B}</style>
