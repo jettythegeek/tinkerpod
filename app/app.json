@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "TinkerPod",
+    "slug": "tinkerpod",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "../design/assets/logo-icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "../design/assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F8FAFC"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ng.tinkerpod.app"
+    },
+    "android": {
+      "package": "ng.tinkerpod.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#00BFAE",
+        "foregroundImage": "../design/assets/logo-icon.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "../design/assets/logo-icon.png"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-audio",
+      "expo-font"
+    ]
+  }
+}
