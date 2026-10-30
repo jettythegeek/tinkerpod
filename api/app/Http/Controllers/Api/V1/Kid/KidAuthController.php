@@ -9,8 +9,11 @@ use App\Http\Resources\Api\V1\KidPickerProfileResource;
 use App\Http\Resources\Api\V1\KidProfileResource;
 use App\Models\Child;
 use App\Models\User;
+use App\Notifications\ChildProfileLockedNotification;
+use App\Services\AuditLogger;
 use App\Support\ApiResponse;
 use App\Support\NigerianPhone;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,7 +59,7 @@ class KidAuthController extends Controller
         );
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request, AuditLogger $auditLogger): JsonResponse
     {
         $targetInput = trim((string) (
             $request->input('profile_id')
@@ -78,6 +81,17 @@ class KidAuthController extends Controller
         $child = $this->resolveChildByIdOrUsername($validated['target']);
 
         if ($child === null) {
+            $auditLogger->log(
+                action: 'kid.login.failed',
+                actor: null,
+                subject: null,
+                metadata: [
+                    'target' => $validated['target'],
+                    'reason' => 'unknown_profile',
+                ],
+                request: $request,
+            );
+
             return ApiResponse::error(
                 message: self::WRONG_PIN_MESSAGE,
                 data: null,
@@ -86,6 +100,16 @@ class KidAuthController extends Controller
         }
 
         if ($child->isLocked()) {
+            $auditLogger->log(
+                action: 'kid.login.blocked_locked',
+                actor: $child,
+                subject: $child,
+                metadata: [
+                    'locked_until' => $child->locked_until?->toIso8601String(),
+                ],
+                request: $request,
+            );
+
             return ApiResponse::error(
                 message: self::LOCKOUT_MESSAGE,
                 data: [
@@ -95,11 +119,23 @@ class KidAuthController extends Controller
             );
         }
 
+        // If a previous lockout has expired, reset the attempt counter for the new cycle while keeping lockout_tier
+        $maxAttempts = max(1, (int) config('tinkerpod.auth.pin_max_attempts', 5));
+        if (
+            $child->locked_until instanceof CarbonInterface
+            && $child->locked_until->isPast()
+            && $child->pin_failed_attempts >= $maxAttempts
+        ) {
+            $child->pin_failed_attempts = 0;
+            $child->locked_until = null;
+        }
+
         if (! Hash::check($validated['pin'], $child->pin_hash)) {
-            return $this->handleFailedPinAttempt($child);
+            return $this->handleFailedPinAttempt($child, $request, $auditLogger);
         }
 
         $child->pin_failed_attempts = 0;
+        $child->lockout_tier = 0;
         $child->locked_until = null;
         $child->save();
 
@@ -107,6 +143,16 @@ class KidAuthController extends Controller
         $expiresAt = now()->addDays($ttlDays);
 
         $token = $child->createToken('kid-mobile', ['child:*'], $expiresAt)->plainTextToken;
+
+        $auditLogger->log(
+            action: 'kid.login.succeeded',
+            actor: $child,
+            subject: $child,
+            metadata: [
+                'expires_at' => $expiresAt->toIso8601String(),
+            ],
+            request: $request,
+        );
 
         return ApiResponse::success(
             message: 'Welcome back!',
@@ -120,7 +166,7 @@ class KidAuthController extends Controller
         );
     }
 
-    protected function handleFailedPinAttempt(Child $child): JsonResponse
+    protected function handleFailedPinAttempt(Child $child, Request $request, AuditLogger $auditLogger): JsonResponse
     {
         $maxAttempts = max(1, (int) config('tinkerpod.auth.pin_max_attempts', 5));
         $attempts = $child->pin_failed_attempts + 1;
@@ -136,6 +182,24 @@ class KidAuthController extends Controller
             $child->lockout_tier = $child->lockout_tier + 1;
             $child->save();
 
+            $auditLogger->log(
+                action: 'kid.login.locked',
+                actor: $child,
+                subject: $child,
+                metadata: [
+                    'failed_attempts' => $attempts,
+                    'lockout_minutes' => $lockMinutes,
+                    'lockout_tier' => $child->lockout_tier,
+                    'locked_until' => $child->locked_until->toIso8601String(),
+                ],
+                request: $request,
+            );
+
+            $parent = $child->parent;
+            if ($parent instanceof User) {
+                $parent->notify(new ChildProfileLockedNotification($child, $lockMinutes));
+            }
+
             return ApiResponse::error(
                 message: self::LOCKOUT_MESSAGE,
                 data: [
@@ -148,6 +212,17 @@ class KidAuthController extends Controller
 
         $child->pin_failed_attempts = $attempts;
         $child->save();
+
+        $auditLogger->log(
+            action: 'kid.login.failed',
+            actor: $child,
+            subject: $child,
+            metadata: [
+                'failed_attempts' => $attempts,
+                'remaining_attempts' => max(0, $maxAttempts - $attempts),
+            ],
+            request: $request,
+        );
 
         return ApiResponse::error(
             message: self::WRONG_PIN_MESSAGE,
