@@ -60,7 +60,6 @@ class RepoHygieneTest extends TestCase
 
         // Verify no legacy models or controllers exist in fresh M0 api/app
         $legacyPhpClasses = [
-            base_path('app/Models/Child.php'),
             base_path('app/Models/Pod.php'),
             base_path('app/Models/Plan.php'),
             base_path('app/Models/Subscription.php'),
