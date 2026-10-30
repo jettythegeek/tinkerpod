@@ -29,6 +29,21 @@ class ChildPolicy
         return $user->tokenCan('parent:*') && $child->parent_id === $user->id;
     }
 
+    public function updatePin(User $user, Child $child): bool
+    {
+        return $user->tokenCan('parent:*') && $child->parent_id === $user->id;
+    }
+
+    public function updateUsername(User $user, Child $child): bool
+    {
+        return $user->tokenCan('parent:*') && $child->parent_id === $user->id;
+    }
+
+    public function unlock(User $user, Child $child): bool
+    {
+        return $user->tokenCan('parent:*') && $child->parent_id === $user->id;
+    }
+
     public function delete(User $user, Child $child): bool
     {
         return $user->tokenCan('parent:*') && $child->parent_id === $user->id;

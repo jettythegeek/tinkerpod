@@ -43,6 +43,9 @@ Route::prefix('v1')->group(function (): void {
             Route::post('/children', [ParentChildController::class, 'store'])->name('api.v1.parent.children.store');
             Route::get('/children/{child}', [ParentChildController::class, 'show'])->name('api.v1.parent.children.show');
             Route::match(['put', 'patch'], '/children/{child}', [ParentChildController::class, 'update'])->name('api.v1.parent.children.update');
+            Route::match(['post', 'put', 'patch'], '/children/{child}/pin', [ParentChildController::class, 'updatePin'])->name('api.v1.parent.children.pin');
+            Route::match(['post', 'put', 'patch'], '/children/{child}/username', [ParentChildController::class, 'updateUsername'])->name('api.v1.parent.children.username');
+            Route::post('/children/{child}/unlock', [ParentChildController::class, 'unlock'])->name('api.v1.parent.children.unlock');
             Route::delete('/children/{child}', [ParentChildController::class, 'destroy'])->name('api.v1.parent.children.destroy');
         });
 

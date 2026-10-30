@@ -11,6 +11,7 @@ use App\Models\Child;
 use App\Models\User;
 use App\Rules\ChildPinRule;
 use App\Rules\ChildUsernameRule;
+use App\Services\AuditLogger;
 use App\Support\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,7 @@ class ParentChildController extends Controller
         );
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, AuditLogger $auditLogger): JsonResponse
     {
         $parent = $this->requireParentUser($request);
         Gate::forUser($parent)->authorize('create', Child::class);
@@ -95,6 +96,22 @@ class ParentChildController extends Controller
             'locked_until' => null,
         ]);
 
+        $auditLogger->log(
+            action: 'child.pin.set',
+            actor: $parent,
+            subject: $child,
+            metadata: ['source' => 'parent.create'],
+            request: $request,
+        );
+
+        $auditLogger->log(
+            action: 'child.username.set',
+            actor: $parent,
+            subject: $child,
+            metadata: ['new_username' => $child->username, 'source' => 'parent.create'],
+            request: $request,
+        );
+
         return ApiResponse::success(
             message: 'Child profile created.',
             data: [
@@ -117,7 +134,7 @@ class ParentChildController extends Controller
         );
     }
 
-    public function update(Request $request, Child $child): JsonResponse
+    public function update(Request $request, Child $child, AuditLogger $auditLogger): JsonResponse
     {
         $parent = $this->requireParentUser($request);
         Gate::forUser($parent)->authorize('update', $child);
@@ -156,11 +173,129 @@ class ParentChildController extends Controller
             }
         }
 
+        $previousUsername = $child->username;
+
         $child->fill($validated);
         $child->save();
 
+        if ($child->username !== $previousUsername) {
+            $auditLogger->log(
+                action: 'child.username.updated',
+                actor: $parent,
+                subject: $child,
+                metadata: [
+                    'old_username' => $previousUsername,
+                    'new_username' => $child->username,
+                    'source' => 'parent.update',
+                ],
+                request: $request,
+            );
+        }
+
         return ApiResponse::success(
             message: 'Child profile updated.',
+            data: [
+                'child' => (new ParentChildResource($child))->resolve(),
+            ],
+        );
+    }
+
+    public function updatePin(Request $request, Child $child, AuditLogger $auditLogger): JsonResponse
+    {
+        $parent = $this->requireParentUser($request);
+        Gate::forUser($parent)->authorize('updatePin', $child);
+
+        /** @var array{pin: string} $validated */
+        $validated = $request->validate([
+            'pin' => ['required', new ChildPinRule],
+        ]);
+
+        $child->pin_hash = Hash::make((string) $validated['pin']);
+        $child->pin_failed_attempts = 0;
+        $child->lockout_tier = 0;
+        $child->locked_until = null;
+        $child->save();
+
+        $auditLogger->log(
+            action: 'child.pin.updated',
+            actor: $parent,
+            subject: $child,
+            metadata: ['source' => 'parent.pin_control'],
+            request: $request,
+        );
+
+        return ApiResponse::success(
+            message: 'Child PIN updated successfully.',
+            data: [
+                'child' => (new ParentChildResource($child))->resolve(),
+            ],
+        );
+    }
+
+    public function updateUsername(Request $request, Child $child, AuditLogger $auditLogger): JsonResponse
+    {
+        $parent = $this->requireParentUser($request);
+        Gate::forUser($parent)->authorize('updateUsername', $child);
+
+        $request->merge([
+            'username' => strtolower(trim((string) $request->input('username', ''))),
+        ]);
+
+        /** @var array{username: string} $validated */
+        $validated = $request->validate([
+            'username' => $this->usernameRules($child->first_name, $child->last_name, $child->id),
+        ]);
+
+        $previousUsername = $child->username;
+        $child->username = $validated['username'];
+        $child->save();
+
+        $auditLogger->log(
+            action: 'child.username.updated',
+            actor: $parent,
+            subject: $child,
+            metadata: [
+                'old_username' => $previousUsername,
+                'new_username' => $child->username,
+                'source' => 'parent.username_control',
+            ],
+            request: $request,
+        );
+
+        return ApiResponse::success(
+            message: 'Child username updated successfully.',
+            data: [
+                'child' => (new ParentChildResource($child))->resolve(),
+            ],
+        );
+    }
+
+    public function unlock(Request $request, Child $child, AuditLogger $auditLogger): JsonResponse
+    {
+        $parent = $this->requireParentUser($request);
+        Gate::forUser($parent)->authorize('unlock', $child);
+
+        $wasLocked = $child->isLocked();
+        $previousAttempts = $child->pin_failed_attempts;
+
+        $child->pin_failed_attempts = 0;
+        $child->lockout_tier = 0;
+        $child->locked_until = null;
+        $child->save();
+
+        $auditLogger->log(
+            action: 'child.profile.unlocked',
+            actor: $parent,
+            subject: $child,
+            metadata: [
+                'was_locked' => $wasLocked,
+                'previous_failed_attempts' => $previousAttempts,
+            ],
+            request: $request,
+        );
+
+        return ApiResponse::success(
+            message: 'Child profile unlocked.',
             data: [
                 'child' => (new ParentChildResource($child))->resolve(),
             ],
