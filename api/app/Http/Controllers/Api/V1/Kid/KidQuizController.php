@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1\Kid;
 
 use App\Domain\Learning\LearningAccess;
+use App\Domain\Rewards\RewardEvent;
+use App\Domain\Rewards\RewardResult;
+use App\Domain\Rewards\RewardService;
 use App\Enums\LessonCompletionMode;
 use App\Http\Controllers\Controller;
 use App\Models\Child;
@@ -28,13 +31,23 @@ class KidQuizController extends Controller
 
     public const FEEDBACK_TRY_AGAIN = 'Not quite. Try again!';
 
-    public function attempts(Request $request, Quiz $quiz, LearningAccess $access): JsonResponse
-    {
+    public function attempts(
+        Request $request,
+        Quiz $quiz,
+        LearningAccess $access,
+        RewardService $rewardService,
+    ): JsonResponse {
         $action = strtolower(trim((string) $request->input('action', '')));
         $attemptId = trim((string) $request->input('attempt_id', ''));
 
         if ($action === 'finish' || $attemptId !== '') {
-            return $this->finishOpenAttempt($request, $quiz, $access, $attemptId !== '' ? $attemptId : null);
+            return $this->finishOpenAttempt(
+                request: $request,
+                quiz: $quiz,
+                access: $access,
+                rewardService: $rewardService,
+                attemptPublicId: $attemptId !== '' ? $attemptId : null,
+            );
         }
 
         return $this->startAttempt($request, $quiz, $access);
@@ -305,15 +318,21 @@ class KidQuizController extends Controller
         );
     }
 
-    public function finishAttempt(Request $request, Quiz $quiz, QuizAttempt $attempt, LearningAccess $access): JsonResponse
-    {
-        return $this->finishOpenAttempt($request, $quiz, $access, $attempt->public_id);
+    public function finishAttempt(
+        Request $request,
+        Quiz $quiz,
+        QuizAttempt $attempt,
+        LearningAccess $access,
+        RewardService $rewardService,
+    ): JsonResponse {
+        return $this->finishOpenAttempt($request, $quiz, $access, $rewardService, $attempt->public_id);
     }
 
     private function finishOpenAttempt(
         Request $request,
         Quiz $quiz,
         LearningAccess $access,
+        RewardService $rewardService,
         ?string $attemptPublicId = null,
     ): JsonResponse {
         $child = $this->requireChild($request);
@@ -343,12 +362,13 @@ class KidQuizController extends Controller
             ? trim((string) $validated['idempotency_key'])
             : ($headerKey !== '' ? $headerKey : null);
 
-        /** @var array{missing_attempt: bool, unanswered_question: int|null, replayed: bool, attempt: QuizAttempt|null, attempts_used: int, lesson_completed: bool, question_results: list<array<string, mixed>>} $outcome */
+        /** @var array{missing_attempt: bool, unanswered_question: int|null, replayed: bool, attempt: QuizAttempt|null, attempts_used: int, lesson_completed: bool, question_results: list<array<string, mixed>>, reward_result: RewardResult|null} $outcome */
         $outcome = DB::transaction(function () use (
             $child,
             $quiz,
             $resolvedAttemptPublicId,
-            $idempotencyKey
+            $idempotencyKey,
+            $rewardService
         ): array {
             Child::query()->whereKey($child->id)->lockForUpdate()->firstOrFail();
 
@@ -376,6 +396,7 @@ class KidQuizController extends Controller
                     'attempts_used' => 0,
                     'lesson_completed' => false,
                     'question_results' => [],
+                    'reward_result' => null,
                 ];
             }
 
@@ -400,6 +421,7 @@ class KidQuizController extends Controller
                         'attempts_used' => $attemptsUsed,
                         'lesson_completed' => false,
                         'question_results' => [],
+                        'reward_result' => null,
                     ];
                 }
             }
@@ -416,6 +438,28 @@ class KidQuizController extends Controller
                         ->exists();
                 }
 
+                $replayedRewardResult = null;
+                if ($attempt->passed) {
+                    $quizPassReward = $rewardService->award(
+                        RewardEvent::quizPassed($child->id, $quiz->id)
+                    );
+                    $others = [];
+                    if ($attempt->score_percent === 100) {
+                        $others[] = $rewardService->award(
+                            RewardEvent::perfectQuiz($child->id, $quiz->id)
+                        );
+                    }
+                    if ($lessonCompleted) {
+                        $mode = LessonCompletionMode::tryFrom($quiz->lesson->completion_mode) ?? LessonCompletionMode::Manual;
+                        if ($mode === LessonCompletionMode::QuizPass) {
+                            $others[] = $rewardService->award(
+                                RewardEvent::lessonCompleted($child->id, $quiz->lesson->id, triggerDailyStreak: false)
+                            );
+                        }
+                    }
+                    $replayedRewardResult = RewardResult::merge($quizPassReward, ...$others);
+                }
+
                 return [
                     'missing_attempt' => false,
                     'unanswered_question' => null,
@@ -424,6 +468,7 @@ class KidQuizController extends Controller
                     'attempts_used' => $attemptsUsed,
                     'lesson_completed' => $lessonCompleted,
                     'question_results' => $questionResults,
+                    'reward_result' => $replayedRewardResult,
                 ];
             }
 
@@ -450,6 +495,7 @@ class KidQuizController extends Controller
             $attempt->save();
 
             $lessonCompleted = false;
+            $lessonNewlyCompleted = false;
             $lesson = $quiz->lesson;
 
             if ($lesson instanceof Lesson) {
@@ -480,6 +526,7 @@ class KidQuizController extends Controller
                         $progress->is_completed = true;
                         $progress->completed_at = now();
                         $progress->completion_source = LessonCompletionMode::QuizPass->value;
+                        $lessonNewlyCompleted = true;
                         if ($idempotencyKey !== null) {
                             $progress->completion_idempotency_key = $idempotencyKey;
                         }
@@ -492,6 +539,25 @@ class KidQuizController extends Controller
                 $lessonCompleted = (bool) ($progress->is_completed ?? false);
             }
 
+            $rewardResult = null;
+            if ($passed) {
+                $quizPassReward = $rewardService->award(
+                    RewardEvent::quizPassed($child->id, $quiz->id)
+                );
+                $others = [];
+                if ($scorePercent === 100) {
+                    $others[] = $rewardService->award(
+                        RewardEvent::perfectQuiz($child->id, $quiz->id)
+                    );
+                }
+                if ($lessonNewlyCompleted) {
+                    $others[] = $rewardService->award(
+                        RewardEvent::lessonCompleted($child->id, $lesson->id, triggerDailyStreak: false)
+                    );
+                }
+                $rewardResult = RewardResult::merge($quizPassReward, ...$others);
+            }
+
             return [
                 'missing_attempt' => false,
                 'unanswered_question' => null,
@@ -500,6 +566,7 @@ class KidQuizController extends Controller
                 'attempts_used' => $attemptsUsed,
                 'lesson_completed' => $lessonCompleted,
                 'question_results' => $questionResults,
+                'reward_result' => $rewardResult,
             ];
         });
 
@@ -541,6 +608,7 @@ class KidQuizController extends Controller
                     'submitted_at' => $attempt->submitted_at?->toIso8601String(),
                     'results' => $outcome['question_results'],
                 ],
+                'reward_result' => $outcome['reward_result']?->toArray(),
             ],
         );
     }

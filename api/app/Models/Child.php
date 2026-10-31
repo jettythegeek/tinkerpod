@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -143,6 +144,31 @@ class Child extends Authenticatable
     public function rewardBalances(): HasMany
     {
         return $this->hasMany(RewardBalance::class, 'child_id');
+    }
+
+    /**
+     * @return HasMany<ChildBadge, $this>
+     */
+    public function childBadges(): HasMany
+    {
+        return $this->hasMany(ChildBadge::class, 'child_id');
+    }
+
+    /**
+     * @return BelongsToMany<Badge, $this>
+     */
+    public function badges(): BelongsToMany
+    {
+        return $this->belongsToMany(Badge::class, 'child_badges', 'child_id', 'badge_id')
+            ->withPivot(['ledger_id', 'earned_at']);
+    }
+
+    /**
+     * @return HasOne<ChildStreak, $this>
+     */
+    public function streak(): HasOne
+    {
+        return $this->hasOne(ChildStreak::class, 'child_id');
     }
 
     public function isLocked(): bool

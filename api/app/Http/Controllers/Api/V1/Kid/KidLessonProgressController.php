@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1\Kid;
 
 use App\Domain\Learning\LearningAccess;
+use App\Domain\Rewards\RewardEvent;
+use App\Domain\Rewards\RewardResult;
+use App\Domain\Rewards\RewardService;
 use App\Enums\LessonCompletionMode;
 use App\Http\Controllers\Controller;
 use App\Models\Child;
@@ -18,8 +21,12 @@ use Illuminate\Support\Facades\DB;
 
 class KidLessonProgressController extends Controller
 {
-    public function update(Request $request, Lesson $lesson, LearningAccess $access): JsonResponse
-    {
+    public function update(
+        Request $request,
+        Lesson $lesson,
+        LearningAccess $access,
+        RewardService $rewardService,
+    ): JsonResponse {
         $child = $this->requireChild($request);
         $child->loadMissing('enrollments');
 
@@ -46,14 +53,15 @@ class KidLessonProgressController extends Controller
             ? trim((string) $validated['idempotency_key'])
             : ($headerKey !== '' ? $headerKey : null);
 
-        /** @var array{progress: LessonProgress, newly_completed: bool} $result */
+        /** @var array{progress: LessonProgress, newly_completed: bool, reward_result: RewardResult|null} $result */
         $result = DB::transaction(function () use (
             $child,
             $lesson,
             $incomingResume,
             $incomingWatch,
             $incomingManual,
-            $idempotencyKey
+            $idempotencyKey,
+            $rewardService
         ): array {
             Child::query()->whereKey($child->id)->lockForUpdate()->firstOrFail();
 
@@ -117,9 +125,17 @@ class KidLessonProgressController extends Controller
                 $progress->save();
             }
 
+            $rewardResult = null;
+            if ($nextIsCompleted && ($newlyCompleted || $shouldComplete || $idempotencyKey !== null)) {
+                $rewardResult = $rewardService->award(
+                    RewardEvent::lessonCompleted($child->id, $lesson->id)
+                );
+            }
+
             return [
                 'progress' => $progress,
                 'newly_completed' => $newlyCompleted,
+                'reward_result' => $rewardResult,
             ];
         });
 
@@ -140,6 +156,7 @@ class KidLessonProgressController extends Controller
                     'is_completed' => $progress->is_completed,
                     'completed_at' => $progress->completed_at?->toIso8601String(),
                 ],
+                'reward_result' => $result['reward_result']?->toArray(),
             ],
         );
     }

@@ -43,6 +43,10 @@ enum PermissionName: string
     case ManageGamification = 'gamification.manage';
     case ManageTournaments = 'tournaments.manage';
 
+    case ViewRewards = 'rewards.view';
+    case ManageRewards = 'rewards.manage';
+    case AdjustRewards = 'rewards.adjust';
+
     case ViewBilling = 'billing.view';
     case ManageBilling = 'billing.manage';
     case ReconcileBilling = 'billing.reconcile';
