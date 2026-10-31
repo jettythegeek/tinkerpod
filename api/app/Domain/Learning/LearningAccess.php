@@ -114,11 +114,23 @@ class LearningAccess
         }
 
         $world = $lesson->world;
+        $module = $lesson->module;
+
+        if (
+            $world instanceof World
+            && $module !== null
+            && $world->course_id !== null
+            && $world->course_id === $module->course_id
+            && $module->relationLoaded('course')
+            && ! $world->relationLoaded('course')
+        ) {
+            $world->setRelation('course', $module->course);
+        }
+
         if (! $world instanceof World || ! $this->canAccessWorld($child, $world)) {
             return false;
         }
 
-        $module = $lesson->module;
         if ($module === null || ! $module->isPublished()) {
             return false;
         }

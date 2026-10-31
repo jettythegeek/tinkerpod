@@ -144,4 +144,12 @@ class Lesson extends Model
     {
         return $this->hasMany(Project::class, 'lesson_id')->orderBy('sort_order');
     }
+
+    /**
+     * @return HasMany<LessonProgress, $this>
+     */
+    public function progressRecords(): HasMany
+    {
+        return $this->hasMany(LessonProgress::class, 'lesson_id');
+    }
 }

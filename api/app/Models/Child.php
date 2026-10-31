@@ -121,6 +121,14 @@ class Child extends Authenticatable
             ->withTimestamps();
     }
 
+    /**
+     * @return HasMany<LessonProgress, $this>
+     */
+    public function lessonProgress(): HasMany
+    {
+        return $this->hasMany(LessonProgress::class, 'child_id');
+    }
+
     public function isLocked(): bool
     {
         return $this->locked_until instanceof CarbonInterface && $this->locked_until->isFuture();
