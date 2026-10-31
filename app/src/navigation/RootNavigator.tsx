@@ -10,8 +10,10 @@ import { ParentRegisterScreen } from '../features/auth/screens/ParentRegisterScr
 import { PinPadScreen } from '../features/auth/screens/PinPadScreen';
 import { ProfilePickerScreen } from '../features/auth/screens/ProfilePickerScreen';
 import { WelcomeScreen } from '../features/auth/screens/WelcomeScreen';
-import { BootPlaceholderScreen } from '../features/boot/BootPlaceholderScreen';
+import { JourneyMapScreen } from '../features/kid/JourneyMapScreen';
 import { KidHomeScreen } from '../features/kid/KidHomeScreen';
+import { LessonDetailScreen } from '../features/kid/LessonDetailScreen';
+import { QuizScreen } from '../features/kid/QuizScreen';
 import { ParentHomeScreen } from '../features/parent/ParentHomeScreen';
 import { useTheme } from '../theme';
 
@@ -23,7 +25,6 @@ export type AuthStackParamList = {
   readonly KidLogin: undefined;
   readonly ProfilePicker: { readonly profiles: KidPickerProfileDto[] };
   readonly PinPad: { readonly profile: KidPickerProfileDto };
-  readonly BootPlaceholder: undefined;
 };
 
 export type ParentStackParamList = {
@@ -32,6 +33,9 @@ export type ParentStackParamList = {
 
 export type KidStackParamList = {
   readonly KidHome: undefined;
+  readonly JourneyMap: { readonly podId?: string } | undefined;
+  readonly LessonDetail: { readonly lessonId: string };
+  readonly Quiz: { readonly quizId?: string; readonly lessonId?: string };
 };
 
 export type RootStackParamList = AuthStackParamList &
@@ -76,9 +80,63 @@ export function RootNavigator(): React.JSX.Element {
         >
           <KidStack.Screen
             name="KidHome"
-            component={KidHomeScreen}
             options={{ title: 'TinkerPod Studio' }}
-          />
+          >
+            {({ navigation }) => (
+              <KidHomeScreen
+                onOpenJourneyMap={(podId) =>
+                  navigation.navigate('JourneyMap', podId ? { podId } : undefined)
+                }
+                onOpenLesson={(lessonId) =>
+                  navigation.navigate('LessonDetail', { lessonId })
+                }
+              />
+            )}
+          </KidStack.Screen>
+
+          <KidStack.Screen
+            name="JourneyMap"
+            options={{ title: 'Journey Map' }}
+          >
+            {({ navigation, route }) => (
+              <JourneyMapScreen
+                podId={route.params?.podId}
+                onBack={() => navigation.goBack()}
+                onNavigateHome={() => navigation.navigate('KidHome')}
+                onOpenLesson={(lessonId) =>
+                  navigation.navigate('LessonDetail', { lessonId })
+                }
+              />
+            )}
+          </KidStack.Screen>
+
+          <KidStack.Screen
+            name="LessonDetail"
+            options={{ title: 'Lesson' }}
+          >
+            {({ navigation, route }) => (
+              <LessonDetailScreen
+                lessonId={route.params.lessonId}
+                onBack={() => navigation.goBack()}
+                onStartQuiz={(quizId, lessonId) =>
+                  navigation.navigate('Quiz', { quizId, lessonId })
+                }
+              />
+            )}
+          </KidStack.Screen>
+
+          <KidStack.Screen
+            name="Quiz"
+            options={{ title: 'Quiz' }}
+          >
+            {({ navigation, route }) => (
+              <QuizScreen
+                quizId={route.params.quizId}
+                lessonId={route.params.lessonId}
+                onBack={() => navigation.goBack()}
+              />
+            )}
+          </KidStack.Screen>
         </KidStack.Navigator>
       ) : (
         <AuthStack.Navigator
@@ -163,12 +221,6 @@ export function RootNavigator(): React.JSX.Element {
               />
             )}
           </AuthStack.Screen>
-
-          <AuthStack.Screen
-            name="BootPlaceholder"
-            component={BootPlaceholderScreen}
-            options={{ title: 'TinkerPod' }}
-          />
         </AuthStack.Navigator>
       )}
     </NavigationContainer>

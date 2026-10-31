@@ -17,6 +17,7 @@ use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class KidAuthController extends Controller
@@ -26,6 +27,31 @@ class KidAuthController extends Controller
     public const WRONG_PIN_MESSAGE = "Hmm, that PIN didn't match. Try again or ask your parent for help.";
 
     public const LOCKOUT_MESSAGE = "Let's take a short break. Ask your parent to unlock, or try again in 15 minutes.";
+
+    /**
+     * Constant-cost dummy bcrypt hash used when a child profile is unknown so
+     * login timing does not leak profile existence.
+     */
+    private const DUMMY_BCRYPT_HASH = '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+
+    public static function lockoutMessageForMinutes(int $minutes): string
+    {
+        if ($minutes === 60) {
+            $waitLabel = '1 hour';
+        } elseif ($minutes >= 120 && $minutes % 60 === 0) {
+            $hours = intdiv($minutes, 60);
+            $waitLabel = sprintf('%d hours', $hours);
+        } elseif ($minutes === 1) {
+            $waitLabel = '1 minute';
+        } else {
+            $waitLabel = sprintf('%d minutes', $minutes);
+        }
+
+        return sprintf(
+            "Let's take a short break. Ask your parent to unlock, or try again in %s.",
+            $waitLabel,
+        );
+    }
 
     public function lookup(Request $request): JsonResponse
     {
@@ -78,92 +104,102 @@ class KidAuthController extends Controller
             'pin' => ['required', 'string', 'regex:/^\d{4,6}$/'],
         ]);
 
-        $child = $this->resolveChildByIdOrUsername($validated['target']);
+        return DB::transaction(function () use ($validated, $request, $auditLogger): JsonResponse {
+            $child = $this->resolveChildByIdOrUsernameForUpdate($validated['target']);
 
-        if ($child === null) {
+            if ($child === null) {
+                Hash::check($validated['pin'], self::DUMMY_BCRYPT_HASH);
+
+                $auditLogger->log(
+                    action: 'kid.login.failed',
+                    actor: null,
+                    subject: null,
+                    metadata: [
+                        'target' => $validated['target'],
+                        'reason' => 'unknown_profile',
+                    ],
+                    request: $request,
+                );
+
+                return ApiResponse::error(
+                    message: self::WRONG_PIN_MESSAGE,
+                    data: null,
+                    status: 422,
+                );
+            }
+
+            if ($child->isLocked()) {
+                /** @var list<int> $schedule */
+                $schedule = config('tinkerpod.auth.lockout_minutes_schedule', [15, 60, 1440]);
+                $tierIndex = max(0, min($child->lockout_tier - 1, count($schedule) - 1));
+                $lockMinutes = $schedule[$tierIndex] ?? 15;
+
+                $auditLogger->log(
+                    action: 'kid.login.blocked_locked',
+                    actor: $child,
+                    subject: $child,
+                    metadata: [
+                        'locked_until' => $child->locked_until?->toIso8601String(),
+                    ],
+                    request: $request,
+                );
+
+                return ApiResponse::error(
+                    message: self::lockoutMessageForMinutes($lockMinutes),
+                    data: [
+                        'locked_until' => $child->locked_until?->toIso8601String(),
+                        'lockout_minutes' => $lockMinutes,
+                    ],
+                    status: 423,
+                );
+            }
+
+            // If a previous lockout has expired, reset the attempt counter for the new cycle while keeping lockout_tier
+            $maxAttempts = max(1, (int) config('tinkerpod.auth.pin_max_attempts', 5));
+            if (
+                $child->locked_until instanceof CarbonInterface
+                && $child->locked_until->isPast()
+                && $child->pin_failed_attempts >= $maxAttempts
+            ) {
+                $child->pin_failed_attempts = 0;
+                $child->locked_until = null;
+            }
+
+            if (! Hash::check($validated['pin'], $child->pin_hash)) {
+                return $this->handleFailedPinAttempt($child, $request, $auditLogger);
+            }
+
+            $child->pin_failed_attempts = 0;
+            $child->lockout_tier = 0;
+            $child->locked_until = null;
+            $child->save();
+
+            $ttlDays = max(1, (int) config('tinkerpod.auth.kid_token_ttl_days', 7));
+            $expiresAt = now()->addDays($ttlDays);
+
+            $token = $child->createToken('kid-mobile', ['child:*'], $expiresAt)->plainTextToken;
+
             $auditLogger->log(
-                action: 'kid.login.failed',
-                actor: null,
-                subject: null,
-                metadata: [
-                    'target' => $validated['target'],
-                    'reason' => 'unknown_profile',
-                ],
-                request: $request,
-            );
-
-            return ApiResponse::error(
-                message: self::WRONG_PIN_MESSAGE,
-                data: null,
-                status: 422,
-            );
-        }
-
-        if ($child->isLocked()) {
-            $auditLogger->log(
-                action: 'kid.login.blocked_locked',
+                action: 'kid.login.succeeded',
                 actor: $child,
                 subject: $child,
                 metadata: [
-                    'locked_until' => $child->locked_until?->toIso8601String(),
+                    'expires_at' => $expiresAt->toIso8601String(),
                 ],
                 request: $request,
             );
 
-            return ApiResponse::error(
-                message: self::LOCKOUT_MESSAGE,
+            return ApiResponse::success(
+                message: 'Welcome back!',
                 data: [
-                    'locked_until' => $child->locked_until?->toIso8601String(),
+                    'token' => $token,
+                    'token_type' => 'Bearer',
+                    'abilities' => ['child:*'],
+                    'expires_at' => $expiresAt->toIso8601String(),
+                    'child' => (new KidProfileResource($child))->resolve(),
                 ],
-                status: 423,
             );
-        }
-
-        // If a previous lockout has expired, reset the attempt counter for the new cycle while keeping lockout_tier
-        $maxAttempts = max(1, (int) config('tinkerpod.auth.pin_max_attempts', 5));
-        if (
-            $child->locked_until instanceof CarbonInterface
-            && $child->locked_until->isPast()
-            && $child->pin_failed_attempts >= $maxAttempts
-        ) {
-            $child->pin_failed_attempts = 0;
-            $child->locked_until = null;
-        }
-
-        if (! Hash::check($validated['pin'], $child->pin_hash)) {
-            return $this->handleFailedPinAttempt($child, $request, $auditLogger);
-        }
-
-        $child->pin_failed_attempts = 0;
-        $child->lockout_tier = 0;
-        $child->locked_until = null;
-        $child->save();
-
-        $ttlDays = max(1, (int) config('tinkerpod.auth.kid_token_ttl_days', 7));
-        $expiresAt = now()->addDays($ttlDays);
-
-        $token = $child->createToken('kid-mobile', ['child:*'], $expiresAt)->plainTextToken;
-
-        $auditLogger->log(
-            action: 'kid.login.succeeded',
-            actor: $child,
-            subject: $child,
-            metadata: [
-                'expires_at' => $expiresAt->toIso8601String(),
-            ],
-            request: $request,
-        );
-
-        return ApiResponse::success(
-            message: 'Welcome back!',
-            data: [
-                'token' => $token,
-                'token_type' => 'Bearer',
-                'abilities' => ['child:*'],
-                'expires_at' => $expiresAt->toIso8601String(),
-                'child' => (new KidProfileResource($child))->resolve(),
-            ],
-        );
+        });
     }
 
     protected function handleFailedPinAttempt(Child $child, Request $request, AuditLogger $auditLogger): JsonResponse
@@ -201,7 +237,7 @@ class KidAuthController extends Controller
             }
 
             return ApiResponse::error(
-                message: self::LOCKOUT_MESSAGE,
+                message: self::lockoutMessageForMinutes($lockMinutes),
                 data: [
                     'locked_until' => $child->locked_until->toIso8601String(),
                     'lockout_minutes' => $lockMinutes,
@@ -273,13 +309,16 @@ class KidAuthController extends Controller
         return ['single', new Collection([$child])];
     }
 
-    private function resolveChildByIdOrUsername(string $target): ?Child
+    private function resolveChildByIdOrUsernameForUpdate(string $target): ?Child
     {
         $lower = strtolower(trim($target));
 
         return Child::query()
-            ->where('public_id', $lower)
-            ->orWhereRaw('LOWER(username) = ?', [$lower])
+            ->where(static function ($query) use ($lower): void {
+                $query->where('public_id', $lower)
+                    ->orWhereRaw('LOWER(username) = ?', [$lower]);
+            })
+            ->lockForUpdate()
             ->first();
     }
 }

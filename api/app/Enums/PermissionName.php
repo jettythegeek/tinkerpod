@@ -22,6 +22,10 @@ enum PermissionName: string
     case ManageContent = 'content.manage';
     case PublishContent = 'content.publish';
 
+    case ViewCurriculum = 'curriculum.view';
+    case ManageCurriculum = 'curriculum.manage';
+    case PublishCurriculum = 'curriculum.publish';
+
     case ViewPacks = 'packs.view';
     case ManagePacks = 'packs.manage';
     case PublishPacks = 'packs.publish';

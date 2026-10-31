@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\AuditLog;
 use App\Models\Child;
+use App\Models\PublicationLog;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -64,6 +65,46 @@ class AuditLogger
         );
     }
 
+    /**
+     * Records a curriculum publication status transition in both `audit_logs`
+     * and `publication_logs`.
+     *
+     * @param  array<string, mixed>  $metadata
+     */
+    public function logPublicationChange(
+        Model $subject,
+        ?string $fromStatus,
+        string $toStatus,
+        ?Model $actor = null,
+        array $metadata = [],
+        ?Request $request = null,
+    ): PublicationLog {
+        $mergedMeta = array_merge($metadata, [
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+        ]);
+
+        $auditLog = $this->log(
+            action: 'curriculum.status.changed',
+            actor: $actor,
+            subject: $subject,
+            metadata: $mergedMeta,
+            request: $request,
+        );
+
+        return PublicationLog::query()->create([
+            'publishable_type' => $subject::class,
+            'publishable_id' => (string) $this->resolveIdentifier($subject),
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+            'actor_type' => $actor !== null ? $actor::class : null,
+            'actor_id' => $this->resolveIdentifier($actor),
+            'audit_log_id' => $auditLog->id,
+            'metadata' => $mergedMeta,
+            'occurred_at' => $auditLog->occurred_at,
+        ]);
+    }
+
     private function resolveIdentifier(?Model $model): ?string
     {
         if ($model === null) {
@@ -72,6 +113,11 @@ class AuditLogger
 
         if ($model instanceof Child) {
             return $model->public_id;
+        }
+
+        $publicId = $model->getAttribute('public_id');
+        if (is_string($publicId) && $publicId !== '') {
+            return $publicId;
         }
 
         $key = $model->getKey();

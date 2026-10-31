@@ -3,6 +3,8 @@ import { ImageSourcePropType } from 'react-native';
 
 export const APPROVED_LOGO_ASSET: ImageSourcePropType = require('../../../design/assets/logo.png');
 
+export const APPROVED_FX03_AUDIO_ASSET: number = require('../../../design/fx/audio/fx03-correct-wrong.mp3');
+
 export const APPROVED_AVATAR_ASSETS: Record<string, ImageSourcePropType> = {
   'av1.png': require('../../../design/assets/av1.png'),
   'av2.png': require('../../../design/assets/av2.png'),

@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Factories;
+
+use App\Enums\ContentStatus;
+use App\Models\Course;
+use App\Models\Pod;
+use App\Models\Track;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+
+/**
+ * @extends Factory<Course>
+ */
+class CourseFactory extends Factory
+{
+    protected $model = Course::class;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        $title = 'Course '.fake()->unique()->numerify('###');
+
+        return [
+            'public_id' => strtolower((string) Str::ulid()),
+            'pod_id' => Pod::factory(),
+            'track_id' => function (array $attributes): int {
+                $podId = is_int($attributes['pod_id'] ?? null)
+                    ? $attributes['pod_id']
+                    : Pod::factory()->create()->id;
+
+                return Track::factory()->create(['pod_id' => $podId])->id;
+            },
+            'slug' => Str::slug($title),
+            'title' => $title,
+            'description' => fake()->sentence(),
+            'difficulty' => 'Beginner',
+            'status' => ContentStatus::Published->value,
+            'is_demo' => false,
+            'sort_order' => 1,
+            'published_at' => now(),
+        ];
+    }
+
+    public function draft(): static
+    {
+        return $this->state(fn (): array => [
+            'status' => ContentStatus::Draft->value,
+            'published_at' => null,
+        ]);
+    }
+}

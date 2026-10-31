@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { PipIdleSvg, PIP_IDLE_SOURCE_ASSET } from '../../pip';
+import { PipIdleSvg } from '../../pip';
 import { AgeBandThemeMode, useTheme } from '../../theme';
 
 export function BootPlaceholderScreen(): React.JSX.Element {
@@ -75,7 +75,7 @@ export function BootPlaceholderScreen(): React.JSX.Element {
             },
           ]}
         >
-          Hi, I&apos;m Pip!
+          Hi, I&apos;m Captain Jetty!
         </Text>
 
         <Text
@@ -99,7 +99,7 @@ export function BootPlaceholderScreen(): React.JSX.Element {
             },
           ]}
         >
-          Rig source: {PIP_IDLE_SOURCE_ASSET}
+          Captain Jetty · Official TinkerPod Mascot
         </Text>
       </View>
 

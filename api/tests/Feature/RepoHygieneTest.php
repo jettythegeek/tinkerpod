@@ -58,9 +58,8 @@ class RepoHygieneTest extends TestCase
             );
         }
 
-        // Verify no legacy models or controllers exist in fresh M0 api/app
+        // Verify no legacy services or unimplemented M5 billing models exist in api/app
         $legacyPhpClasses = [
-            base_path('app/Models/Pod.php'),
             base_path('app/Models/Plan.php'),
             base_path('app/Models/Subscription.php'),
             base_path('app/Services/PaystackService.php'),

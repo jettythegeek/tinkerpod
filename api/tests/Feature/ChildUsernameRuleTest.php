@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\RoleName;
 use App\Models\Child;
 use App\Models\User;
 use App\Rules\ChildUsernameRule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ChildUsernameRuleTest extends TestCase
@@ -16,7 +18,10 @@ class ChildUsernameRuleTest extends TestCase
 
     public function test_rejects_rude_lookalike_phone_like_email_like_and_real_name_usernames_with_kid_friendly_message(): void
     {
+        Role::findOrCreate(RoleName::Parent->value, 'web');
+
         $parent = User::factory()->create();
+        $parent->assignRole(RoleName::Parent->value);
         $parentToken = $parent->createToken('parent-mobile', ['parent:*'])->plainTextToken;
 
         $existingChild = Child::factory()->for($parent, 'parent')->create([

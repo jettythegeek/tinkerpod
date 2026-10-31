@@ -1,0 +1,448 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Api\V1\Kid;
+
+use App\Domain\Learning\LearningAccess;
+use App\Enums\LessonCompletionMode;
+use App\Http\Controllers\Controller;
+use App\Models\Child;
+use App\Models\Lesson;
+use App\Models\LessonProgress;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
+use App\Models\QuizAttemptAnswer;
+use App\Models\QuizOption;
+use App\Models\QuizQuestion;
+use App\Support\ApiResponse;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
+class KidQuizController extends Controller
+{
+    public const FEEDBACK_CORRECT = 'Correct! Captain Jetty is proud of you.';
+
+    public const FEEDBACK_TRY_AGAIN = 'Not quite. Try again!';
+
+    public function check(Request $request, Quiz $quiz, LearningAccess $access): JsonResponse
+    {
+        $child = $this->requireChild($request);
+        $child->loadMissing('enrollments');
+
+        $quiz->load([
+            'lesson.world.pod',
+            'lesson.module.course.track',
+            'questions.options',
+        ]);
+
+        $access->assertCanAccessQuiz($child, $quiz);
+
+        /** @var array{question_id: string, option_id?: string|null, option_key?: string|null} $validated */
+        $validated = $request->validate([
+            'question_id' => ['required', 'string'],
+            'option_id' => ['nullable', 'string', 'required_without:option_key'],
+            'option_key' => ['nullable', 'string', 'required_without:option_id'],
+        ]);
+
+        $attemptsUsed = QuizAttempt::query()
+            ->where('child_id', $child->id)
+            ->where('quiz_id', $quiz->id)
+            ->whereNotNull('submitted_at')
+            ->count();
+
+        if ($quiz->max_attempts > 0 && $attemptsUsed >= $quiz->max_attempts) {
+            return ApiResponse::error(
+                message: 'You have used all attempts for this quiz.',
+                data: [
+                    'attempts_used' => $attemptsUsed,
+                    'max_attempts' => $quiz->max_attempts,
+                    'remaining_attempts' => 0,
+                ],
+                status: 422,
+            );
+        }
+
+        $questionId = strtolower(trim($validated['question_id']));
+        /** @var QuizQuestion|null $question */
+        $question = $quiz->questions->first(
+            static fn (QuizQuestion $q): bool => strtolower($q->public_id) === $questionId
+        );
+
+        if ($question === null) {
+            throw ValidationException::withMessages([
+                'question_id' => ['The selected question does not belong to this quiz.'],
+            ]);
+        }
+
+        $option = $this->resolveOptionForQuestion(
+            question: $question,
+            optionId: $validated['option_id'] ?? null,
+            optionKey: $validated['option_key'] ?? null,
+        );
+
+        if ($option === null) {
+            throw ValidationException::withMessages([
+                'option_id' => ['The selected option does not belong to this question.'],
+            ]);
+        }
+
+        $isCorrect = (bool) $option->is_correct;
+
+        return ApiResponse::success(
+            message: $isCorrect ? self::FEEDBACK_CORRECT : self::FEEDBACK_TRY_AGAIN,
+            data: [
+                'quiz_id' => $quiz->public_id,
+                'question_id' => $question->public_id,
+                'option_id' => $option->public_id,
+                'option_key' => $option->option_key,
+                'is_correct' => $isCorrect,
+                'points_awarded' => $isCorrect ? $question->points : 0,
+                'feedback' => $isCorrect ? self::FEEDBACK_CORRECT : self::FEEDBACK_TRY_AGAIN,
+                'explanation' => $question->explanation,
+            ],
+        );
+    }
+
+    public function submit(Request $request, Quiz $quiz, LearningAccess $access): JsonResponse
+    {
+        $child = $this->requireChild($request);
+        $child->loadMissing('enrollments');
+
+        $quiz->load([
+            'lesson.world.pod',
+            'lesson.module.course.track',
+            'questions.options',
+        ]);
+
+        $access->assertCanAccessQuiz($child, $quiz);
+
+        /** @var array{answers: list<array{question_id: string, option_id?: string|null, option_key?: string|null}>, idempotency_key?: string|null} $validated */
+        $validated = $request->validate([
+            'answers' => ['required', 'array', 'min:1'],
+            'answers.*.question_id' => ['required', 'string'],
+            'answers.*.option_id' => ['nullable', 'string'],
+            'answers.*.option_key' => ['nullable', 'string'],
+            'idempotency_key' => ['sometimes', 'nullable', 'string', 'max:120'],
+        ]);
+
+        $headerKey = trim((string) $request->header('Idempotency-Key', ''));
+        $idempotencyKey = isset($validated['idempotency_key']) && trim((string) $validated['idempotency_key']) !== ''
+            ? trim((string) $validated['idempotency_key'])
+            : ($headerKey !== '' ? $headerKey : null);
+
+        $submittedByQuestionUlid = [];
+        foreach ($validated['answers'] as $answerItem) {
+            $qUlid = strtolower(trim($answerItem['question_id']));
+            $submittedByQuestionUlid[$qUlid] = [
+                'option_id' => $answerItem['option_id'] ?? null,
+                'option_key' => $answerItem['option_key'] ?? null,
+            ];
+        }
+
+        // Validate that every submitted answer matches a real question and option on this quiz
+        $resolvedSelections = [];
+        /** @var QuizQuestion $question */
+        foreach ($quiz->questions as $question) {
+            $qUlid = strtolower($question->public_id);
+            if (! isset($submittedByQuestionUlid[$qUlid])) {
+                throw ValidationException::withMessages([
+                    'answers' => ["Missing answer for question {$question->question_number}."],
+                ]);
+            }
+
+            $submitted = $submittedByQuestionUlid[$qUlid];
+            $option = $this->resolveOptionForQuestion(
+                question: $question,
+                optionId: $submitted['option_id'],
+                optionKey: $submitted['option_key'],
+            );
+
+            if ($option === null) {
+                throw ValidationException::withMessages([
+                    'answers' => ["Invalid option selected for question {$question->question_number}."],
+                ]);
+            }
+
+            $resolvedSelections[$question->id] = $option;
+        }
+
+        /** @var array{capped: bool, replayed: bool, attempt: QuizAttempt|null, attempts_used: int, lesson_completed: bool, question_results: list<array<string, mixed>>} $outcome */
+        $outcome = DB::transaction(function () use (
+            $child,
+            $quiz,
+            $idempotencyKey,
+            $resolvedSelections
+        ): array {
+            Child::query()->whereKey($child->id)->lockForUpdate()->firstOrFail();
+
+            if ($idempotencyKey !== null) {
+                /** @var QuizAttempt|null $existingAttempt */
+                $existingAttempt = QuizAttempt::query()
+                    ->where('child_id', $child->id)
+                    ->where('quiz_id', $quiz->id)
+                    ->where('idempotency_key', $idempotencyKey)
+                    ->with(['answers'])
+                    ->first();
+
+                if ($existingAttempt !== null) {
+                    $attemptsUsed = QuizAttempt::query()
+                        ->where('child_id', $child->id)
+                        ->where('quiz_id', $quiz->id)
+                        ->whereNotNull('submitted_at')
+                        ->count();
+
+                    $lessonCompleted = false;
+                    if ($quiz->lesson !== null) {
+                        $lessonCompleted = LessonProgress::query()
+                            ->where('child_id', $child->id)
+                            ->where('lesson_id', $quiz->lesson->id)
+                            ->where('is_completed', true)
+                            ->exists();
+                    }
+
+                    return [
+                        'capped' => false,
+                        'replayed' => true,
+                        'attempt' => $existingAttempt,
+                        'attempts_used' => $attemptsUsed,
+                        'lesson_completed' => $lessonCompleted,
+                        'question_results' => $this->buildQuestionResults($quiz, $resolvedSelections),
+                    ];
+                }
+            }
+
+            $existingCount = QuizAttempt::query()
+                ->where('child_id', $child->id)
+                ->where('quiz_id', $quiz->id)
+                ->whereNotNull('submitted_at')
+                ->lockForUpdate()
+                ->count();
+
+            if ($quiz->max_attempts > 0 && $existingCount >= $quiz->max_attempts) {
+                return [
+                    'capped' => true,
+                    'replayed' => false,
+                    'attempt' => null,
+                    'attempts_used' => $existingCount,
+                    'lesson_completed' => false,
+                    'question_results' => [],
+                ];
+            }
+
+            $earnedPoints = 0;
+            $totalPoints = 0;
+            $questionResults = [];
+
+            /** @var QuizQuestion $question */
+            foreach ($quiz->questions as $question) {
+                $option = $resolvedSelections[$question->id];
+                $isCorrect = (bool) $option->is_correct;
+                $points = $isCorrect ? (int) $question->points : 0;
+
+                $totalPoints += (int) $question->points;
+                $earnedPoints += $points;
+
+                $questionResults[] = [
+                    'question_id' => $question->public_id,
+                    'question_number' => $question->question_number,
+                    'option_id' => $option->public_id,
+                    'option_key' => $option->option_key,
+                    'is_correct' => $isCorrect,
+                    'points_awarded' => $points,
+                    'feedback' => $isCorrect ? self::FEEDBACK_CORRECT : self::FEEDBACK_TRY_AGAIN,
+                    'explanation' => $question->explanation,
+                ];
+            }
+
+            $scorePercent = $totalPoints > 0
+                ? (int) round(($earnedPoints * 100) / $totalPoints)
+                : 0;
+            $passed = $scorePercent >= (int) $quiz->pass_mark_percent;
+            $attemptNumber = $existingCount + 1;
+
+            $attempt = QuizAttempt::query()->create([
+                'child_id' => $child->id,
+                'quiz_id' => $quiz->id,
+                'attempt_number' => $attemptNumber,
+                'idempotency_key' => $idempotencyKey,
+                'earned_points' => $earnedPoints,
+                'total_points' => $totalPoints,
+                'score_percent' => $scorePercent,
+                'passed' => $passed,
+                'submitted_at' => now(),
+            ]);
+
+            /** @var QuizQuestion $question */
+            foreach ($quiz->questions as $question) {
+                $option = $resolvedSelections[$question->id];
+                $isCorrect = (bool) $option->is_correct;
+
+                QuizAttemptAnswer::query()->create([
+                    'quiz_attempt_id' => $attempt->id,
+                    'quiz_question_id' => $question->id,
+                    'quiz_option_id' => $option->id,
+                    'is_correct' => $isCorrect,
+                    'points_awarded' => $isCorrect ? (int) $question->points : 0,
+                ]);
+            }
+
+            $lessonCompleted = false;
+            $lesson = $quiz->lesson;
+
+            if ($lesson instanceof Lesson) {
+                /** @var LessonProgress|null $progress */
+                $progress = LessonProgress::query()
+                    ->where('child_id', $child->id)
+                    ->where('lesson_id', $lesson->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($passed) {
+                    if ($progress === null) {
+                        $progress = new LessonProgress([
+                            'child_id' => $child->id,
+                            'lesson_id' => $lesson->id,
+                            'resume_position_seconds' => 0,
+                            'watch_percent' => 0,
+                            'manual_completed' => false,
+                            'quiz_passed' => true,
+                            'is_completed' => false,
+                        ]);
+                    } else {
+                        $progress->quiz_passed = true;
+                    }
+
+                    $mode = LessonCompletionMode::tryFrom($lesson->completion_mode) ?? LessonCompletionMode::Manual;
+                    if ($mode === LessonCompletionMode::QuizPass && ! $progress->is_completed) {
+                        $progress->is_completed = true;
+                        $progress->completed_at = now();
+                        $progress->completion_source = LessonCompletionMode::QuizPass->value;
+                        if ($idempotencyKey !== null) {
+                            $progress->completion_idempotency_key = $idempotencyKey;
+                        }
+                    }
+
+                    $progress->last_accessed_at = now();
+                    $progress->save();
+                }
+
+                $lessonCompleted = (bool) ($progress->is_completed ?? false);
+            }
+
+            return [
+                'capped' => false,
+                'replayed' => false,
+                'attempt' => $attempt,
+                'attempts_used' => $attemptNumber,
+                'lesson_completed' => $lessonCompleted,
+                'question_results' => $questionResults,
+            ];
+        });
+
+        if ($outcome['capped'] || $outcome['attempt'] === null) {
+            return ApiResponse::error(
+                message: 'You have used all attempts for this quiz.',
+                data: [
+                    'attempts_used' => $outcome['attempts_used'],
+                    'max_attempts' => $quiz->max_attempts,
+                    'remaining_attempts' => 0,
+                ],
+                status: 422,
+            );
+        }
+
+        $attempt = $outcome['attempt'];
+
+        return ApiResponse::success(
+            message: $attempt->passed ? self::FEEDBACK_CORRECT : self::FEEDBACK_TRY_AGAIN,
+            data: [
+                'attempt' => [
+                    'id' => $attempt->public_id,
+                    'quiz_id' => $quiz->public_id,
+                    'attempt_number' => $attempt->attempt_number,
+                    'attempts_used' => $outcome['attempts_used'],
+                    'max_attempts' => $quiz->max_attempts,
+                    'remaining_attempts' => max(0, $quiz->max_attempts - $outcome['attempts_used']),
+                    'earned_points' => $attempt->earned_points,
+                    'total_points' => $attempt->total_points,
+                    'score_percent' => $attempt->score_percent,
+                    'pass_mark_percent' => $quiz->pass_mark_percent,
+                    'passed' => $attempt->passed,
+                    'replayed' => $outcome['replayed'],
+                    'lesson_completed' => $outcome['lesson_completed'],
+                    'feedback' => $attempt->passed ? self::FEEDBACK_CORRECT : self::FEEDBACK_TRY_AGAIN,
+                    'submitted_at' => $attempt->submitted_at?->toIso8601String(),
+                    'results' => $outcome['question_results'],
+                ],
+            ],
+        );
+    }
+
+    /**
+     * @param  array<int, QuizOption>  $resolvedSelections
+     * @return list<array<string, mixed>>
+     */
+    private function buildQuestionResults(Quiz $quiz, array $resolvedSelections): array
+    {
+        $results = [];
+
+        /** @var QuizQuestion $question */
+        foreach ($quiz->questions as $question) {
+            $option = $resolvedSelections[$question->id];
+            $isCorrect = (bool) $option->is_correct;
+
+            $results[] = [
+                'question_id' => $question->public_id,
+                'question_number' => $question->question_number,
+                'option_id' => $option->public_id,
+                'option_key' => $option->option_key,
+                'is_correct' => $isCorrect,
+                'points_awarded' => $isCorrect ? (int) $question->points : 0,
+                'feedback' => $isCorrect ? self::FEEDBACK_CORRECT : self::FEEDBACK_TRY_AGAIN,
+                'explanation' => $question->explanation,
+            ];
+        }
+
+        return $results;
+    }
+
+    private function resolveOptionForQuestion(
+        QuizQuestion $question,
+        ?string $optionId,
+        ?string $optionKey,
+    ): ?QuizOption {
+        $normalizedId = $optionId !== null ? strtolower(trim($optionId)) : '';
+        $normalizedKey = $optionKey !== null ? strtoupper(trim($optionKey)) : '';
+
+        /** @var QuizOption|null $option */
+        $option = $question->options->first(
+            static function (QuizOption $opt) use ($normalizedId, $normalizedKey): bool {
+                if ($normalizedId !== '' && strtolower($opt->public_id) === $normalizedId) {
+                    return true;
+                }
+
+                if ($normalizedKey !== '' && strtoupper($opt->option_key) === $normalizedKey) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+
+        return $option;
+    }
+
+    private function requireChild(Request $request): Child
+    {
+        $actor = $request->user();
+        if (! $actor instanceof Child || ! $actor->tokenCan('child:*')) {
+            throw new AuthorizationException('Child authentication is required for this endpoint.');
+        }
+
+        return $actor;
+    }
+}
