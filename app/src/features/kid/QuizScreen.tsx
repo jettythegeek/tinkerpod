@@ -11,6 +11,7 @@ import {
   QuizAttemptResultDto,
   QuizDetailDto,
   QuizOptionDto,
+  RewardResultDto,
   startQuizAttempt,
   submitQuizAttempt,
 } from '../../api/learningApi';
@@ -18,6 +19,7 @@ import { APPROVED_MASCOT_THINKING_ASSET } from '../../assets/approvedAssets';
 import { TpButton, TpCard, TpErrorBanner } from '../../components/DesignSystem';
 import { TpIcon } from '../../components/TpIcon';
 import { Fx03CorrectWrong } from '../../fx/Fx03CorrectWrong';
+import { RewardCelebrationModal } from '../../fx/RewardCelebrationModal';
 import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { LearningScreenState } from './components/LearningScreenState';
@@ -146,6 +148,7 @@ export function QuizScreen({
   const [showHint, setShowHint] = useState<boolean>(true);
   const [checkedResult, setCheckedResult] = useState<CheckQuizAnswerData | null>(null);
   const [attemptResult, setAttemptResult] = useState<QuizAttemptResultDto | null>(null);
+  const [rewardResult, setRewardResult] = useState<RewardResultDto | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -314,6 +317,9 @@ export function QuizScreen({
         idempotency_key: `quiz-${activeQuiz.id}-finish-${activeQuiz.attempts_used || 1}`,
       });
       setAttemptResult(res.data.attempt);
+      if (res.data.reward_result) {
+        setRewardResult(res.data.reward_result);
+      }
       if (res.data.attempt.passed) {
         onQuizPassed?.(res.data.attempt);
       }
@@ -388,6 +394,12 @@ export function QuizScreen({
               variant={attemptResult.passed ? 'correct' : 'wrong'}
               explanation={`You scored ${attemptResult.score_percent}% (${attemptResult.earned_points}/${attemptResult.total_points} points). Pass mark: ${attemptResult.pass_mark_percent}%.`}
             />
+            {rewardResult ? (
+              <RewardCelebrationModal
+                rewardResult={rewardResult}
+                onDismiss={() => setRewardResult(null)}
+              />
+            ) : null}
             {!attemptResult.passed && attemptResult.remaining_attempts > 0 ? (
               <TpButton
                 testID="quiz-retry-attempt-btn"

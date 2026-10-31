@@ -16,6 +16,7 @@ import {
   resolveApprovedAvatar,
 } from '../../assets/approvedAssets';
 import { TpIcon } from '../../components/TpIcon';
+import { StreakFlameIdle } from '../../fx/StreakFlameIdle';
 import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { KidBottomNav, KidNavTab } from './components/KidBottomNav';
@@ -434,7 +435,7 @@ export function KidHomeScreen({
           {/* Streak, Coin & Gem Chips */}
           <View style={styles.hudChipsRow}>
             <View testID="kid-hud-streak-chip" style={styles.hudGlassChip}>
-              <TpIcon name="flame" size={14} color="#FDE68A" />
+              <StreakFlameIdle size={16} />
               <Text style={[styles.hudGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
                 {gamification.streak_days} days
               </Text>

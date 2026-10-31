@@ -15,11 +15,13 @@ import {
   isOfflineError,
   LessonDetailDto,
   LessonProgressDto,
+  RewardResultDto,
   updateLessonProgress,
 } from '../../api/learningApi';
 import { APPROVED_LESSON_LOOPS_ASSET } from '../../assets/approvedAssets';
 import { TpButton, TpCard, TpErrorBanner } from '../../components/DesignSystem';
 import { TpIcon } from '../../components/TpIcon';
+import { RewardCelebrationModal } from '../../fx/RewardCelebrationModal';
 import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { LearningScreenState } from './components/LearningScreenState';
@@ -131,6 +133,7 @@ export function LessonDetailScreen({
   const [actionError, setActionError] = useState<string | null>(null);
   const [showVideoPlayer, setShowVideoPlayer] = useState<boolean>(false);
   const [isSavingProgress, setIsSavingProgress] = useState<boolean>(false);
+  const [rewardResult, setRewardResult] = useState<RewardResultDto | null>(null);
 
   const videoSource = lesson?.intro_video_url ?? DEFAULT_DEMO_LESSON.intro_video_url ?? '';
   const player = useVideoPlayer(videoSource, (instance) => {
@@ -180,6 +183,9 @@ export function LessonDetailScreen({
           mark_complete: markComplete,
         });
         setProgress(res.data.progress);
+        if (res.data.reward_result) {
+          setRewardResult(res.data.reward_result);
+        }
       } catch (err) {
         setActionError(extractApiErrorMessage(err, 'Could not save lesson progress.'));
       } finally {
@@ -431,6 +437,13 @@ export function LessonDetailScreen({
             </Text>
             <TpIcon name="arrow-right" size={18} color="#FFFFFF" />
           </Pressable>
+
+          {rewardResult ? (
+            <RewardCelebrationModal
+              rewardResult={rewardResult}
+              onDismiss={() => setRewardResult(null)}
+            />
+          ) : null}
 
           {activeLesson.completion_mode === 'manual' && !progress.is_completed ? (
             <TpButton
