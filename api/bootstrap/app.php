@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Middleware\EnsureChildToken;
 use App\Http\Middleware\EnsureParentToken;
+use App\Http\Middleware\RejectClientRewardFields;
 use App\Support\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -24,11 +25,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->appendToGroup('api', [
+            RejectClientRewardFields::class,
+        ]);
+
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
             'parent.token' => EnsureParentToken::class,
             'child.token' => EnsureChildToken::class,
+            'reject.client.rewards' => RejectClientRewardFields::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

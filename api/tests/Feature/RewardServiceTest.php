@@ -142,4 +142,44 @@ class RewardServiceTest extends TestCase
             ->assertJsonPath('data.reward_result.totals.gems', 5)
             ->assertJsonPath('data.reward_result.presentation_tier', 'big');
     }
+
+    public function test_client_sent_reward_fields_are_rejected_with_422(): void
+    {
+        $this->seed(DemoCurriculumSeeder::class);
+
+        $parent = User::factory()->create();
+        $child = Child::factory()->for($parent, 'parent')->create();
+
+        /** @var Pod $pod */
+        $pod = Pod::query()->firstOrFail();
+
+        Enrollment::query()->create([
+            'child_id' => $child->id,
+            'pod_id' => $pod->id,
+            'status' => 'active',
+            'enrolled_at' => now(),
+        ]);
+
+        /** @var Lesson $lesson */
+        $lesson = Lesson::query()->whereHas('quizzes')->firstOrFail();
+        /** @var Quiz $quiz */
+        $quiz = Quiz::query()->where('lesson_id', $lesson->id)->firstOrFail();
+
+        Sanctum::actingAs($child, ['child:*']);
+
+        foreach (['xp' => 500, 'coins' => 999, 'gems' => 50, 'level' => 20, 'badge' => 'odogwu'] as $field => $value) {
+            $this->putJson("/api/v1/kid/lessons/{$lesson->public_id}/progress", [
+                'mark_complete' => true,
+                $field => $value,
+            ])->assertStatus(422)
+                ->assertJsonStructure(['data' => ['errors' => [$field]]]);
+
+            $this->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
+                $field => $value,
+            ])->assertStatus(422)
+                ->assertJsonStructure(['data' => ['errors' => [$field]]]);
+        }
+
+        $this->assertSame(0, RewardLedger::query()->where('child_id', $child->id)->count());
+    }
 }
