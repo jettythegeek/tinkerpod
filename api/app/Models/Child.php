@@ -129,6 +129,22 @@ class Child extends Authenticatable
         return $this->hasMany(LessonProgress::class, 'child_id');
     }
 
+    /**
+     * @return HasMany<RewardLedger, $this>
+     */
+    public function rewardLedgerEntries(): HasMany
+    {
+        return $this->hasMany(RewardLedger::class, 'child_id');
+    }
+
+    /**
+     * @return HasMany<RewardBalance, $this>
+     */
+    public function rewardBalances(): HasMany
+    {
+        return $this->hasMany(RewardBalance::class, 'child_id');
+    }
+
     public function isLocked(): bool
     {
         return $this->locked_until instanceof CarbonInterface && $this->locked_until->isFuture();
