@@ -241,7 +241,7 @@ class KidCatalogueTest extends TestCase
             ->assertJsonPath('data.lesson.progress.resume_position_seconds', 32)
             ->assertJsonPath('data.lesson.quizzes.0.id', $quiz->public_id);
 
-        $this->assertLessThanOrEqual(12, $lessonQueries, "Expected <= 12 queries on /kid/lessons/{id}, got {$lessonQueries}");
+        $this->assertLessThanOrEqual(14, $lessonQueries, "Expected <= 14 queries on /kid/lessons/{id}, got {$lessonQueries}");
 
         // 4. Quiz detail + hidden answers + query count assertion
         DB::flushQueryLog();

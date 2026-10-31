@@ -152,4 +152,12 @@ class Lesson extends Model
     {
         return $this->hasMany(LessonProgress::class, 'lesson_id');
     }
+
+    /**
+     * @return HasMany<LessonAttachment, $this>
+     */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(LessonAttachment::class, 'lesson_id')->orderBy('sort_order');
+    }
 }

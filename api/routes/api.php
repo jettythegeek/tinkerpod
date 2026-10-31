@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Auth\ParentAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\Kid\KidAuthController;
 use App\Http\Controllers\Api\V1\Kid\KidCatalogueController;
+use App\Http\Controllers\Api\V1\Kid\KidLessonAttachmentController;
 use App\Http\Controllers\Api\V1\Kid\KidLessonProgressController;
 use App\Http\Controllers\Api\V1\Kid\KidProfileController;
 use App\Http\Controllers\Api\V1\Kid\KidQuizController;
@@ -87,6 +88,14 @@ Route::prefix('v1')->group(function (): void {
             Route::post('/quizzes/{quiz}/check', [KidQuizController::class, 'check'])->name('api.v1.kid.quizzes.check');
             Route::post('/quizzes/{quiz}/attempts', [KidQuizController::class, 'submit'])->name('api.v1.kid.quizzes.attempts');
             Route::post('/quizzes/{quiz}/submit', [KidQuizController::class, 'submit'])->name('api.v1.kid.quizzes.submit');
+
+            Route::post('/lessons/{lesson}/attachments/{attachment}/signed-url', [KidLessonAttachmentController::class, 'signedUrlForLessonAttachment'])
+                ->name('api.v1.kid.lessons.attachments.signed-url');
+            Route::match(['get', 'post'], '/attachments/{attachment}/signed-url', [KidLessonAttachmentController::class, 'signedUrl'])
+                ->name('api.v1.kid.attachments.signed-url');
         });
+
+        Route::get('/attachments/{attachment}/download', [KidLessonAttachmentController::class, 'download'])
+            ->name('api.v1.kid.attachments.download');
     });
 });

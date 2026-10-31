@@ -7,6 +7,7 @@ namespace App\Domain\Learning;
 use App\Models\Child;
 use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Models\LessonAttachment;
 use App\Models\Pod;
 use App\Models\Project;
 use App\Models\Quiz;
@@ -187,6 +188,20 @@ class LearningAccess
     public function assertCanAccessProject(Child $child, Project $project): void
     {
         if (! $this->canAccessProject($child, $project)) {
+            throw new AuthorizationException(self::FORBIDDEN_MESSAGE);
+        }
+    }
+
+    public function canAccessAttachment(Child $child, LessonAttachment $attachment): bool
+    {
+        $lesson = $attachment->lesson;
+
+        return $lesson instanceof Lesson && $this->canAccessLesson($child, $lesson);
+    }
+
+    public function assertCanAccessAttachment(Child $child, LessonAttachment $attachment): void
+    {
+        if (! $this->canAccessAttachment($child, $attachment)) {
             throw new AuthorizationException(self::FORBIDDEN_MESSAGE);
         }
     }

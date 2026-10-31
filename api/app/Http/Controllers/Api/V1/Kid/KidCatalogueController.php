@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\KidProfileResource;
 use App\Models\Child;
 use App\Models\Lesson;
+use App\Models\LessonAttachment;
 use App\Models\LessonProgress;
 use App\Models\Pod;
 use App\Models\Project;
@@ -147,6 +148,7 @@ class KidCatalogueController extends Controller
                 $query->where('status', ContentStatus::Published->value)
                     ->orderBy('sort_order');
             },
+            'attachments',
         ]);
 
         $access->assertCanAccessLesson($child, $lesson);
@@ -176,7 +178,13 @@ class KidCatalogueController extends Controller
             'is_demo' => $project->is_demo,
         ])->values()->all();
 
-        $attachments = [];
+        $attachments = $lesson->attachments->map(static fn (LessonAttachment $attachment): array => [
+            'id' => $attachment->public_id,
+            'title' => $attachment->title,
+            'filename' => $attachment->original_filename,
+            'mime_type' => $attachment->mime_type,
+            'size_bytes' => $attachment->size_bytes,
+        ])->values()->all();
 
         $world = $lesson->world;
         $module = $lesson->module;
