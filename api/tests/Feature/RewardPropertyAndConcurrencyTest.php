@@ -90,6 +90,11 @@ class RewardPropertyAndConcurrencyTest extends TestCase
             $this->artisan('tinkerpod:rebuild-reward-balances')
                 ->assertExitCode(0);
 
+            $rebuiltFromLedger = $service->rebuildFromLedger($child);
+            $this->assertSame($expectedTotals, $rebuiltFromLedger['totals']);
+            $this->assertSame($expectedSummary['level'], $rebuiltFromLedger['level']);
+            $this->assertSame($expectedSummary['title'], $rebuiltFromLedger['title']);
+
             $rebuiltSummary = $service->profileSummaryFor($child->fresh() ?? $child);
             $this->assertSame($expectedSummary['xp'], $rebuiltSummary['xp']);
             $this->assertSame($expectedSummary['coins'], $rebuiltSummary['coins']);

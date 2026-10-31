@@ -136,8 +136,8 @@ class FilamentRewardsResourcesTest extends TestCase
             1,
             AuditLog::query()
                 ->where('action', 'reward.adjusted')
-                ->where('actor_id', $adjuster->id)
-                ->where('subject_id', $child->id)
+                ->where('actor_id', (string) $adjuster->id)
+                ->where('subject_id', $child->public_id)
                 ->count()
         );
     }

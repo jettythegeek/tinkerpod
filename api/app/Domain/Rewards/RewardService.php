@@ -275,14 +275,28 @@ class RewardService
             // Handle daily streak in Africa/Lagos if triggered or if this is a streak_day event
             $streakChange = null;
             if ($event->eventType === RewardEvent::TYPE_STREAK_DAY) {
-                $streakOutcome = $this->applyDailyStreak(
-                    child: $child,
-                    occurredAt: $event->occurredAt,
-                    appendLedgerRows: false,
-                    alreadyCreatedPrimary: $anyCreated,
-                );
-                $streakChange = $streakOutcome['streak_change'];
-            } elseif ($event->triggerDailyStreak) {
+                if ($anyCreated) {
+                    $streakOutcome = $this->applyDailyStreak(
+                        child: $child,
+                        occurredAt: $event->occurredAt,
+                        appendLedgerRows: false,
+                        alreadyCreatedPrimary: true,
+                    );
+                    $streakChange = $streakOutcome['streak_change'];
+                } else {
+                    $snap = $this->getStreakSnapshot($child, $event->occurredAt);
+                    $streakChange = [
+                        'previous_streak' => $snap['current_streak'],
+                        'current_streak' => $snap['current_streak'],
+                        'best_streak' => $snap['best_streak'],
+                        'incremented' => false,
+                        'status' => $snap['status'],
+                        'last_active_date' => $snap['last_active_date'],
+                        'grace_days_used' => $snap['grace_days_used'],
+                        'message' => $snap['message'],
+                    ];
+                }
+            } elseif ($event->triggerDailyStreak && $anyCreated) {
                 $streakOutcome = $this->applyDailyStreak(
                     child: $child,
                     occurredAt: $event->occurredAt,
@@ -297,6 +311,18 @@ class RewardService
                     $xpDeltaThisCall += $streakOutcome['xp_awarded'];
                     $anyCreated = true;
                 }
+            } elseif ($event->triggerDailyStreak) {
+                $snap = $this->getStreakSnapshot($child, $event->occurredAt);
+                $streakChange = [
+                    'previous_streak' => $snap['current_streak'],
+                    'current_streak' => $snap['current_streak'],
+                    'best_streak' => $snap['best_streak'],
+                    'incremented' => false,
+                    'status' => $snap['status'],
+                    'last_active_date' => $snap['last_active_date'],
+                    'grace_days_used' => $snap['grace_days_used'],
+                    'message' => $snap['message'],
+                ];
             }
 
             $totals = RewardLedger::ledgerTotalsFor($child->id);

@@ -76,8 +76,8 @@ class RewardAdjustmentTest extends TestCase
 
         $auditLogs = AuditLog::query()
             ->where('action', 'reward.adjusted')
-            ->where('actor_id', $staff->id)
-            ->where('subject_id', $child->id)
+            ->where('actor_id', (string) $staff->id)
+            ->where('subject_id', $child->public_id)
             ->orderBy('id')
             ->get();
 

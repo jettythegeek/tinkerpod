@@ -65,7 +65,7 @@ final readonly class RewardEvent
         int $childId,
         int|string $quizId,
         ?CarbonInterface $occurredAt = null,
-        bool $triggerDailyStreak = false,
+        bool $triggerDailyStreak = true,
     ): self {
         return new self(
             childId: $childId,
