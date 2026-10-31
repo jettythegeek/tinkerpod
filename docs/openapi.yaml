@@ -1323,13 +1323,49 @@ paths:
     get:
       tags:
         - Kid Learning
-      summary: Retrieve kid home dashboard summary (enrolled pods, continue lesson, and M3 gamification stub)
+      summary: Retrieve kid home dashboard summary (enrolled pods, continue lesson, and live M3 gamification HUD)
       operationId: getKidHome
       security:
         - ChildBearerToken: []
       responses:
         "200":
-          description: Kid home summary retrieved
+          description: Kid home summary retrieved with live M3 XP, coins, gems, streak, level, and Naija title
+        "403":
+          description: Forbidden (requires child token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/rewards:
+    get:
+      tags:
+        - Kid Rewards
+      summary: Retrieve live M3 rewards HUD, level progress, Naija title ladder, streak calendar, and badge collection
+      operationId: getKidRewards
+      security:
+        - ChildBearerToken: []
+      responses:
+        "200":
+          description: Kid rewards summary retrieved (HUD totals, level progress, Naija titles, streak state, and badges)
+        "403":
+          description: Forbidden (requires child token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/profile:
+    get:
+      tags:
+        - Kid Rewards
+      summary: Retrieve kid profile, HUD, level progress, Naija title ladder, badge collection, and learning stats
+      operationId: getKidProfile
+      security:
+        - ChildBearerToken: []
+      responses:
+        "200":
+          description: Kid profile and rewards summary retrieved
         "403":
           description: Forbidden (requires child token)
           content:
@@ -1453,9 +1489,15 @@ paths:
                   example: watch-complete-key-1
       responses:
         "200":
-          description: Lesson progress updated monotonically and idempotently
+          description: Lesson progress updated monotonically and idempotently; returns `reward_result` when lesson completes
         "403":
           description: Forbidden (not enrolled or lesson not published)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "422":
+          description: Validation error or client-sent reward fields rejected (server-authoritative rewards)
           content:
             application/json:
               schema:
@@ -1592,13 +1634,13 @@ paths:
                   maxLength: 120
       responses:
         "200":
-          description: Quiz attempt finished (or replayed idempotently) and scored on the server from saved answers
+          description: Quiz attempt finished (or replayed idempotently) and scored on the server from saved answers; returns `reward_result` when quiz passes
         "201":
           description: New open quiz attempt started (counted against max_attempts)
         "403":
           description: Forbidden
         "422":
-          description: Attempt cap reached or unanswered questions when finishing
+          description: Attempt cap reached, unanswered questions when finishing, or client-sent reward fields rejected
           content:
             application/json:
               schema:
@@ -1637,11 +1679,11 @@ paths:
                   maxLength: 120
       responses:
         "200":
-          description: Quiz attempt scored on the server from saved answers; marks quiz-gated lesson complete when passed
+          description: Quiz attempt scored on the server from saved answers; marks quiz-gated lesson complete when passed and returns `reward_result`
         "403":
           description: Forbidden
         "422":
-          description: Unanswered questions or no matching attempt
+          description: Unanswered questions, no matching attempt, or client-sent reward fields rejected
           content:
             application/json:
               schema:
