@@ -1,17 +1,18 @@
 openapi: 3.1.0
 info:
   title: TinkerPod API
-  version: 1.0.0-m1
+  version: 1.0.0-m2
   description: >-
-    TinkerPod v1 REST API specification for Milestone M1 (Roles, Parent Auth,
-    Child Profile Management, Two-Step Kid Login, PIN Lockout, and Parent Controls).
-    All responses follow the standard `{ success, message, data, errors? }` envelope.
+    TinkerPod v1 REST API specification for Milestones M1 (Auth, Parent Controls,
+    Kid Login) and M2 (Curriculum Catalogue, Journey Map, Lessons, Progress,
+    Quizzes, and Private Signed Attachments).
+    All JSON responses follow the standard `{ success, message, data, errors? }` envelope.
   contact:
     name: TinkerPod Engineering
     url: https://www.tinkerpod.ng
 servers:
   - url: http://localhost:8000/api/v1
-    description: Local Laravel 11 development server
+    description: Local Laravel development server
   - url: https://api.tinkerpod.ng/api/v1
     description: Production API server
 
@@ -24,6 +25,8 @@ tags:
     description: Parent-scoped CRUD and security controls (PIN, username, unlock) for child profiles
   - name: Kid Auth
     description: Privacy-safe two-step child profile lookup, PIN login, and child profile endpoints
+  - name: Kid Learning
+    description: Child-scoped home summary, journey map, lessons, monotonic progress, quizzes, and signed attachments
   - name: Billing
     description: Parent-scoped billing status endpoints
 
@@ -1311,6 +1314,362 @@ paths:
                         example: none
         "403":
           description: Forbidden (child tokens are strictly blocked from billing endpoints)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/home:
+    get:
+      tags:
+        - Kid Learning
+      summary: Retrieve kid home dashboard summary (enrolled pods, continue lesson, and M3 gamification stub)
+      operationId: getKidHome
+      security:
+        - ChildBearerToken: []
+      responses:
+        "200":
+          description: Kid home summary retrieved
+        "403":
+          description: Forbidden (requires child token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/journey-map:
+    get:
+      tags:
+        - Kid Learning
+      summary: Retrieve enrolled pods and worlds with done, now, and lock states for the Journey Map
+      operationId: getKidJourneyMap
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: pod_id
+          in: query
+          required: false
+          description: Optional pod public ULID to filter a specific pod
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Journey map retrieved
+        "403":
+          description: Forbidden (not enrolled in requested pod or requires child token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/pods/{pod}/journey-map:
+    get:
+      tags:
+        - Kid Learning
+      summary: Retrieve Journey Map for a specific enrolled pod
+      operationId: getKidPodJourneyMap
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: pod
+          in: path
+          required: true
+          description: Pod public ULID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Pod journey map retrieved
+        "403":
+          description: Forbidden (child is not enrolled in this pod or pod is not published)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/lessons/{lesson}:
+    get:
+      tags:
+        - Kid Learning
+      summary: Retrieve published lesson detail, objectives, progress, quizzes, projects, and attachments
+      operationId: getKidLessonDetail
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: lesson
+          in: path
+          required: true
+          description: Lesson public ULID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lesson detail retrieved
+        "403":
+          description: Forbidden (not enrolled or lesson/ancestors not published)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/lessons/{lesson}/progress:
+    put:
+      tags:
+        - Kid Learning
+      summary: Monotonically update lesson resume position and watch percentage; server decides completion
+      operationId: updateKidLessonProgress
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: lesson
+          in: path
+          required: true
+          description: Lesson public ULID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resume_position_seconds:
+                  type: integer
+                  minimum: 0
+                  maximum: 86400
+                  example: 45
+                watch_percent:
+                  type: integer
+                  minimum: 0
+                  maximum: 100
+                  example: 85
+                mark_complete:
+                  type: boolean
+                  example: true
+                idempotency_key:
+                  type: string
+                  maxLength: 120
+                  example: watch-complete-key-1
+      responses:
+        "200":
+          description: Lesson progress updated monotonically and idempotently
+        "403":
+          description: Forbidden (not enrolled or lesson not published)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/lessons/{lesson}/quiz:
+    get:
+      tags:
+        - Kid Learning
+      summary: Retrieve the primary published quiz for a lesson (correct answers are never exposed)
+      operationId: getKidLessonQuiz
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: lesson
+          in: path
+          required: true
+          description: Lesson public ULID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Quiz retrieved without `is_correct` flags
+        "403":
+          description: Forbidden
+        "404":
+          description: No published quiz found for this lesson
+
+  /kid/quizzes/{quiz}:
+    get:
+      tags:
+        - Kid Learning
+      summary: Retrieve quiz questions, options, attempt cap, and pass mark (correct answers hidden)
+      operationId: getKidQuizDetail
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: quiz
+          in: path
+          required: true
+          description: Quiz public ULID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Quiz retrieved without `is_correct` flags
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/quizzes/{quiz}/check:
+    post:
+      tags:
+        - Kid Learning
+      summary: Check a single question answer and return kid-friendly feedback and explanation
+      operationId: checkKidQuizAnswer
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: quiz
+          in: path
+          required: true
+          description: Quiz public ULID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question_id
+              properties:
+                question_id:
+                  type: string
+                  description: Question public ULID
+                option_id:
+                  type: string
+                  description: Option public ULID
+                option_key:
+                  type: string
+                  description: Option key (e.g. A, B, C, D)
+      responses:
+        "200":
+          description: Answer checked; returns `is_correct`, friendly feedback, and kid-facing explanation
+        "403":
+          description: Forbidden
+        "422":
+          description: Validation error or attempt cap reached
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/quizzes/{quiz}/attempts:
+    post:
+      tags:
+        - Kid Learning
+      summary: Submit and score a quiz attempt on the server (enforces attempt cap and idempotency)
+      operationId: submitKidQuizAttempt
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: quiz
+          in: path
+          required: true
+          description: Quiz public ULID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - answers
+              properties:
+                idempotency_key:
+                  type: string
+                  maxLength: 120
+                answers:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    required:
+                      - question_id
+                    properties:
+                      question_id:
+                        type: string
+                      option_id:
+                        type: string
+                      option_key:
+                        type: string
+      responses:
+        "200":
+          description: Quiz attempt scored on the server; marks quiz-gated lesson complete when passed
+        "403":
+          description: Forbidden
+        "422":
+          description: Attempt cap reached or invalid answer payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/lessons/{lesson}/attachments/{attachment}/signed-url:
+    post:
+      tags:
+        - Kid Learning
+      summary: Generate a short-lived (~5 minute) signed download URL for a private lesson attachment
+      operationId: createKidLessonAttachmentSignedUrl
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: lesson
+          in: path
+          required: true
+          description: Lesson public ULID
+          schema:
+            type: string
+        - name: attachment
+          in: path
+          required: true
+          description: Attachment public ULID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Short-lived signed URL generated
+        "403":
+          description: Forbidden by LearningAccess
+        "404":
+          description: Attachment not found for lesson
+
+  /kid/attachments/{attachment}/download:
+    get:
+      tags:
+        - Kid Learning
+      summary: Download a private attachment using a valid, non-expired temporary signed URL
+      operationId: downloadKidAttachment
+      parameters:
+        - name: attachment
+          in: path
+          required: true
+          description: Attachment public ULID
+          schema:
+            type: string
+        - name: child
+          in: query
+          required: true
+          description: Signed child public ULID
+          schema:
+            type: string
+        - name: expires
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: signature
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Private file stream
+        "403":
+          description: Expired or tampered signature, or LearningAccess denied
           content:
             application/json:
               schema:
