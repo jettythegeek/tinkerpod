@@ -39,5 +39,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $superAdmin->syncRoles([RoleName::SuperAdmin->value]);
+
+        $this->call(DemoCurriculumSeeder::class);
     }
 }
