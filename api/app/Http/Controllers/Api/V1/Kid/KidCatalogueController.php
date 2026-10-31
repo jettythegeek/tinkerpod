@@ -209,11 +209,7 @@ class KidCatalogueController extends Controller
                     'completion_mode' => $lesson->completion_mode,
                     'required_watch_percent' => $lesson->required_watch_percent,
                     'is_demo' => $lesson->is_demo,
-                    'rewards_preview' => [
-                        'xp' => $lesson->reward_xp_preview,
-                        'coins' => $lesson->reward_coins_preview,
-                        'gems' => $lesson->reward_gems_preview,
-                    ],
+                    'rewards_preview' => $lesson->rewardsPreview(),
                     'world' => $world !== null ? [
                         'id' => $world->public_id,
                         'world_number' => $world->world_number,

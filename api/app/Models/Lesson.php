@@ -36,9 +36,6 @@ use Illuminate\Support\Carbon;
  * @property int $steps_count
  * @property string $completion_mode
  * @property int $required_watch_percent
- * @property int $reward_xp_preview
- * @property int $reward_coins_preview
- * @property int $reward_gems_preview
  * @property string $status
  * @property bool $is_demo
  * @property int $sort_order
@@ -63,9 +60,6 @@ use Illuminate\Support\Carbon;
     'steps_count',
     'completion_mode',
     'required_watch_percent',
-    'reward_xp_preview',
-    'reward_coins_preview',
-    'reward_gems_preview',
     'status',
     'is_demo',
     'sort_order',
@@ -94,13 +88,26 @@ class Lesson extends Model
             'duration_minutes' => 'integer',
             'steps_count' => 'integer',
             'required_watch_percent' => 'integer',
-            'reward_xp_preview' => 'integer',
-            'reward_coins_preview' => 'integer',
-            'reward_gems_preview' => 'integer',
             'is_demo' => 'boolean',
             'sort_order' => 'integer',
             'published_at' => 'datetime',
             'archived_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Compute the lesson's reward preview dynamically from the active `lesson_completed` reward rule.
+     *
+     * @return array{xp: int, coins: int, gems: int}
+     */
+    public function rewardsPreview(): array
+    {
+        $rule = RewardRule::activeForEvent('lesson_completed');
+
+        return [
+            'xp' => $rule !== null ? $rule->xp_amount : 50,
+            'coins' => $rule !== null ? $rule->coins_amount : 20,
+            'gems' => $rule !== null ? $rule->gems_amount : 0,
         ];
     }
 

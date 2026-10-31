@@ -10,11 +10,13 @@ use App\Domain\Rewards\RewardService;
 use App\Models\Child;
 use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Models\NaijaTitle;
 use App\Models\Pod;
 use App\Models\Quiz;
 use App\Models\QuizOption;
 use App\Models\QuizQuestion;
 use App\Models\RewardLedger;
+use App\Models\RewardRule;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Database\Seeders\DemoCurriculumSeeder;
@@ -181,5 +183,89 @@ class RewardServiceTest extends TestCase
         }
 
         $this->assertSame(0, RewardLedger::query()->where('child_id', $child->id)->count());
+    }
+
+    public function test_versioned_reward_rules_naija_title_ladder_and_dynamic_lesson_reward_preview(): void
+    {
+        $this->seed(DemoCurriculumSeeder::class);
+
+        $parent = User::factory()->create();
+        $child = Child::factory()->for($parent, 'parent')->create();
+        $service = app(RewardService::class);
+
+        $service->ensureDefaultsSeeded();
+
+        // Verify exact Naija title ladder order
+        $ladder = NaijaTitle::query()->orderBy('sort_order')->pluck('name')->all();
+        $this->assertSame([
+            'Cody Coda',
+            'Jango-Jango',
+            'Design Sultan',
+            'Eze Code',
+            'Code Dragon',
+            'Design Jango',
+            'Odogwu',
+        ], $ladder);
+
+        /** @var Pod $pod */
+        $pod = Pod::query()->firstOrFail();
+        Enrollment::query()->create([
+            'child_id' => $child->id,
+            'pod_id' => $pod->id,
+            'status' => 'active',
+            'enrolled_at' => now(),
+        ]);
+
+        /** @var Lesson $lesson */
+        $lesson = Lesson::query()->firstOrFail();
+
+        Sanctum::actingAs($child, ['child:*']);
+
+        // Lesson reward preview comes from active lesson_completed rule (v1: 50 XP, 20 coins, 0 gems)
+        $this->getJson("/api/v1/kid/lessons/{$lesson->public_id}")
+            ->assertOk()
+            ->assertJsonPath('data.lesson.rewards_preview.xp', 50)
+            ->assertJsonPath('data.lesson.rewards_preview.coins', 20)
+            ->assertJsonPath('data.lesson.rewards_preview.gems', 0);
+
+        // Award lesson_completed under rule v1
+        $service->award(RewardEvent::lessonCompleted($child->id, 'lesson-v1'));
+
+        $v1Row = RewardLedger::query()
+            ->where('child_id', $child->id)
+            ->where('source_id', 'lesson-v1')
+            ->where('currency', 'xp')
+            ->firstOrFail();
+        $this->assertSame(1, $v1Row->rule_version);
+        $this->assertSame(50, $v1Row->amount);
+
+        // Create version 2 of lesson_completed rule
+        $ruleV2 = RewardRule::createNextVersion(
+            eventType: RewardEvent::TYPE_LESSON_COMPLETED,
+            xpAmount: 95,
+            coinsAmount: 45,
+            gemsAmount: 2,
+            createdBy: $parent->id,
+        );
+        $this->assertSame(2, $ruleV2->version);
+
+        // Lesson detail dynamically reflects version 2 without any column on lessons
+        $this->getJson("/api/v1/kid/lessons/{$lesson->public_id}")
+            ->assertOk()
+            ->assertJsonPath('data.lesson.rewards_preview.xp', 95)
+            ->assertJsonPath('data.lesson.rewards_preview.coins', 45)
+            ->assertJsonPath('data.lesson.rewards_preview.gems', 2);
+
+        // Award lesson_completed under rule v2; old ledger row retains rule_version = 1
+        $service->award(RewardEvent::lessonCompleted($child->id, 'lesson-v2'));
+
+        $v2Row = RewardLedger::query()
+            ->where('child_id', $child->id)
+            ->where('source_id', 'lesson-v2')
+            ->where('currency', 'xp')
+            ->firstOrFail();
+        $this->assertSame(2, $v2Row->rule_version);
+        $this->assertSame(95, $v2Row->amount);
+        $this->assertSame(1, $v1Row->fresh()?->rule_version);
     }
 }
