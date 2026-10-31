@@ -1,0 +1,102 @@
+{
+ "ui-tap": {
+  "lufs": -16.0,
+  "dbtp": -1.54,
+  "measured_padded_to_400ms": true
+ },
+ "ui-toggle": {
+  "lufs": -16.0,
+  "dbtp": -1.6,
+  "measured_padded_to_400ms": true
+ },
+ "ui-back": {
+  "lufs": -16.35,
+  "dbtp": -1.8,
+  "measured_padded_to_400ms": true
+ },
+ "ui-sheet-open": {
+  "lufs": -16.0,
+  "dbtp": -1.59,
+  "measured_padded_to_400ms": true
+ },
+ "ui-sheet-close": {
+  "lufs": -16.0,
+  "dbtp": -1.59,
+  "measured_padded_to_400ms": true
+ },
+ "ui-error": {
+  "lufs": -16.0,
+  "dbtp": -6.89,
+  "measured_padded_to_400ms": false
+ },
+ "ui-success-small": {
+  "lufs": -16.0,
+  "dbtp": -3.96,
+  "measured_padded_to_400ms": false
+ },
+ "ui-notification": {
+  "lufs": -16.0,
+  "dbtp": -4.69,
+  "measured_padded_to_400ms": false
+ },
+ "ui-message-pop": {
+  "lufs": -16.0,
+  "dbtp": -1.61,
+  "measured_padded_to_400ms": true
+ },
+ "ui-pin-digit": {
+  "lufs": -16.0,
+  "dbtp": -4.12,
+  "measured_padded_to_400ms": true
+ },
+ "ui-pin-wrong": {
+  "lufs": -16.0,
+  "dbtp": -5.21,
+  "measured_padded_to_400ms": false
+ },
+ "ui-pin-unlock": {
+  "lufs": -16.0,
+  "dbtp": -6.36,
+  "measured_padded_to_400ms": false
+ },
+ "ui-countdown-tick": {
+  "lufs": -16.0,
+  "dbtp": -3.84,
+  "measured_padded_to_400ms": true
+ },
+ "ui-countdown-go": {
+  "lufs": -16.0,
+  "dbtp": -1.57,
+  "measured_padded_to_400ms": false
+ },
+ "ui-match-whistle": {
+  "lufs": -16.0,
+  "dbtp": -11.44,
+  "measured_padded_to_400ms": false
+ },
+ "ui-match-win": {
+  "lufs": -16.0,
+  "dbtp": -2.46,
+  "measured_padded_to_400ms": false
+ },
+ "ui-match-lose": {
+  "lufs": -16.0,
+  "dbtp": -3.99,
+  "measured_padded_to_400ms": false
+ },
+ "ui-badge-earned": {
+  "lufs": -16.0,
+  "dbtp": -1.67,
+  "measured_padded_to_400ms": false
+ },
+ "ui-purchase-complete": {
+  "lufs": -16.0,
+  "dbtp": -5.06,
+  "measured_padded_to_400ms": false
+ },
+ "ui-download-complete": {
+  "lufs": -16.0,
+  "dbtp": -3.7,
+  "measured_padded_to_400ms": false
+ }
+}

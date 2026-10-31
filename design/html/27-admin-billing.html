@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:billing"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Money / Billing</div><div class="ptitle">Billing</div></div>
+    <div class="flex gap-2 items-center"><span class="placeholder-note">All amounts are placeholders · plan names TBC</span><span class="wbtn sec"><i data-lucide="external-link"></i>Open Paystack dashboard</span></div>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1fr 1fr 1fr 1.25fr">
+    <div class="panel kpi"><div class="l"><span class="kic" style="background:#FFF6DB;color:#B45309"><i data-lucide="wallet"></i></span>MRR</div><div class="v">₦X.XM</div><div class="d" style="color:#2F7D16">+12% vs Sep</div></div>
+    <div class="panel kpi"><div class="l"><span class="kic" style="background:#E6F9F7;color:#007A70"><i data-lucide="repeat"></i></span>Renewals this week</div><div class="v">146</div><div class="d" style="color:#475569">₦X,XXX,XXX expected</div></div>
+    <div class="panel kpi"><div class="l"><span class="kic" style="background:#FFECEC;color:#D92D20"><i data-lucide="alert-circle"></i></span>Failed payments</div><div class="v">9</div><div class="d" style="color:#B42318">Auto-retry in 24h</div></div>
+    <div class="panel" style="padding:14px 16px;background:linear-gradient(135deg,#0B1E3F,#101B4D);color:#fff">
+     <div class="flex items-center justify-between"><div class="flex items-center gap-2" style="font-weight:900;font-size:15px"><span style="width:28px;height:28px;border-radius:8px;background:#00C3F7;display:flex;align-items:center;justify-content:center;color:#0B1E3F"><i data-lucide="layers" style="width:16px"></i></span>Paystack</div><span class="st g" style="background:rgba(99,193,50,.2);color:#B7F09B">Connected</span></div>
+     <div style="font-size:12px;font-weight:700;color:#B9C3E0;margin-top:8px">Live mode · Webhooks healthy · last event 2 min ago</div>
+     <div style="font-size:12px;font-weight:700;color:#B9C3E0;margin-top:2px">Next settlement: Fri · ₦X,XXX,XXX to GTBank ••42</div>
+    </div>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1fr 1.7fr">
+    <div class="panel"><div class="ph"><b>Plans</b><span class="wbtn sec sm"><i data-lucide="plus"></i>Plan</span></div>
+     <div style="padding:6px 16px 12px" id="plans"></div></div>
+    <div class="panel"><div class="ph"><b>Transactions</b><div class="flex gap-2"><div class="tabs" style="border:0;font-size:13px"><span class="on">All</span><span>Successful</span><span>Failed</span><span>Refunds</span></div></div></div>
+     <table class="tbl" id="tx"></table><style>#tx td{padding-top:5px;padding-bottom:5px}</style></div>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1.7fr 1fr">
+    <div class="panel"><div class="ph" style="padding-top:10px;padding-bottom:10px"><b>MRR trend · last 12 months</b><span style="font-size:12px;font-weight:800;color:#64748B">values hidden · placeholder</span></div><div id="trend" style="padding:6px 16px 8px"></div></div>
+    <div class="panel"><div class="ph" style="padding-top:10px;padding-bottom:10px"><b>Failed payment follow-up</b><span class="st r">9</span></div>
+     <div style="padding:2px 16px 8px;font-size:13px;font-weight:700" id="dun"></div></div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+document.getElementById('plans').innerHTML=[['Plan A · Single child','Monthly · 1 child','#00BFAE',412],['Plan B · Family','Monthly · up to 3 children','#7C3AED',301],['Plan C · Yearly','Yearly · 1 child · 2 months free','#2563EB',118],['Pod add-on','In-person pod sessions','#FFB700',96],['Cup entry','One-off · per tournament','#FF6B6B',41]].map(([n,d,c,s])=>`<div class="flex items-center gap-3" style="padding:6px 0;border-bottom:1px solid #F1F4F8"><span style="width:8px;height:30px;border-radius:4px;background:${c}"></span><div class="flex-1"><div style="font-weight:900">${n}</div><div style="font-size:12px;font-weight:700;color:#64748B">${d}</div></div><div style="text-align:right"><div style="font-weight:900">₦X,XXX</div><div style="font-size:12px;font-weight:700;color:#64748B">${s} active</div></div></div>`).join('');
+const pts=[30,34,33,40,44,47,52,55,61,66,70,78];let W=720,H=96,d='';pts.forEach((v,i)=>{d+=(i?'L':'M')+(i*W/11)+' '+(H-v*1.1)});
+document.getElementById('trend').innerHTML=`<svg width="100%" height="${H+20}" viewBox="0 0 ${W} ${H+20}" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#00BFAE" stop-opacity=".35"/><stop offset="1" stop-color="#00BFAE" stop-opacity="0"/></linearGradient></defs>${[0,1,2].map(i=>`<line x1="0" x2="${W}" y1="${10+i*45}" y2="${10+i*45}" stroke="#EEF1F5"/>`).join('')}<path d="${d} L${W} ${H} L0 ${H}Z" fill="url(#g)"/><path d="${d}" fill="none" stroke="#00BFAE" stroke-width="3"/>${['Nov','Feb','May','Aug','Oct'].map((m,i)=>`<text x="${[4,190,370,560,690][i]}" y="${H+16}" font-size="11" font-weight="800" fill="#94A3B8" font-family="Nunito">${m}</text>`).join('')}</svg>`;
+document.getElementById('dun').innerHTML=[['Mrs. A. Eze','Card declined · retry 1 of 3','Send reminder'],['Mrs. F. Adewale','Insufficient funds · retry 2 of 3','Send reminder'],['Mr. O. Lawal','Card expired · access paused','Update link']].map(([n,r,a])=>`<div class="flex items-center gap-2" style="padding:6px 0;border-bottom:1px solid #F1F4F8"><div class="flex-1"><div style="font-weight:900">${n}</div><div style="font-size:11.5px;color:#64748B">${r}</div></div><span class="wbtn sec sm">${a}</span></div>`).join('');
+let h='<tr><th>Reference</th><th>Parent</th><th>Item</th><th>Channel</th><th style="text-align:right">Amount</th><th>Status</th><th>Date</th></tr>';
+[['TP-PSK-8F21K','Mrs. N. Okafor','Plan B · Family','Card ••4081','g','Success','Oct 30, 09:12'],['TP-PSK-8F1ZQ','Mr. K. Obi','Plan A · Single','Bank transfer','g','Success','Oct 30, 08:47'],['TP-PSK-8F1XA','Mrs. A. Eze','Plan B · Family','Card ••1129','r','Failed','Oct 30, 07:03'],['TP-PSK-8F1T2','Mr. S. Bello','Cup entry','USSD *737#','g','Success','Oct 29, 21:30'],['TP-PSK-8F1R9','Mrs. F. Adewale','Plan A · Single','Card ••5532','y','Retrying','Oct 29, 18:15'],['TP-PSK-8F1M0','Mr. I. Musa','Plan C · Yearly','Bank transfer','g','Success','Oct 29, 11:02'],['TP-PSK-8F1J4','Mrs. B. Ojo','Plan A · Single','Card ••7710','b','Refunded','Oct 28, 16:40']].forEach(r=>h+=`<tr><td><code style="font-size:12px">${r[0]}</code></td><td>${r[1]}</td><td class="sub" style="color:#334155">${r[2]}</td><td class="sub">${r[3]}</td><td style="text-align:right;font-weight:900">₦X,XXX</td><td><span class="st ${r[4]}">${r[5]}</span></td><td class="sub">${r[6]}</td></tr>`);
+document.getElementById('tx').innerHTML=h;
+</script>
+<script>tpInit()</script></body></html>

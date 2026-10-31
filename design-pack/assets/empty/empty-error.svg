@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="e3-root" viewBox="0 0 600 480" width="600" height="480" role="img" aria-label="Something went wrong: Captain Jetty and a popped-out gear">
+<title>Something went wrong: Captain Jetty and a popped-out gear</title>
+<style>
+#e3-root .e3-a{transform-box:fill-box;transform-origin:50% 50%}
+
+
+#e3-p-pip *{transform-box:view-box}
+.e3-p-v{opacity:0} .e3-p-v.e3-p-on{opacity:1}
+#e3-p-pip,#e3-p-pip-squash{transform-origin:200px 384px}
+#e3-p-shadow{transform-box:view-box;transform-origin:200px 392px}
+#e3-p-head{transform-origin:200px 238px} #e3-p-antenna{transform-origin:200px 84px} #e3-p-antenna-glow{transform-origin:200px 28px}
+#e3-p-arm-l{transform-origin:148px 252px} #e3-p-arm-r{transform-origin:252px 252px}
+#e3-p-hand-l{transform-origin:148px 316px} #e3-p-hand-r{transform-origin:252px 316px}
+#e3-p-eyes{transform-origin:200px 160px} #e3-p-mouth{transform-origin:200px 196px} #e3-p-torso{transform-origin:200px 338px}
+#e3-p-cheeks{opacity:0} #e3-p-tear,#e3-p-burst,.e3-p-spark,#e3-p-ha-l,#e3-p-ha-r{opacity:0}
+#e3-p-gear{transform-origin:156px 82px} #e3-p-wrench{transform-origin:246px 96px}
+.e3-p-spark{transform-box:fill-box;transform-origin:50% 50%}
+#e3-p-mouth-smile{opacity:0}#e3-p-mouth-o{opacity:1}
+@keyframes e3-p-su-j{0%,8%{transform:translateY(0);animation-timing-function:cubic-bezier(.22,1,.36,1)} 20%{transform:translateY(-26px);animation-timing-function:cubic-bezier(.55,0,.9,.4)} 32%{transform:translateY(0)} 100%{transform:translateY(0)}}
+#e3-p-pip{animation:e3-p-su-j 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-s{0%{transform:scale(1,1)} 8%{transform:scale(1.07,.92)} 14%{transform:scale(.94,1.08)} 24%{transform:scale(1,1)} 32%{transform:scale(1.08,.92);animation-timing-function:cubic-bezier(.34,1.6,.64,1)} 42%,100%{transform:scale(1,1)}}
+#e3-p-pip-squash{animation:e3-p-su-s 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-sh{0%,8%,32%,100%{transform:scale(1);opacity:.13} 20%{transform:scale(.8);opacity:.08}}
+#e3-p-shadow{animation:e3-p-su-sh 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-e{0%,6%{transform:scale(1)} 14%{transform:scale(1.28,1.34)} 24%,74%{transform:scale(1.2,1.24)} 77%{transform:scale(1.2,.1)} 80%,92%{transform:scale(1.18,1.22)} 100%{transform:scale(1)}}
+#e3-p-eyes{animation:e3-p-su-e 2.0s cubic-bezier(.34,1.6,.64,1) 0s infinite}
+@keyframes e3-p-su-m{0%,6%{transform:scale(.5)} 16%{transform:scale(1.25)} 30%,90%{transform:scale(1)} 100%{transform:scale(.5)}}
+#e3-p-mouth{animation:e3-p-su-m 2.0s cubic-bezier(.34,1.6,.64,1) 0s infinite}
+@keyframes e3-p-su-h{0%,6%{transform:translateY(0)} 12%{transform:translateY(-8px) rotate(-3deg)} 30%{transform:translateY(2px)} 44%,100%{transform:translateY(0) rotate(0)}}
+#e3-p-head{animation:e3-p-su-h 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-ant{0%,8%{transform:rotate(0)} 14%{transform:rotate(-20deg)} 22%{transform:rotate(16deg)} 30%{transform:rotate(-10deg)} 38%{transform:rotate(6deg)} 46%{transform:rotate(-3deg)} 54%,100%{transform:rotate(0)}}
+#e3-p-antenna{animation:e3-p-su-ant 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-glow{0%,8%{opacity:.2;transform:scale(.9)} 14%{opacity:.8;transform:scale(1.6)} 50%,100%{opacity:.25;transform:scale(1)}}
+#e3-p-antenna-glow{animation:e3-p-su-glow 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-al{0%,6%{transform:rotate(0)} 14%{transform:rotate(58deg)} 24%,80%{transform:rotate(48deg)} 100%{transform:rotate(0)}}
+#e3-p-arm-l{animation:e3-p-su-al 2.0s cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes e3-p-su-ar{0%,6%{transform:rotate(0)} 14%{transform:rotate(-58deg)} 24%,80%{transform:rotate(-48deg)} 100%{transform:rotate(0)}}
+#e3-p-arm-r{animation:e3-p-su-ar 2.0s cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes e3-p-su-hl{0%,6%,100%{transform:rotate(0)} 14%,80%{transform:rotate(-24deg)}}
+#e3-p-hand-l{animation:e3-p-su-hl 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-hr{0%,6%,100%{transform:rotate(0)} 14%,80%{transform:rotate(24deg)}}
+#e3-p-hand-r{animation:e3-p-su-hr 2.0s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e3-p-su-bang{0%,8%{opacity:0;transform:scale(0) rotate(-20deg)} 16%{opacity:1;transform:scale(1.25) rotate(8deg)} 24%,80%{opacity:1;transform:scale(1) rotate(0deg)} 92%,100%{opacity:0;transform:scale(.6) rotate(0deg)}}
+#e3-p-bang{animation:e3-p-su-bang 2.0s cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes e3-p-su-pops{0%,10%{opacity:0;transform:scale(.5)} 16%{opacity:1;transform:scale(1)} 34%,100%{opacity:0;transform:scale(1.4)}}
+#e3-p-pops{animation:e3-p-su-pops 2.0s cubic-bezier(.22,1,.36,1) 0s infinite}
+
+
+
+@keyframes e3-k0{0.000%{transform:translateY(0px) rotate(0deg);animation-timing-function:cubic-bezier(.2,.6,.4,1)}16.667%{transform:translateY(-70px) rotate(90deg);animation-timing-function:cubic-bezier(.6,0,.8,.4)}33.333%{transform:translateY(0px) rotate(180deg);animation-timing-function:cubic-bezier(.2,.6,.4,1)}43.750%{transform:translateY(-22px) rotate(220deg);animation-timing-function:cubic-bezier(.6,0,.8,.4)}54.167%{transform:translateY(0px) rotate(260deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:translateY(0px) rotate(360deg)}}#e3-gear{animation:e3-k0 2.4s linear 0s infinite both}
+@keyframes e3-k1{0.000%{transform:scale(1)}16.667%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}33.333%{transform:scale(1);animation-timing-function:cubic-bezier(.45,0,.55,1)}43.750%{transform:scale(.85);animation-timing-function:cubic-bezier(.45,0,.55,1)}54.167%{transform:scale(1)}100.000%{transform:scale(1)}}#e3-gsh{animation:e3-k1 2.4s linear 0s infinite both}
+@keyframes e3-k2{0.000%{transform:translateY(0px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}12.500%{transform:translateY(-16px) rotate(30deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}33.333%{transform:translateY(0px) rotate(0deg)}100.000%{transform:translateY(0px) rotate(0deg)}}#e3-b0{animation:e3-k2 2.4s linear 0s infinite both}
+@keyframes e3-k3{0.000%{transform:translateY(0px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}18.750%{transform:translateY(-22px) rotate(-40deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}37.500%{transform:translateY(0px) rotate(0deg)}100.000%{transform:translateY(0px) rotate(0deg)}}#e3-b1{animation:e3-k3 2.4s linear 0s infinite both}
+@keyframes e3-k4{0.000%{transform:translateY(0px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}25.000%{transform:translateY(-28px) rotate(60deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}41.667%{transform:translateY(0px) rotate(0deg)}100.000%{transform:translateY(0px) rotate(0deg)}}#e3-b2{animation:e3-k4 2.4s linear 0s infinite both}
+@keyframes e3-k5{0.000%{transform:scaleY(1);animation-timing-function:cubic-bezier(.45,0,.55,1)}25.000%{transform:scaleY(1.35);animation-timing-function:cubic-bezier(.45,0,.55,1)}50.000%{transform:scaleY(.85);animation-timing-function:cubic-bezier(.45,0,.55,1)}75.000%{transform:scaleY(1.1);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:scaleY(1)}}#e3-spring{animation:e3-k5 2.4s linear 0s infinite both}
+@media (prefers-reduced-motion:reduce){#e3-root *{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+</style>
+<circle cx="300" cy="226" r="196" fill="#E6F9F7"/>
+<circle cx="300" cy="226" r="196" fill="none" stroke="#CCF2EE" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round"/>
+<ellipse cx="300" cy="424" rx="230" ry="14" fill="#0F172A" opacity=".05"/>
+<svg id="e3-p-rig" x="40" y="96" width="350" height="350" viewBox="-70 -110 540 540" overflow="visible"><defs>
+ <linearGradient id="e3-p-limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"/><stop offset=".4" stop-color="#22D9C7"/><stop offset="1" stop-color="#00A597"/></linearGradient>
+ <linearGradient id="e3-p-torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"/><stop offset=".32" stop-color="#2DDFCD"/><stop offset=".7" stop-color="#05C2B1"/><stop offset="1" stop-color="#009587"/></linearGradient>
+ <radialGradient id="e3-p-shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"/><stop offset=".45" stop-color="#0CC9B7"/><stop offset="1" stop-color="#009184"/></radialGradient>
+ <radialGradient id="e3-p-screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"/><stop offset="1" stop-color="#0D1838"/></radialGradient>
+ <radialGradient id="e3-p-earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#F2A900"/></radialGradient>
+ <radialGradient id="e3-p-ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"/><stop offset=".6" stop-color="#FF8A1F"/><stop offset="1" stop-color="#E86A00"/></radialGradient>
+ <clipPath id="e3-p-podTop"><rect x="60" y="-20" width="280" height="112"/></clipPath>
+</defs>
+<ellipse id="e3-p-shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity=".13"/>
+<g id="e3-p-fx-back"></g>
+<g id="e3-p-pip"><g id="e3-p-pip-squash">
+ <g id="e3-p-legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#e3-p-limb)"/><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#e3-p-limb)"/><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+ </g>
+ <g id="e3-p-torso">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#e3-p-torsoG)"/>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity=".32"/>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity=".28"/>
+  <g id="e3-p-chest-lights"><circle id="e3-p-led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"/><circle id="e3-p-led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"/><circle id="e3-p-led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"/></g>
+ </g>
+ <g id="e3-p-head">
+  <g id="e3-p-antenna">
+   <circle id="e3-p-antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity=".3"/>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"/>
+   <circle id="e3-p-antenna-ball" cx="200" cy="28" r="13" fill="url(#e3-p-ballG)"/><circle id="e3-p-antenna-dim" cx="200" cy="28" r="13" fill="#7C8799" opacity="0"/><circle cx="196" cy="23.5" r="4" fill="#fff" opacity=".7"/>
+  </g>
+  <g id="e3-p-ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#e3-p-earG)"/><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <g id="e3-p-ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#e3-p-earG)"/><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <rect id="e3-p-shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#e3-p-shellG)"/>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity=".35"/>
+  <ellipse id="e3-p-pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"/>
+  <g id="e3-p-toolkit" clip-path="url(#e3-p-podTop)">
+   <g id="e3-p-gear"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"/><circle cx="156" cy="82" r="8" fill="#E39A00"/><circle cx="153" cy="78" r="2.5" fill="#fff" opacity=".5"/></g>
+   <g id="e3-p-code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"/><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+   <g id="e3-p-wrench"><g transform="translate(248 60) rotate(18) scale(1.18)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"/><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"/><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity=".3"/></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"/>
+  <rect id="e3-p-face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"/>
+  <rect id="e3-p-screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#e3-p-screenG)"/>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".12"/>
+  <g id="e3-p-face">
+   <g id="e3-p-brows"></g>
+   <g id="e3-p-eyes"><g id="e3-p-eye-l"><g id="e3-p-eye-l-open" class="e3-p-v e3-p-on">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"/><circle cx="171" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="e3-p-eye-l-happy" class="e3-p-v"><path d="M152 165 Q166 145 180 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="e3-p-eye-l-sad" class="e3-p-v">
+      <rect x="154" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="163" cy="165" r="3.6" fill="#fff"/>
+      <path d="M149 139 L183 139 L183 147 L149 159Z" fill="#14234F"/>
+      <path d="M153 145 L178 135" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="e3-p-eye-l-squint" class="e3-p-v"><path d="M156 149 L175 160 L156 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="e3-p-eye-l-star" class="e3-p-v">
+      <ellipse cx="166" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="151" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M163 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="172" cy="168" r="2.4" fill="#fff"/></g></g><g id="e3-p-eye-r"><g id="e3-p-eye-r-open" class="e3-p-v e3-p-on">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"/><circle cx="239" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="e3-p-eye-r-happy" class="e3-p-v"><path d="M220 165 Q234 145 248 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="e3-p-eye-r-sad" class="e3-p-v">
+      <rect x="222" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="231" cy="165" r="3.6" fill="#fff"/>
+      <path d="M217 139 L251 139 L251 159 L217 147Z" fill="#14234F"/>
+      <path d="M222 135 L247 145" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="e3-p-eye-r-squint" class="e3-p-v"><path d="M244 149 L225 160 L244 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="e3-p-eye-r-star" class="e3-p-v">
+      <ellipse cx="234" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="219" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M231 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="240" cy="168" r="2.4" fill="#fff"/></g></g></g>
+   <g id="e3-p-cheeks"><ellipse cx="139" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/><ellipse cx="261" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/></g>
+   <g id="e3-p-mouth">
+    <g id="e3-p-mouth-smile" class="e3-p-v e3-p-on"><path d="M185 191 Q200 205 215 191" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="e3-p-mouth-grin" class="e3-p-v"><path d="M181 188 Q200 185 219 188 Q217 211 200 211 Q183 211 181 188Z" fill="#FF6B7D"/>
+      <path d="M190 205 Q200 197 210 205 Q206 211 200 211 Q194 211 190 205Z" fill="#FFB3BC"/></g>
+    <g id="e3-p-mouth-frown" class="e3-p-v"><path d="M187 200 Q200 189 213 200" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="e3-p-mouth-o" class="e3-p-v"><ellipse cx="200" cy="197" rx="12" ry="14" fill="#FF6B7D"/><ellipse cx="200" cy="204" rx="7" ry="5" fill="#FFB3BC"/></g>
+  </g>
+  </g>
+ </g>
+ <g id="e3-p-arm-l"><g transform="rotate(22 148 252)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#e3-p-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="e3-p-hand-l"><circle cx="148" cy="316" r="18.5" fill="url(#e3-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#e3-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g><g id="e3-p-arm-r"><g transform="rotate(-22 252 252)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#e3-p-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="e3-p-hand-r"><circle cx="252" cy="316" r="18.5" fill="url(#e3-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#e3-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g>
+</g></g>
+<g id="e3-p-fx-front"><g id="e3-p-bang" style="transform-box:view-box;transform-origin:330px 10px"><path d="M330 -30 L330 4" stroke="#FF6B6B" stroke-width="13" stroke-linecap="round"/><circle cx="330" cy="24" r="7.5" fill="#FF6B6B"/></g><g id="e3-p-pops" style="transform-box:view-box;transform-origin:200px 40px"><path d="M150 18 l-14 -14 M200 -8 v-20 M250 18 l14 -14 M120 60 h-20 M280 60 h20" stroke="#FFB700" stroke-width="7" stroke-linecap="round"/></g></g>
+</svg><g transform="translate(450 412)"><g id="e3-gsh" class="e3-a"><ellipse rx="50" ry="8" fill="#0F172A" opacity=".08"/></g></g>
+<g transform="translate(450 358)"><g id="e3-gear" class="e3-a"><path d="M40.0,0.0 L51.2,9.0 L48.9,17.8 L34.6,20.0 L30.6,25.7 L33.4,39.8 L26.0,45.0 L13.7,37.6 L6.9,39.4 L0.0,52.0 L-9.0,51.2 L-13.7,37.6 L-20.0,34.6 L-33.4,39.8 L-39.8,33.4 L-34.6,20.0 L-37.6,13.7 L-51.2,9.0 L-52.0,0.0 L-39.4,-6.9 L-37.6,-13.7 L-45.0,-26.0 L-39.8,-33.4 L-25.7,-30.6 L-20.0,-34.6 L-17.8,-48.9 L-9.0,-51.2 L-0.0,-40.0 L6.9,-39.4 L17.8,-48.9 L26.0,-45.0 L25.7,-30.6 L30.6,-25.7 L45.0,-26.0 L48.9,-17.8 L39.4,-6.9Z M16 0 A16 16 0 1 0 -16 0 A16 16 0 1 0 16 0Z" fill="#FFB700" fill-rule="evenodd"/><circle r="26" fill="none" stroke="#E09A00" stroke-width="6" opacity=".6"/></g></g>
+<g transform="translate(556 408)"><g id="e3-b0" class="e3-a"><rect x="-7" y="-12" width="14" height="24" rx="4" fill="#94A3B8"/><rect x="-11" y="-14" width="22" height="7" rx="3" fill="#64748B"/></g></g>
+<g transform="translate(392 410)"><g id="e3-b1" class="e3-a"><path d="M0 -12 L10 -6 L10 6 L0 12 L-10 6 L-10 -6Z" fill="#94A3B8"/><circle r="4.5" fill="#E6F9F7"/></g></g>
+<g transform="translate(540 402)"><g id="e3-b2" class="e3-a"><g transform="rotate(-18)"><rect x="-26" y="-6" width="52" height="12" rx="6" fill="#7C3AED"/><circle cx="-26" cy="0" r="11" fill="#7C3AED"/><circle cx="-26" cy="0" r="5" fill="#E6F9F7"/></g></g></g>
+<g transform="translate(536 358)"><g id="e3-spring" class="e3-a" style="transform-origin:50% 100%"><path d="M0 50 C18 46 18 36 0 32 C-18 28 -18 18 0 14 C18 10 18 0 0 -4 C-18 -8 -18 -18 0 -22" fill="none" stroke="#FF6B6B" stroke-width="6" stroke-linecap="round"/></g></g>
+</svg>

@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:178px;background:radial-gradient(120% 90% at 85% 0%,#A78BFA 0%,#7C3AED 45%,#5B21B6 100%);border-radius:0 0 32px 32px;box-shadow:0 10px 24px -12px rgba(30,0,80,.5)"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0;color:#fff">
+   <div class="flex items-center justify-between">
+    <div><div class="over" style="color:#DDD6FE">6 builds · 4 reviewed</div><div style="font-size:28px;font-weight:900;line-height:1.1">My Build</div></div>
+    <span data-podchip="coding,design"></span>
+   </div>
+   <div class="flex gap-2 mt-3" style="font-size:13px;font-weight:900"><span style="background:#fff;color:#5B21B6;border-radius:99px;padding:6px 12px">All 6</span><span style="background:rgba(255,255,255,.16);border-radius:99px;padding:6px 12px">Reviewed</span><span style="background:rgba(255,255,255,.16);border-radius:99px;padding:6px 12px">Waiting</span><span style="background:rgba(255,255,255,.16);border-radius:99px;padding:6px 12px">Drafts</span></div>
+  </div>
+  <div style="position:relative;padding:30px 16px 0">
+   <div class="card flex items-center gap-3" style="padding:10px 12px;border-radius:20px;background:linear-gradient(90deg,#FFF6DB,#fff)">
+    <span data-ic="trophy" data-s="30"></span>
+    <div class="flex-1 min-w-0"><div style="font-weight:900;font-size:14.5px">Show Mum & Dad</div><div class="cap" style="font-size:12px">Your builds appear in their app</div></div>
+    <i data-lucide="chevron-right" style="color:#94A3B8"></i>
+   </div>
+   <div class="grid grid-cols-2 gap-3 mt-3" id="g"></div>
+  </div>
+  <div data-kidnav="build"></div>
+ </div>
+</div>
+</div>
+<script>
+const code=(l)=>`<div style="position:absolute;inset:0;background:#1E1B4B;padding:10px 11px;font:700 10.5px/1.55 ui-monospace,Menlo,monospace;color:#C4B5FD;text-align:left">${l.map(x=>`<div style="white-space:nowrap">${x}</div>`).join('')}</div>`;
+const pat=(a,b,i)=>`<div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,${a} 0 14px,${b} 14px 28px);display:flex;align-items:center;justify-content:center"><span style="width:52px;height:52px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;color:${a};box-shadow:0 4px 10px rgba(0,0,0,.15)"><i data-lucide="${i}" style="width:28px;height:28px"></i></span></div>`;
+const img=(src,pos)=>`<img src="${src}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${pos}">`;
+const S={r3:'<span class="st g nodot" style="height:22px;font-size:11px">Reviewed</span>',w:'<span class="st y" style="height:22px;font-size:11px">Waiting for Mr. Femi</span>',d:'<span class="st s nodot" style="height:22px;font-size:11px">Draft</span>'};
+const stars=n=>[0,1,2].map(i=>`<span data-ic="${i<n?'star':'staroff'}" data-s="14"></span>`).join('');
+const P=[
+ ['Jollof Timer App','Coding · Unit 3',code(['<span style="color:#F9A8D4">for</span> m <span style="color:#F9A8D4">in</span> range(10,0,-1):','&nbsp;&nbsp;print(m,<span style="color:#FDE68A">"mins"</span>)','print(<span style="color:#FDE68A">"Jollof ready!"</span>)']),'r3',3],
+ ['Lagos Bus Counter','Coding · Unit 4',code(['buses = 0','<span style="color:#F9A8D4">while</span> buses &lt; 20:','&nbsp;&nbsp;buses += 1','&nbsp;&nbsp;honk()']),'w',0],
+ ['Ankara Pattern','Design · Unit 2',pat('#FF6B6B','#FFB700','palette'),'r3',2],
+ ['Golden Gate Key','Mission · Codazanga',img('../assets/journey-map-bg.jpg','60% 30%'),'r3',3],
+ ['Name in Lights','Design · Unit 1',pat('#7C3AED','#A855F7','sparkles'),'r3',3],
+ ['Times Table Song','Coding · Unit 2',code(['n = 7','<span style="color:#F9A8D4">for</span> i <span style="color:#F9A8D4">in</span> range(1,13):','&nbsp;&nbsp;sing(n*i)']),'d',0],
+];
+document.getElementById('g').innerHTML=P.map(([t,s,th,st,n])=>`<div class="card" style="padding:0;overflow:hidden;border-radius:20px"><div style="position:relative;height:96px;overflow:hidden">${th}</div><div style="padding:8px 10px 10px"><div style="font-weight:900;font-size:13.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</div><div class="cap" style="font-size:11px">${s}</div><div class="flex items-center justify-between mt-1.5">${S[st]}${n?`<span class="flex">${stars(n)}</span>`:''}</div></div></div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

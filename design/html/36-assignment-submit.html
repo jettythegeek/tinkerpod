@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen" style="background:linear-gradient(#FFF6DB,#F8FAFC 34%)">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:4px 20px">
+   <div style="width:40px;height:40px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #E2E8F0 inset"><i data-lucide="chevron-left"></i></div>
+   <div class="flex-1"><div class="over" style="color:#B45309">Unit 3 assignment</div><div style="font-weight:900;font-size:19px;line-height:1.1">Jollof Timer App</div></div>
+   <span class="st p" style="height:26px;background:#fff;box-shadow:0 0 0 1.5px #E9E3F8 inset">In progress</span>
+  </div>
+  <div style="padding:10px 18px 0">
+   <!-- brief from Captain Jetty -->
+   <div class="flex items-end gap-1">
+    <img src="../assets/mascot-thinking.png" style="width:78px;flex:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.15))">
+    <div style="flex:1;background:#fff;border-radius:22px 22px 22px 6px;padding:11px 14px;font-weight:800;font-size:14px;line-height:1.4;box-shadow:0 10px 24px -12px rgba(76,29,149,.35);margin-bottom:14px"><span style="color:var(--purple)">Captain Jetty:</span> Mama's jollof keeps burning! Build a timer that counts down from 10, then shouts <b>“Food is ready!”</b></div>
+   </div>
+   <div class="card mt-2" style="padding:12px 14px;border-radius:22px">
+    <div class="flex justify-between items-center"><div class="h3">What to make</div><span class="cap" style="font-size:12px">Due Sun, Nov 8</span></div>
+    <div class="flex flex-col gap-1.5 mt-2" id="todo"></div>
+    <div class="flex items-center gap-2 mt-3" style="background:#F8FAFC;border-radius:14px;padding:7px 10px">
+     <span class="over" style="color:#64748B;font-size:10px;flex:1">Reward after review</span>
+     <span class="stat" style="height:28px;font-size:13px"><span data-ic="xp" data-s="20"></span>+150</span>
+     <span class="stat" style="height:28px;font-size:13px"><span data-ic="coin" data-s="20"></span>+40</span>
+     <span class="stat" style="height:28px;font-size:13px"><span data-ic="gem" data-s="18"></span>+3</span>
+    </div>
+   </div>
+   <!-- submit -->
+   <div class="flex justify-between items-end mt-4 mb-2"><div class="h3">Your work</div><div class="cap" style="font-size:12px">Saved as you go</div></div>
+   <div class="flex" style="padding:4px;border-radius:999px;background:#EDE7FB;font-weight:800;font-size:14px">
+    <div class="flex-1 flex items-center justify-center gap-1.5" style="height:36px;border-radius:999px;background:#fff;color:#5B21B6;font-weight:900;box-shadow:0 2px 0 rgba(91,33,182,.2)"><i data-lucide="code-xml" style="width:16px"></i>Code</div>
+    <div class="flex-1 flex items-center justify-center gap-1.5" style="height:36px;color:#64748B"><i data-lucide="upload" style="width:16px"></i>Upload</div>
+   </div>
+   <div style="margin-top:10px;border-radius:22px;background:#1E1B4B;padding:12px 16px;font-family:ui-monospace,'JetBrains Mono',Menlo,monospace;font-size:14.5px;line-height:1.65;color:#E2E8F0;box-shadow:0 12px 24px -12px rgba(30,27,75,.6)">
+    <div class="flex items-center gap-1.5 mb-1"><i style="width:9px;height:9px;border-radius:9px;background:#FF6B6B"></i><i style="width:9px;height:9px;border-radius:9px;background:#FFB700"></i><i style="width:9px;height:9px;border-radius:9px;background:#63C132"></i><span style="margin-left:auto;font-family:Nunito;font-size:11px;font-weight:900;color:#A5B4FC">jollof_timer.py</span></div>
+    <div><span style="color:#C4B5FD">for</span> n <span style="color:#C4B5FD">in</span> <span style="color:#5EEAD4">range</span>(<span style="color:#FFD25E">10</span>, <span style="color:#FFD25E">0</span>, <span style="color:#FFD25E">-1</span>):</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5EEAD4">print</span>(n)</div>
+    <div><span style="color:#5EEAD4">print</span>(<span style="color:#86EFAC">"Food is ready!"</span>)</div>
+   </div>
+   <div class="flex items-center gap-2 mt-2.5">
+    <div class="flex-1 flex items-center gap-2" style="height:42px;border-radius:14px;border:2px dashed #CBD5E1;padding:0 12px;font-size:13px;font-weight:800;color:#64748B"><i data-lucide="image-plus" style="width:18px;color:#7C3AED"></i>Add a photo or video (optional)</div>
+    <div class="btn sm teal" style="height:42px;padding:0 14px"><i data-lucide="play" style="width:15px;fill:#fff"></i>Run</div>
+   </div>
+  </div>
+  <div style="position:absolute;left:16px;right:16px;bottom:30px"><div class="btn" style="height:56px"><i data-lucide="send" style="width:20px"></i>Send to Mr. Femi</div></div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const T=[['Count down from 10 to 1',1],['Use a loop, not 10 print lines',1],['Show “Food is ready!” at the end',1],['Bonus: add a ding sound at 0',0]];
+document.getElementById('todo').innerHTML=T.map(([t,d])=>`<div class="flex items-center gap-2.5" style="font-size:14px;font-weight:800">${d?'<span data-ic="check" data-s="22"></span>':'<span style="width:22px;height:22px;border-radius:99px;box-shadow:0 0 0 2px #CBD5E1 inset;flex:none"></span>'}<span style="${d?'':'color:#334155'}">${t}</span></div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="f13-root" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Loading placeholder">
+<title>Loading placeholder</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&amp;display=swap');
+#f13-root text{font-family:Nunito,'Arial Rounded MT Bold',system-ui,sans-serif;font-weight:900}
+#f13-root .f13-a{transform-box:fill-box;transform-origin:50% 50%}
+@keyframes f13-k0{0.000%{transform:translateX(-520px);animation-timing-function:cubic-bezier(.45,0,.55,1)}85.714%{transform:translateX(520px);animation-timing-function:step-end}100.000%{transform:translateX(520px)}}#f13-band{animation:f13-k0 1.4s linear 0s infinite both}
+@media (prefers-reduced-motion:reduce){#f13-root *{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+</style>
+<defs><clipPath id="f13-clip"><rect x="60" y="70" width="480" height="140" rx="22"/><circle cx="112" cy="266" r="26"/><rect x="156" y="248" width="300" height="16" rx="8"/><rect x="156" y="274" width="200" height="14" rx="7"/><rect x="60" y="320" width="480" height="140" rx="22"/><circle cx="112" cy="516" r="26"/><rect x="156" y="498" width="300" height="16" rx="8"/><rect x="156" y="524" width="200" height="14" rx="7"/></clipPath>
+ <linearGradient id="f13-g" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+<rect x="40" y="55" width="520" height="230" rx="30" fill="#0F172A" opacity=".07"/><rect x="40" y="50" width="520" height="230" rx="30" fill="#fff"/><rect x="40" y="305" width="520" height="230" rx="30" fill="#0F172A" opacity=".07"/><rect x="40" y="300" width="520" height="230" rx="30" fill="#fff"/>
+<rect x="60" y="70" width="480" height="140" rx="22" fill="#E2E8F0"/><circle cx="112" cy="266" r="26" fill="#E2E8F0"/><rect x="156" y="248" width="300" height="16" rx="8" fill="#E2E8F0"/><rect x="156" y="274" width="200" height="14" rx="7" fill="#E2E8F0"/><rect x="60" y="320" width="480" height="140" rx="22" fill="#E2E8F0"/><circle cx="112" cy="516" r="26" fill="#E2E8F0"/><rect x="156" y="498" width="300" height="16" rx="8" fill="#E2E8F0"/><rect x="156" y="524" width="200" height="14" rx="7" fill="#E2E8F0"/>
+<g clip-path="url(#f13-clip)"><g id="f13-band"><rect x="160" y="0" width="280" height="600" fill="url(#f13-g)" transform="skewX(-12)"/></g></g>
+</svg>

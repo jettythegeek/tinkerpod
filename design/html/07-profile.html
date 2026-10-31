@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:300px;background:linear-gradient(160deg,#E6F9F7,#F3EEFF 70%)"></div>
+  <svg style="position:absolute;left:0;top:0" width="390" height="300"><circle cx="195" cy="210" r="120" fill="#fff" opacity=".6"/><circle cx="195" cy="210" r="86" fill="#fff" opacity=".7"/><path d="M60 90l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#FFB700"/><path d="M330 150l2.5 5.5 5.5 2.5-5.5 2.5-2.5 5.5-2.5-5.5-5.5-2.5 5.5-2.5z" fill="#7C3AED"/><circle cx="320" cy="80" r="5" fill="#FF6B6B"/><circle cx="70" cy="200" r="4" fill="#2563EB"/></svg>
+  <div data-statusbar></div>
+  <div class="flex items-center justify-between" style="position:relative;padding:2px 20px">
+   <div class="h2">My Profile</div>
+   <div style="width:44px;height:44px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #E2E8F0 inset"><i data-lucide="settings"></i></div>
+  </div>
+  <img src="../assets/girl-cutout.png" style="position:absolute;left:50%;transform:translateX(-50%);top:92px;height:210px">
+  <div class="btn sm yellow" style="position:absolute;right:28px;top:226px;height:38px;font-size:13px;padding:0 14px"><i data-lucide="shirt" style="width:16px"></i>Style me</div>
+  <div class="card" style="position:absolute;left:16px;right:16px;top:290px;padding:16px 16px 14px;text-align:center">
+   <div style="font-size:23px;font-weight:900;line-height:1.1">Amara Okafor</div>
+   <div class="flex items-center justify-center gap-2 mt-2">
+    <span class="chip" style="height:28px;background:linear-gradient(90deg,#7C3AED,#A855F7);color:#fff;box-shadow:0 3px 0 #5B21B6"><i data-lucide="crown" style="width:15px"></i>Jango-Jango</span>
+    <span class="chip" style="height:28px">Level 12</span>
+    <span class="chip" style="height:28px">Ages 5–11</span>
+   </div>
+   <div class="grid grid-cols-4 mt-4" style="text-align:center">
+    <div><span data-ic="flame" data-s="26"></span><div style="font-weight:900;font-size:17px">7</div><div class="cap" style="font-size:11px">Day streak</div></div>
+    <div><span data-ic="xp" data-s="26"></span><div style="font-weight:900;font-size:17px">14.2k</div><div class="cap" style="font-size:11px">Total XP</div></div>
+    <div><span data-ic="coin" data-s="26"></span><div style="font-weight:900;font-size:17px">1,250</div><div class="cap" style="font-size:11px">Coins</div></div>
+    <div><span data-ic="gem" data-s="24"></span><div style="font-weight:900;font-size:17px">45</div><div class="cap" style="font-size:11px">Gems</div></div>
+   </div>
+  </div>
+  <div style="position:absolute;left:20px;right:0;top:498px">
+   <div class="flex justify-between items-end" style="padding-right:20px"><div class="h3">Title ladder</div><div class="cap">Next: Design Sultan</div></div>
+   <div class="flex items-center mt-2" id="ladder" style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)"></div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;top:600px">
+   <div class="flex justify-between items-end"><div class="h3">Badges <span style="color:var(--muted)">9/36</span></div><div class="cap" style="color:var(--purple)">See all</div></div>
+   <div class="flex justify-between mt-2" id="badges"></div>
+  </div>
+  <div data-nav="me"></div>
+ </div>
+</div>
+</div>
+<script>
+const L=[['Cody Coda','done'],['…','done'],['Jango-Jango','now'],['Design Sultan','next'],['Eze Code','lock'],['Code Dragon','lock'],['Design Jango','lock'],['Odogwu','lock']];
+document.getElementById('ladder').innerHTML=L.map(([n,s],i)=>`${i?`<i style="width:12px;height:3px;flex:none;background:${s==='done'||s==='now'?'#7C3AED':'#CBD5E1'}"></i>`:''}<span style="flex:none;height:32px;padding:0 12px;border-radius:999px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:900;white-space:nowrap;${s==='now'?'background:#7C3AED;color:#fff;box-shadow:0 3px 0 #5B21B6':s==='done'?'background:#F3EEFF;color:#5B21B6':s==='next'?'background:#fff;color:#0F172A;box-shadow:0 0 0 2px #7C3AED inset':'background:#F1F5F9;color:#94A3B8'}">${s==='lock'?'<i data-lucide="lock" style="width:12px"></i>':s==='done'?'<i data-lucide="check" style="width:13px"></i>':''}${n}</span>`).join('');
+const B=[['First Steps','footprints','#63C132','#3E8F18'],['Loop Hero','repeat','#7C3AED','#5B21B6'],['Bug Hunter','bug','#FF6B6B','#D94848'],['Quiz Champ','brain','#2563EB','#1D4ED8']];
+document.getElementById('badges').innerHTML=B.map(([n,i,a,b])=>`<div style="text-align:center;width:66px"><div style="position:relative;width:56px;height:62px;margin:0 auto"><div class="badge-hex" style="position:absolute;inset:0;width:56px;height:62px;background:${b}"></div><div class="badge-hex" style="position:absolute;left:4px;top:3px;width:48px;height:54px;background:linear-gradient(160deg,${a},${b})"><i data-lucide="${i}" style="width:24px;height:24px"></i></div></div><div style="font-size:10.5px;font-weight:900;margin-top:4px;white-space:nowrap">${n}</div></div>`).join('')+`<div style="text-align:center;width:66px"><div class="badge-hex" style="width:56px;height:62px;margin:0 auto;background:#E2E8F0"><span data-ic="lock" data-s="22"></span></div><div style="font-size:10.5px;font-weight:900;margin-top:4px;color:#94A3B8">Locked</div></div>`;
+</script>
+<script>tpInit()</script></body></html>

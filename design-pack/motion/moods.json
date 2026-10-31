@@ -1,0 +1,46 @@
+{
+ "idle": {
+  "dur": 3.2,
+  "title": "Idle"
+ },
+ "wave": {
+  "dur": 2.8,
+  "title": "Wave hello"
+ },
+ "happy": {
+  "dur": 2.6,
+  "title": "Happy smile"
+ },
+ "sad": {
+  "dur": 4.4,
+  "title": "Sad (streak broken)"
+ },
+ "laugh": {
+  "dur": 1.4,
+  "title": "Laugh"
+ },
+ "clap": {
+  "dur": 1.8,
+  "title": "Clap"
+ },
+ "cheer": {
+  "dur": 3.2,
+  "title": "Cheer + confetti"
+ },
+ "thinking": {
+  "dur": 3.6,
+  "title": "Thinking"
+ },
+ "sleepy": {
+  "dur": 5.2,
+  "title": "Sleepy, then wakes up to cheer you on"
+ },
+ "surprised": {
+  "dur": 2.0,
+  "title": "Surprised"
+ },
+ "celebrate": {
+  "dur": 3.0,
+  "title": "Celebrate (victory dance)"
+ }
+}

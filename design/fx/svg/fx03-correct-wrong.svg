@@ -1,0 +1,304 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="f3-root" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Correct and wrong answer feedback">
+<title>Correct and wrong answer feedback</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&amp;display=swap');
+#f3-root text{font-family:Nunito,'Arial Rounded MT Bold',system-ui,sans-serif;font-weight:900}
+#f3-root .f3-a{transform-box:fill-box;transform-origin:50% 50%}
+
+
+#f3-pa-pip *{transform-box:view-box}
+.f3-pa-v{opacity:0} .f3-pa-v.f3-pa-on{opacity:1}
+#f3-pa-pip,#f3-pa-pip-squash{transform-origin:200px 384px}
+#f3-pa-shadow{transform-box:view-box;transform-origin:200px 392px}
+#f3-pa-head{transform-origin:200px 238px} #f3-pa-antenna{transform-origin:200px 84px} #f3-pa-antenna-glow{transform-origin:200px 28px}
+#f3-pa-arm-l{transform-origin:148px 252px} #f3-pa-arm-r{transform-origin:252px 252px}
+#f3-pa-hand-l{transform-origin:148px 316px} #f3-pa-hand-r{transform-origin:252px 316px}
+#f3-pa-eyes{transform-origin:200px 160px} #f3-pa-mouth{transform-origin:200px 196px} #f3-pa-torso{transform-origin:200px 338px}
+#f3-pa-cheeks{opacity:0} #f3-pa-tear,#f3-pa-burst,.f3-pa-spark,#f3-pa-ha-l,#f3-pa-ha-r{opacity:0}
+#f3-pa-gear{transform-origin:156px 82px} #f3-pa-wrench{transform-origin:246px 96px}
+.f3-pa-spark{transform-box:fill-box;transform-origin:50% 50%}
+@keyframes f3-pa-h-hop{0%,18%{transform:translateY(0);animation-timing-function:cubic-bezier(.22,1,.36,1)} 34%{transform:translateY(-34px);animation-timing-function:cubic-bezier(.55,0,.9,.4)} 50%{transform:translateY(0)} 100%{transform:translateY(0)}}
+#f3-pa-pip{animation:f3-pa-h-hop 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-sq{0%,8%{transform:scale(1,1)} 18%{transform:scale(1.08,.9);animation-timing-function:cubic-bezier(.22,1,.36,1)} 26%{transform:scale(.95,1.07)} 34%{transform:scale(1,1)} 46%{transform:scale(.97,1.04)} 51%{transform:scale(1.1,.88);animation-timing-function:cubic-bezier(.34,1.6,.64,1)} 62%{transform:scale(.98,1.02)} 70%,100%{transform:scale(1,1)}}
+#f3-pa-pip-squash{animation:f3-pa-h-sq 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-sh{0%,18%,50%,100%{transform:scale(1);opacity:.13} 34%{transform:scale(.72);opacity:.07}}
+#f3-pa-shadow{animation:f3-pa-h-sh 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-ant{0%,46%,100%{transform:rotate(0)} 52%{transform:rotate(14deg)} 60%{transform:rotate(-9deg)} 68%{transform:rotate(5deg)} 76%{transform:rotate(-2deg)} 84%{transform:rotate(0)}}
+#f3-pa-antenna{animation:f3-pa-h-ant 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-glow{0%,20%,100%{opacity:.2;transform:scale(.9)} 36%{opacity:.5;transform:scale(1.3)}}
+#f3-pa-antenna-glow{animation:f3-pa-h-glow 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-al{0%,18%,62%,100%{transform:rotate(0)} 30%{transform:rotate(38deg)} 48%{transform:rotate(10deg)}}
+#f3-pa-arm-l{animation:f3-pa-h-al 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-ar{0%,18%,62%,100%{transform:rotate(0)} 30%{transform:rotate(-38deg)} 48%{transform:rotate(-10deg)}}
+#f3-pa-arm-r{animation:f3-pa-h-ar 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-head{0%,100%{transform:rotate(0)} 60%{transform:rotate(-4deg)} 76%{transform:rotate(3deg)} 90%{transform:rotate(0)}}
+#f3-pa-head{animation:f3-pa-h-head 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-eo{0%,14%,94%,100%{opacity:1} 18%,90%{opacity:0}}
+#f3-pa-eye-l-open,#f3-pa-eye-r-open{animation:f3-pa-h-eo 2.6s linear 0s infinite}
+@keyframes f3-pa-h-eh{0%,14%,94%,100%{opacity:0} 18%,90%{opacity:1}}
+#f3-pa-eye-l-happy,#f3-pa-eye-r-happy{animation:f3-pa-h-eh 2.6s linear 0s infinite}
+@keyframes f3-pa-h-m{0%,14%,94%,100%{transform:scale(1)} 22%,88%{transform:scale(1.35,1.25)}}
+#f3-pa-mouth{animation:f3-pa-h-m 2.6s cubic-bezier(.34,1.6,.64,1) 0s infinite}
+@keyframes f3-pa-h-ch{0%,14%,94%,100%{opacity:0} 24%,88%{opacity:1}}
+#f3-pa-cheeks{animation:f3-pa-h-ch 2.6s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes f3-pa-h-sp0{0%,30%{opacity:0;transform:scale(0) rotate(0)} 42%{opacity:1;transform:scale(1.2) rotate(45deg)} 60%,100%{opacity:0;transform:scale(0) rotate(90deg)}}
+#f3-pa-sp0{animation:f3-pa-h-sp0 2.6s cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes f3-pa-h-sp1{0%,30%{opacity:0;transform:scale(0) rotate(0)} 42%{opacity:1;transform:scale(1.2) rotate(45deg)} 60%,100%{opacity:0;transform:scale(0) rotate(90deg)}}
+#f3-pa-sp1{animation:f3-pa-h-sp1 2.6s cubic-bezier(.22,1,.36,1) -.25s infinite}
+@keyframes f3-pa-h-sp2{0%,30%{opacity:0;transform:scale(0) rotate(0)} 42%{opacity:1;transform:scale(1.2) rotate(45deg)} 60%,100%{opacity:0;transform:scale(0) rotate(90deg)}}
+#f3-pa-sp2{animation:f3-pa-h-sp2 2.6s cubic-bezier(.22,1,.36,1) -.5s infinite}
+
+
+
+
+
+#f3-pb-pip *{transform-box:view-box}
+.f3-pb-v{opacity:0} .f3-pb-v.f3-pb-on{opacity:1}
+#f3-pb-pip,#f3-pb-pip-squash{transform-origin:200px 384px}
+#f3-pb-shadow{transform-box:view-box;transform-origin:200px 392px}
+#f3-pb-head{transform-origin:200px 238px} #f3-pb-antenna{transform-origin:200px 84px} #f3-pb-antenna-glow{transform-origin:200px 28px}
+#f3-pb-arm-l{transform-origin:148px 252px} #f3-pb-arm-r{transform-origin:252px 252px}
+#f3-pb-hand-l{transform-origin:148px 316px} #f3-pb-hand-r{transform-origin:252px 316px}
+#f3-pb-eyes{transform-origin:200px 160px} #f3-pb-mouth{transform-origin:200px 196px} #f3-pb-torso{transform-origin:200px 338px}
+#f3-pb-cheeks{opacity:0} #f3-pb-tear,#f3-pb-burst,.f3-pb-spark,#f3-pb-ha-l,#f3-pb-ha-r{opacity:0}
+#f3-pb-gear{transform-origin:156px 82px} #f3-pb-wrench{transform-origin:246px 96px}
+.f3-pb-spark{transform-box:fill-box;transform-origin:50% 50%}
+#f3-pb-eye-l-open,#f3-pb-eye-r-open,#f3-pb-mouth-smile{opacity:0}#f3-pb-eye-l-sad,#f3-pb-eye-r-sad,#f3-pb-mouth-frown{opacity:1}
+@keyframes f3-pb-s-head{0%,100%{transform:translateY(7px) rotate(-3deg)} 45%{transform:translateY(12px) rotate(-6deg)} 70%{transform:translateY(4px) rotate(-2deg)}}
+#f3-pb-head{animation:f3-pb-s-head 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+@keyframes f3-pb-s-ant{0%,100%{transform:rotate(26deg)} 45%{transform:rotate(34deg)} 70%{transform:rotate(22deg)}}
+#f3-pb-antenna{animation:f3-pb-s-ant 4.4s cubic-bezier(.45,0,.55,1) 1.900s infinite}
+#f3-pb-antenna-glow{opacity:0}#f3-pb-antenna-dim{opacity:.6}
+@keyframes f3-pb-s-breath{0%,100%{transform:scale(1,.97)} 45%{transform:scale(1.01,.95)} 70%{transform:scale(1,1)}}
+#f3-pb-torso{animation:f3-pb-s-breath 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+@keyframes f3-pb-s-al{0%,100%{transform:rotate(-12deg)} 45%{transform:rotate(-15deg) translateY(4px)} 70%{transform:rotate(-9deg)}}
+#f3-pb-arm-l{animation:f3-pb-s-al 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+@keyframes f3-pb-s-ar{0%,100%{transform:rotate(12deg)} 45%{transform:rotate(15deg) translateY(4px)} 70%{transform:rotate(9deg)}}
+#f3-pb-arm-r{animation:f3-pb-s-ar 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+@keyframes f3-pb-s-pip{0%,100%{transform:translateY(3px)} 45%{transform:translateY(6px)} 70%{transform:translateY(0)}}
+#f3-pb-pip{animation:f3-pb-s-pip 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+@keyframes f3-pb-s-tear{0%,8%{opacity:0;transform:translate(0,0) scale(.2)} 22%{opacity:1;transform:translate(0,0) scale(1);animation-timing-function:cubic-bezier(.55,0,.9,.4)} 52%{opacity:1;transform:translate(-3px,46px) scale(1,1.1)} 60%,100%{opacity:0;transform:translate(-4px,58px) scale(.9)}}
+#f3-pb-tear{animation:f3-pb-s-tear 4.4s cubic-bezier(.22,1,.36,1) 2.300s infinite}
+@keyframes f3-pb-s-led{0%,100%{opacity:.35} 50%{opacity:.6}}
+#f3-pb-chest-lights circle{animation:f3-pb-s-led 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+@keyframes f3-pb-s-m{0%,100%{transform:scale(1)} 45%{transform:scale(.9,1.1)}}
+#f3-pb-mouth{animation:f3-pb-s-m 4.4s cubic-bezier(.45,0,.55,1) 2.300s infinite}
+
+
+
+@keyframes f3-k0{0.000%{opacity:1}43.913%{opacity:1;animation-timing-function:cubic-bezier(.45,0,.55,1)}46.739%{opacity:0}100.000%{opacity:0}}#f3-A{animation:f3-k0 4.6s linear 0s infinite both}
+@keyframes f3-k1{0.000%{opacity:0}50.000%{opacity:0;animation-timing-function:cubic-bezier(.45,0,.55,1)}52.174%{opacity:1}100.000%{opacity:1}}#f3-B{animation:f3-k1 4.6s linear 0s infinite both}
+@keyframes f3-k2{0.000%{fill:#fff;stroke:#E2E8F0}2.174%{fill:#fff;stroke:#E2E8F0;animation-timing-function:cubic-bezier(.22,1,.36,1)}5.217%{fill:#EFFAE8;stroke:#63C132}100.000%{fill:#EFFAE8;stroke:#63C132}}#f3-Abg{animation:f3-k2 4.6s linear 0s infinite both}
+@keyframes f3-k3{0.000%{transform:scale(0);animation-timing-function:step-end}2.609%{transform:scale(0);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}6.522%{transform:scale(1.25);animation-timing-function:cubic-bezier(.45,0,.55,1)}9.130%{transform:scale(1)}100.000%{transform:scale(1)}}#f3-Aic{animation:f3-k3 4.6s linear 0s infinite both}
+@keyframes f3-k4{0.000%{stroke-dasharray:1;stroke-dashoffset:1}4.783%{stroke-dasharray:1;stroke-dashoffset:1;animation-timing-function:cubic-bezier(.22,1,.36,1)}9.130%{stroke-dasharray:1;stroke-dashoffset:0}100.000%{stroke-dasharray:1;stroke-dashoffset:0}}#f3-Amk{animation:f3-k4 4.6s linear 0s infinite both}
+@keyframes f3-k5{0.000%{opacity:0;transform:translateY(16px)}5.435%{opacity:0;transform:translateY(16px);animation-timing-function:cubic-bezier(.22,1,.36,1)}11.957%{opacity:1;transform:translateY(0px)}100.000%{opacity:1;transform:translateY(0px)}}#f3-Amsg{animation:f3-k5 4.6s linear 0s infinite both}
+@keyframes f3-k6{0.000%{fill:#fff;stroke:#E2E8F0}52.174%{fill:#fff;stroke:#E2E8F0;animation-timing-function:cubic-bezier(.22,1,.36,1)}55.217%{fill:#FFF1F1;stroke:#FF6B6B}100.000%{fill:#FFF1F1;stroke:#FF6B6B}}#f3-Bbg{animation:f3-k6 4.6s linear 0s infinite both}
+@keyframes f3-k7{0.000%{transform:scale(0);animation-timing-function:step-end}52.609%{transform:scale(0);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}56.522%{transform:scale(1.25);animation-timing-function:cubic-bezier(.45,0,.55,1)}59.130%{transform:scale(1)}100.000%{transform:scale(1)}}#f3-Bic{animation:f3-k7 4.6s linear 0s infinite both}
+@keyframes f3-k8{0.000%{stroke-dasharray:1;stroke-dashoffset:1}54.783%{stroke-dasharray:1;stroke-dashoffset:1;animation-timing-function:cubic-bezier(.22,1,.36,1)}59.130%{stroke-dasharray:1;stroke-dashoffset:0}100.000%{stroke-dasharray:1;stroke-dashoffset:0}}#f3-Bmk{animation:f3-k8 4.6s linear 0s infinite both}
+@keyframes f3-k9{0.000%{opacity:0;transform:translateY(16px)}55.435%{opacity:0;transform:translateY(16px);animation-timing-function:cubic-bezier(.22,1,.36,1)}61.957%{opacity:1;transform:translateY(0px)}100.000%{opacity:1;transform:translateY(0px)}}#f3-Bmsg{animation:f3-k9 4.6s linear 0s infinite both}
+@keyframes f3-k10{0.000%{transform:scale(1)}2.174%{transform:scale(1);animation-timing-function:cubic-bezier(.22,1,.36,1)}4.783%{transform:scale(1.045);animation-timing-function:cubic-bezier(.45,0,.55,1)}9.130%{transform:scale(1)}100.000%{transform:scale(1)}}#f3-Acard{animation:f3-k10 4.6s linear 0s infinite both}
+@keyframes f3-k11{0.000%{opacity:0;transform:scale(1);animation-timing-function:step-end}3.043%{opacity:.9;transform:scale(1);animation-timing-function:cubic-bezier(.22,1,.36,1)}13.478%{opacity:0;transform:scale(2.5)}100.000%{opacity:0;transform:scale(2.5)}}#f3-Aring{animation:f3-k11 4.6s linear 0s infinite both}
+@keyframes f3-k12{0.000%{opacity:0;transform:scale(0) rotate(0deg);animation-timing-function:step-end}4.783%{opacity:1;transform:scale(0);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}8.261%{opacity:1;transform:scale(1.2) rotate(40deg);animation-timing-function:cubic-bezier(.55,0,.9,.4)}16.739%{opacity:0;transform:scale(0) rotate(100deg)}100.000%{opacity:0;transform:scale(0) rotate(100deg)}}#f3-Ast0{animation:f3-k12 4.6s linear 0s infinite both}
+@keyframes f3-k13{0.000%{opacity:0;transform:scale(0) rotate(0deg);animation-timing-function:step-end}6.304%{opacity:1;transform:scale(0);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}9.783%{opacity:1;transform:scale(1.2) rotate(40deg);animation-timing-function:cubic-bezier(.55,0,.9,.4)}18.261%{opacity:0;transform:scale(0) rotate(100deg)}100.000%{opacity:0;transform:scale(0) rotate(100deg)}}#f3-Ast1{animation:f3-k13 4.6s linear 0s infinite both}
+@keyframes f3-k14{0.000%{opacity:0;transform:scale(0) rotate(0deg);animation-timing-function:step-end}7.826%{opacity:1;transform:scale(0);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}11.304%{opacity:1;transform:scale(1.2) rotate(40deg);animation-timing-function:cubic-bezier(.55,0,.9,.4)}19.783%{opacity:0;transform:scale(0) rotate(100deg)}100.000%{opacity:0;transform:scale(0) rotate(100deg)}}#f3-Ast2{animation:f3-k14 4.6s linear 0s infinite both}
+@keyframes f3-k15{0.000%{transform:translateX(0px)}52.174%{transform:translateX(0px);animation-timing-function:cubic-bezier(.45,0,.55,1)}53.478%{transform:translateX(-16px);animation-timing-function:cubic-bezier(.45,0,.55,1)}54.891%{transform:translateX(14px);animation-timing-function:cubic-bezier(.45,0,.55,1)}56.304%{transform:translateX(-10px);animation-timing-function:cubic-bezier(.45,0,.55,1)}57.717%{transform:translateX(7px);animation-timing-function:cubic-bezier(.45,0,.55,1)}59.130%{transform:translateX(-4px);animation-timing-function:cubic-bezier(.45,0,.55,1)}60.543%{transform:translateX(0px);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:translateX(0px)}}#f3-Bshake{animation:f3-k15 4.6s linear 0s infinite both}
+@media (prefers-reduced-motion:reduce){#f3-root *{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}#f3-A{opacity:1!important}#f3-B{opacity:0!important}}
+</style>
+<g id="f3-A">
+ <g id="f3-Apip"><svg id="f3-pa-rig" x="165" y="0" width="270" height="270" viewBox="-70 -110 540 540" overflow="visible"><defs>
+ <linearGradient id="f3-pa-limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"/><stop offset=".4" stop-color="#22D9C7"/><stop offset="1" stop-color="#00A597"/></linearGradient>
+ <linearGradient id="f3-pa-torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"/><stop offset=".32" stop-color="#2DDFCD"/><stop offset=".7" stop-color="#05C2B1"/><stop offset="1" stop-color="#009587"/></linearGradient>
+ <radialGradient id="f3-pa-shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"/><stop offset=".45" stop-color="#0CC9B7"/><stop offset="1" stop-color="#009184"/></radialGradient>
+ <radialGradient id="f3-pa-screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"/><stop offset="1" stop-color="#0D1838"/></radialGradient>
+ <radialGradient id="f3-pa-earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#F2A900"/></radialGradient>
+ <radialGradient id="f3-pa-ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"/><stop offset=".6" stop-color="#FF8A1F"/><stop offset="1" stop-color="#E86A00"/></radialGradient>
+ <clipPath id="f3-pa-podTop"><rect x="60" y="-20" width="280" height="112"/></clipPath>
+</defs>
+<ellipse id="f3-pa-shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity=".13"/>
+<g id="f3-pa-fx-back"></g>
+<g id="f3-pa-pip"><g id="f3-pa-pip-squash">
+ <g id="f3-pa-legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#f3-pa-limb)"/><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#f3-pa-limb)"/><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+ </g>
+ <g id="f3-pa-torso">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#f3-pa-torsoG)"/>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity=".32"/>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity=".28"/>
+  <g id="f3-pa-chest-lights"><circle id="f3-pa-led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"/><circle id="f3-pa-led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"/><circle id="f3-pa-led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"/></g>
+ </g>
+ <g id="f3-pa-head">
+  <g id="f3-pa-antenna">
+   <circle id="f3-pa-antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity=".3"/>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"/>
+   <circle id="f3-pa-antenna-ball" cx="200" cy="28" r="13" fill="url(#f3-pa-ballG)"/><circle id="f3-pa-antenna-dim" cx="200" cy="28" r="13" fill="#7C8799" opacity="0"/><circle cx="196" cy="23.5" r="4" fill="#fff" opacity=".7"/>
+  </g>
+  <g id="f3-pa-ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#f3-pa-earG)"/><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <g id="f3-pa-ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#f3-pa-earG)"/><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <rect id="f3-pa-shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#f3-pa-shellG)"/>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity=".35"/>
+  <ellipse id="f3-pa-pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"/>
+  <g id="f3-pa-toolkit" clip-path="url(#f3-pa-podTop)">
+   <g id="f3-pa-gear"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"/><circle cx="156" cy="82" r="8" fill="#E39A00"/><circle cx="153" cy="78" r="2.5" fill="#fff" opacity=".5"/></g>
+   <g id="f3-pa-code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"/><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+   <g id="f3-pa-wrench"><g transform="translate(248 60) rotate(18) scale(1.18)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"/><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"/><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity=".3"/></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"/>
+  <rect id="f3-pa-face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"/>
+  <rect id="f3-pa-screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#f3-pa-screenG)"/>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".12"/>
+  <g id="f3-pa-face">
+   <g id="f3-pa-brows"></g>
+   <g id="f3-pa-eyes"><g id="f3-pa-eye-l"><g id="f3-pa-eye-l-open" class="f3-pa-v f3-pa-on">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"/><circle cx="171" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="f3-pa-eye-l-happy" class="f3-pa-v"><path d="M152 165 Q166 145 180 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="f3-pa-eye-l-sad" class="f3-pa-v">
+      <rect x="154" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="163" cy="165" r="3.6" fill="#fff"/>
+      <path d="M149 139 L183 139 L183 147 L149 159Z" fill="#14234F"/>
+      <path d="M153 145 L178 135" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="f3-pa-eye-l-squint" class="f3-pa-v"><path d="M156 149 L175 160 L156 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="f3-pa-eye-l-star" class="f3-pa-v">
+      <ellipse cx="166" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="151" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M163 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="172" cy="168" r="2.4" fill="#fff"/></g></g><g id="f3-pa-eye-r"><g id="f3-pa-eye-r-open" class="f3-pa-v f3-pa-on">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"/><circle cx="239" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="f3-pa-eye-r-happy" class="f3-pa-v"><path d="M220 165 Q234 145 248 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="f3-pa-eye-r-sad" class="f3-pa-v">
+      <rect x="222" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="231" cy="165" r="3.6" fill="#fff"/>
+      <path d="M217 139 L251 139 L251 159 L217 147Z" fill="#14234F"/>
+      <path d="M222 135 L247 145" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="f3-pa-eye-r-squint" class="f3-pa-v"><path d="M244 149 L225 160 L244 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="f3-pa-eye-r-star" class="f3-pa-v">
+      <ellipse cx="234" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="219" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M231 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="240" cy="168" r="2.4" fill="#fff"/></g></g></g>
+   <g id="f3-pa-cheeks"><ellipse cx="139" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/><ellipse cx="261" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/></g>
+   <g id="f3-pa-mouth">
+    <g id="f3-pa-mouth-smile" class="f3-pa-v f3-pa-on"><path d="M185 191 Q200 205 215 191" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="f3-pa-mouth-grin" class="f3-pa-v"><path d="M181 188 Q200 185 219 188 Q217 211 200 211 Q183 211 181 188Z" fill="#FF6B7D"/>
+      <path d="M190 205 Q200 197 210 205 Q206 211 200 211 Q194 211 190 205Z" fill="#FFB3BC"/></g>
+    <g id="f3-pa-mouth-frown" class="f3-pa-v"><path d="M187 200 Q200 189 213 200" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="f3-pa-mouth-o" class="f3-pa-v"><ellipse cx="200" cy="197" rx="12" ry="14" fill="#FF6B7D"/><ellipse cx="200" cy="204" rx="7" ry="5" fill="#FFB3BC"/></g>
+  </g>
+  </g>
+ </g>
+ <g id="f3-pa-arm-l"><g transform="rotate(22 148 252)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#f3-pa-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="f3-pa-hand-l"><circle cx="148" cy="316" r="18.5" fill="url(#f3-pa-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#f3-pa-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g><g id="f3-pa-arm-r"><g transform="rotate(-22 252 252)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#f3-pa-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="f3-pa-hand-r"><circle cx="252" cy="316" r="18.5" fill="url(#f3-pa-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#f3-pa-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g>
+</g></g>
+<g id="f3-pa-fx-front"><g transform="translate(96 70)"><g id="f3-pa-sp0" class="f3-pa-spark"><path d="M0 -16 Q2.88 -2.88 16 0 Q2.88 2.88 0 16 Q-2.88 2.88 -16 0 Q-2.88 -2.88 0 -16Z" fill="#FFB700"/></g></g><g transform="translate(312 92)"><g id="f3-pa-sp1" class="f3-pa-spark"><path d="M0 -12 Q2.16 -2.16 12 0 Q2.16 2.16 0 12 Q-2.16 2.16 -12 0 Q-2.16 -2.16 0 -12Z" fill="#7C3AED"/></g></g><g transform="translate(296 6)"><g id="f3-pa-sp2" class="f3-pa-spark"><path d="M0 -10 Q1.7999999999999998 -1.7999999999999998 10 0 Q1.7999999999999998 1.7999999999999998 0 10 Q-1.7999999999999998 1.7999999999999998 -10 0 Q-1.7999999999999998 -1.7999999999999998 0 -10Z" fill="#FF6B6B"/></g></g></g>
+</svg></g>
+ <g id="f3-Ashake"><g id="f3-Acard" class="f3-a">
+  <rect x="70" y="335" width="460" height="86" rx="26" fill="#0F172A" opacity=".07"/>
+  <rect id="f3-Abg" x="70" y="330" width="460" height="86" rx="26" fill="#fff" stroke="#E2E8F0" stroke-width="3"/>
+  <circle cx="120" cy="373" r="23" fill="#F1F5F9"/><text x="120" y="382" font-size="24" fill="#475569" text-anchor="middle" >B</text>
+  <text x="160" y="384" font-size="30" fill="#0F172A" text-anchor="start" >repeat 3 times</text>
+  <g transform="translate(480 373)"><g id="f3-Aring" class="f3-a" opacity="0"><circle r="30" fill="none" stroke="#63C132" stroke-width="6"/></g></g>
+  <g transform="translate(480 373)"><g id="f3-Aic" class="f3-a"><circle r="30" fill="#63C132"/><path id="f3-Amk" d="M-14 1 L-4 11 L15 -10" pathLength="1" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+ </g></g><g transform="translate(428 336)"><g id="f3-Ast0" class="f3-a" opacity="0"><path d="M0 -11 Q2.2 -2.2 11 0 Q2.2 2.2 0 11 Q-2.2 2.2 -11 0 Q-2.2 -2.2 0 -11Z" fill="#FFB700" opacity="1"/></g></g><g transform="translate(530 332)"><g id="f3-Ast1" class="f3-a" opacity="0"><path d="M0 -9 Q1.8 -1.8 9 0 Q1.8 1.8 0 9 Q-1.8 1.8 -9 0 Q-1.8 -1.8 0 -9Z" fill="#00BFAE" opacity="1"/></g></g><g transform="translate(534 412)"><g id="f3-Ast2" class="f3-a" opacity="0"><path d="M0 -10 Q2.0 -2.0 10 0 Q2.0 2.0 0 10 Q-2.0 2.0 -10 0 Q-2.0 -2.0 0 -10Z" fill="#FFB700" opacity="1"/></g></g>
+ <g id="f3-Amsg"><text x="300" y="512" font-size="46" fill="#2F7D16" text-anchor="middle" >Correct!</text><text x="300" y="552" font-size="26" fill="#475569" text-anchor="middle" >+10 XP  ·  Pip is proud of you</text></g></g><g id="f3-B" opacity="0">
+ <g id="f3-Bpip"><svg id="f3-pb-rig" x="165" y="0" width="270" height="270" viewBox="-70 -110 540 540" overflow="visible"><defs>
+ <linearGradient id="f3-pb-limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"/><stop offset=".4" stop-color="#22D9C7"/><stop offset="1" stop-color="#00A597"/></linearGradient>
+ <linearGradient id="f3-pb-torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"/><stop offset=".32" stop-color="#2DDFCD"/><stop offset=".7" stop-color="#05C2B1"/><stop offset="1" stop-color="#009587"/></linearGradient>
+ <radialGradient id="f3-pb-shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"/><stop offset=".45" stop-color="#0CC9B7"/><stop offset="1" stop-color="#009184"/></radialGradient>
+ <radialGradient id="f3-pb-screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"/><stop offset="1" stop-color="#0D1838"/></radialGradient>
+ <radialGradient id="f3-pb-earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#F2A900"/></radialGradient>
+ <radialGradient id="f3-pb-ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"/><stop offset=".6" stop-color="#FF8A1F"/><stop offset="1" stop-color="#E86A00"/></radialGradient>
+ <clipPath id="f3-pb-podTop"><rect x="60" y="-20" width="280" height="112"/></clipPath>
+</defs>
+<ellipse id="f3-pb-shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity=".13"/>
+<g id="f3-pb-fx-back"></g>
+<g id="f3-pb-pip"><g id="f3-pb-pip-squash">
+ <g id="f3-pb-legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#f3-pb-limb)"/><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#f3-pb-limb)"/><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+ </g>
+ <g id="f3-pb-torso">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#f3-pb-torsoG)"/>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity=".32"/>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity=".28"/>
+  <g id="f3-pb-chest-lights"><circle id="f3-pb-led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"/><circle id="f3-pb-led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"/><circle id="f3-pb-led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"/></g>
+ </g>
+ <g id="f3-pb-head">
+  <g id="f3-pb-antenna">
+   <circle id="f3-pb-antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity=".3"/>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"/>
+   <circle id="f3-pb-antenna-ball" cx="200" cy="28" r="13" fill="url(#f3-pb-ballG)"/><circle id="f3-pb-antenna-dim" cx="200" cy="28" r="13" fill="#7C8799" opacity="0"/><circle cx="196" cy="23.5" r="4" fill="#fff" opacity=".7"/>
+  </g>
+  <g id="f3-pb-ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#f3-pb-earG)"/><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <g id="f3-pb-ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#f3-pb-earG)"/><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <rect id="f3-pb-shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#f3-pb-shellG)"/>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity=".35"/>
+  <ellipse id="f3-pb-pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"/>
+  <g id="f3-pb-toolkit" clip-path="url(#f3-pb-podTop)">
+   <g id="f3-pb-gear"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"/><circle cx="156" cy="82" r="8" fill="#E39A00"/><circle cx="153" cy="78" r="2.5" fill="#fff" opacity=".5"/></g>
+   <g id="f3-pb-code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"/><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+   <g id="f3-pb-wrench"><g transform="translate(248 60) rotate(18) scale(1.18)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"/><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"/><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity=".3"/></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"/>
+  <rect id="f3-pb-face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"/>
+  <rect id="f3-pb-screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#f3-pb-screenG)"/>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".12"/>
+  <g id="f3-pb-face">
+   <g id="f3-pb-brows"></g>
+   <g id="f3-pb-eyes"><g id="f3-pb-eye-l"><g id="f3-pb-eye-l-open" class="f3-pb-v f3-pb-on">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"/><circle cx="171" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="f3-pb-eye-l-happy" class="f3-pb-v"><path d="M152 165 Q166 145 180 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="f3-pb-eye-l-sad" class="f3-pb-v">
+      <rect x="154" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="163" cy="165" r="3.6" fill="#fff"/>
+      <path d="M149 139 L183 139 L183 147 L149 159Z" fill="#14234F"/>
+      <path d="M153 145 L178 135" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="f3-pb-eye-l-squint" class="f3-pb-v"><path d="M156 149 L175 160 L156 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="f3-pb-eye-l-star" class="f3-pb-v">
+      <ellipse cx="166" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="151" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M163 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="172" cy="168" r="2.4" fill="#fff"/></g></g><g id="f3-pb-eye-r"><g id="f3-pb-eye-r-open" class="f3-pb-v f3-pb-on">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"/><circle cx="239" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="f3-pb-eye-r-happy" class="f3-pb-v"><path d="M220 165 Q234 145 248 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="f3-pb-eye-r-sad" class="f3-pb-v">
+      <rect x="222" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="231" cy="165" r="3.6" fill="#fff"/>
+      <path d="M217 139 L251 139 L251 159 L217 147Z" fill="#14234F"/>
+      <path d="M222 135 L247 145" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="f3-pb-eye-r-squint" class="f3-pb-v"><path d="M244 149 L225 160 L244 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="f3-pb-eye-r-star" class="f3-pb-v">
+      <ellipse cx="234" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="219" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M231 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="240" cy="168" r="2.4" fill="#fff"/></g></g></g>
+   <g id="f3-pb-cheeks"><ellipse cx="139" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/><ellipse cx="261" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/></g>
+   <g id="f3-pb-mouth">
+    <g id="f3-pb-mouth-smile" class="f3-pb-v f3-pb-on"><path d="M185 191 Q200 205 215 191" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="f3-pb-mouth-grin" class="f3-pb-v"><path d="M181 188 Q200 185 219 188 Q217 211 200 211 Q183 211 181 188Z" fill="#FF6B7D"/>
+      <path d="M190 205 Q200 197 210 205 Q206 211 200 211 Q194 211 190 205Z" fill="#FFB3BC"/></g>
+    <g id="f3-pb-mouth-frown" class="f3-pb-v"><path d="M187 200 Q200 189 213 200" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="f3-pb-mouth-o" class="f3-pb-v"><ellipse cx="200" cy="197" rx="12" ry="14" fill="#FF6B7D"/><ellipse cx="200" cy="204" rx="7" ry="5" fill="#FFB3BC"/></g>
+  </g>
+  </g>
+ </g>
+ <g id="f3-pb-arm-l"><g transform="rotate(22 148 252)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#f3-pb-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="f3-pb-hand-l"><circle cx="148" cy="316" r="18.5" fill="url(#f3-pb-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#f3-pb-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g><g id="f3-pb-arm-r"><g transform="rotate(-22 252 252)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#f3-pb-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="f3-pb-hand-r"><circle cx="252" cy="316" r="18.5" fill="url(#f3-pb-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#f3-pb-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g>
+</g></g>
+<g id="f3-pb-fx-front"><g transform="translate(176 172)"><g id="f3-pb-tear" style="transform-box:view-box;transform-origin:0 0"><path d="M0 -9 Q7 0 7 4 A7 7 0 1 1 -7 4 Q-7 0 0 -9Z" fill="#60A5FA"/><ellipse cx="-2" cy="3" rx="2" ry="3" fill="#fff" opacity=".7"/></g></g></g>
+</svg></g>
+ <g id="f3-Bshake"><g id="f3-Bcard" class="f3-a">
+  <rect x="70" y="335" width="460" height="86" rx="26" fill="#0F172A" opacity=".07"/>
+  <rect id="f3-Bbg" x="70" y="330" width="460" height="86" rx="26" fill="#fff" stroke="#E2E8F0" stroke-width="3"/>
+  <circle cx="120" cy="373" r="23" fill="#F1F5F9"/><text x="120" y="382" font-size="24" fill="#475569" text-anchor="middle" >C</text>
+  <text x="160" y="384" font-size="30" fill="#0F172A" text-anchor="start" >repeat forever</text>
+  <g transform="translate(480 373)"><g id="f3-Bring" class="f3-a" opacity="0"><circle r="30" fill="none" stroke="#FF6B6B" stroke-width="6"/></g></g>
+  <g transform="translate(480 373)"><g id="f3-Bic" class="f3-a"><circle r="30" fill="#FF6B6B"/><path id="f3-Bmk" d="M-11 -11 L11 11 M11 -11 L-11 11" pathLength="1" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/></g></g>
+ </g></g>
+ <g id="f3-Bmsg"><text x="300" y="512" font-size="44" fill="#D92D20" text-anchor="middle" >Not quite!</text><text x="300" y="552" font-size="26" fill="#475569" text-anchor="middle" >Look at the loop again. You got this.</text></g></g>
+</svg>

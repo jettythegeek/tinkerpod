@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="47 -48 306 464" width="306" height="464" role="img" aria-label="Captain Jetty, the TinkerPod robot: Surprised">
+<title>Captain Jetty · Surprised</title>
+<defs>
+ <linearGradient id="limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"></stop><stop offset=".4" stop-color="#22D9C7"></stop><stop offset="1" stop-color="#00A597"></stop></linearGradient>
+ <linearGradient id="torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"></stop><stop offset=".32" stop-color="#2DDFCD"></stop><stop offset=".7" stop-color="#05C2B1"></stop><stop offset="1" stop-color="#009587"></stop></linearGradient>
+ <radialGradient id="shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"></stop><stop offset=".45" stop-color="#0CC9B7"></stop><stop offset="1" stop-color="#009184"></stop></radialGradient>
+ <radialGradient id="screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"></stop><stop offset="1" stop-color="#0D1838"></stop></radialGradient>
+ <radialGradient id="earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"></stop><stop offset="1" stop-color="#F2A900"></stop></radialGradient>
+ <radialGradient id="ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"></stop><stop offset=".6" stop-color="#FF8A1F"></stop><stop offset="1" stop-color="#E86A00"></stop></radialGradient>
+ <clipPath id="podTop"><rect x="60" y="-20" width="280" height="112"></rect></clipPath>
+</defs>
+
+<ellipse id="shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity="0.127" transform="matrix(0.9898 0 0 0.9898 2.0369 3.9923)"></ellipse>
+
+<g id="pip" transform="translate(0 -12.9993)"><g id="pip-squash" transform="matrix(1.0704 0 0 0.9296 -14.0775 27.0289)">
+ <g id="legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#limb)"></rect><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"></rect><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity="0.25"></rect>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#limb)"></rect><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"></rect><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity="0.25"></rect>
+ </g>
+ <g id="torso">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#torsoG)"></rect>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity="0.32"></rect>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity="0.28"></ellipse>
+  <g id="chest-lights"><circle id="led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"></circle><circle id="led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"></circle><circle id="led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"></circle></g>
+ </g>
+ <g id="head" transform="translate(0 2)">
+  <g id="antenna" transform="matrix(0.9848 -0.1736 0.1736 0.9848 -11.548 36.0058)">
+   <circle id="antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity="0.58" transform="matrix(1.36 0 0 1.36 -72.0027 -10.0804)"></circle>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"></rect>
+   <circle id="antenna-ball" cx="200" cy="28" r="13" fill="url(#ballG)"></circle><circle cx="196" cy="23.5" r="4" fill="#fff" opacity="0.7"></circle>
+  </g>
+  <g id="ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#earG)"></ellipse><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity="0.45"></ellipse></g>
+  <g id="ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#earG)"></ellipse><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity="0.45"></ellipse></g>
+  <rect id="shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#shellG)"></rect>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity="0.35"></ellipse>
+  <ellipse id="pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"></ellipse>
+  <g id="toolkit" clip-path="url(#podTop)">
+   <g id="gear"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"></path><circle cx="156" cy="82" r="8" fill="#E39A00"></circle><circle cx="153" cy="78" r="2.5" fill="#fff" opacity="0.5"></circle></g>
+   <g id="code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"></rect><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></g>
+   <g id="wrench"><g transform="matrix(1.1222 0.3646 -0.3646 1.1222 248 60)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"></path><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"></rect><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity="0.3"></rect></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"></path>
+  <rect id="face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"></rect>
+  <rect id="screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#screenG)"></rect>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.12"></path>
+  <g id="face">
+   
+   <g id="eyes" transform="matrix(1.2 0 0 1.24 -40 -38.4)"><g id="eye-l"><g id="eye-l-open">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity="0.16"></ellipse>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"></rect>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"></circle><circle cx="171" cy="166" r="2" fill="#fff" opacity="0.7"></circle></g></g><g id="eye-r"><g id="eye-r-open">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity="0.16"></ellipse>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"></rect>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"></circle><circle cx="239" cy="166" r="2" fill="#fff" opacity="0.7"></circle></g></g></g>
+   
+   <g id="mouth">
+    
+    
+    
+    <g id="mouth-o"><ellipse cx="200" cy="197" rx="12" ry="14" fill="#FF6B7D"></ellipse><ellipse cx="200" cy="204" rx="7" ry="5" fill="#FFB3BC"></ellipse></g>
+  </g>
+  </g>
+ </g>
+ <g id="arm-l" transform="matrix(0.6691 0.7431 -0.7431 0.6691 236.2412 -26.6063)"><g transform="matrix(0.9272 0.3746 -0.3746 0.9272 105.1777 -37.0921)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#limb)" stroke="#00968A" stroke-width="2"></rect>
+     <g id="hand-l" transform="matrix(0.9135 -0.4067 0.4067 0.9135 -115.7335 87.5167)"><circle cx="148" cy="316" r="18.5" fill="url(#limb)" stroke="#00968A" stroke-width="2"></circle>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#limb)" stroke="#00968A" stroke-width="2"></ellipse>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity="0.35"></ellipse></g>
+    </g></g><g id="arm-r" transform="matrix(0.6691 -0.7431 0.7431 0.6691 -103.8934 270.6516)"><g transform="matrix(0.9272 -0.3746 0.3746 0.9272 -76.0512 112.7505)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#limb)" stroke="#00968A" stroke-width="2"></rect>
+     <g id="hand-r" transform="matrix(0.9135 0.4067 -0.4067 0.9135 150.3153 -75.178)"><circle cx="252" cy="316" r="18.5" fill="url(#limb)" stroke="#00968A" stroke-width="2"></circle>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#limb)" stroke="#00968A" stroke-width="2"></ellipse>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity="0.35"></ellipse></g>
+    </g></g>
+</g></g>
+<g id="fx-front"><g id="bang"><path d="M330 -30 L330 4" stroke="#FF6B6B" stroke-width="13" stroke-linecap="round"></path><circle cx="330" cy="24" r="7.5" fill="#FF6B6B"></circle></g><g id="pops" transform="matrix(1.3992 0 0 1.3992 -79.8327 -15.9665)" opacity="0.002"><path d="M150 18 l-14 -14 M200 -8 v-20 M250 18 l14 -14 M120 60 h-20 M280 60 h20" stroke="#FFB700" stroke-width="7" stroke-linecap="round"></path></g></g>
+</svg>

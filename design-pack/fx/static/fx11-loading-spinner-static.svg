@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Loading">
+<title>Loading</title>
+
+<g transform="translate(300 270)">
+ <circle r="100" fill="none" stroke="#E6F9F7" stroke-width="22"></circle>
+ <g id="f11-arc" transform="matrix(0 1 -1 0 0 0)"><g transform="matrix(0 -1 1 0 0 0)">
+  <circle id="f11-arc2" r="100" fill="none" stroke="#00BFAE" stroke-width="22" stroke-linecap="round" pathLength="100" stroke-dasharray="34px, 66" transform="matrix(0.766 0.6428 -0.6428 0.766 0 0)"></circle>
+ </g></g>
+ <circle r="58" fill="#fff"></circle><circle r="58" fill="none" stroke="#E2E8F0" stroke-width="3"></circle>
+ <g id="f11-gear" transform="matrix(0.9239 -0.3827 0.3827 0.9239 0 0)"><path d="M22.0,0.0 L29.4,5.9 L27.7,11.5 L18.3,12.2 L15.6,15.6 L16.7,24.9 L11.5,27.7 L4.3,21.6 L0.0,22.0 L-5.9,29.4 L-11.5,27.7 L-12.2,18.3 L-15.6,15.6 L-24.9,16.7 L-27.7,11.5 L-21.6,4.3 L-22.0,0.0 L-29.4,-5.9 L-27.7,-11.5 L-18.3,-12.2 L-15.6,-15.6 L-16.7,-24.9 L-11.5,-27.7 L-4.3,-21.6 L-0.0,-22.0 L5.9,-29.4 L11.5,-27.7 L12.2,-18.3 L15.6,-15.6 L24.9,-16.7 L27.7,-11.5 L21.6,-4.3Z M10 0 A10 10 0 1 0 -10 0 A10 10 0 1 0 10 0Z" fill="#FFB700" fill-rule="evenodd"></path></g>
+</g>
+<g transform="translate(300 440)"><g transform="translate(-30 0)"><g id="f11-dot0" transform="matrix(1.0839 0 0 1.0839 0 0)"><circle r="9" fill="#00BFAE"></circle></g></g><g><g id="f11-dot1" transform="matrix(1.0839 0 0 1.0839 0 0)"><circle r="9" fill="#7C3AED"></circle></g></g><g transform="translate(30 0)"><g id="f11-dot2" transform="matrix(0.875 0 0 0.875 0 0)"><circle r="9" fill="#FFB700"></circle></g></g></g>
+</svg>

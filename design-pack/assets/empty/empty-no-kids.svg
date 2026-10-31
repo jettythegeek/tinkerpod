@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="e7-root" viewBox="0 0 600 480" width="600" height="480" role="img" aria-label="Add your first child: Captain Jetty beside an empty profile card">
+<title>Add your first child: Captain Jetty beside an empty profile card</title>
+<style>
+#e7-root .e7-a{transform-box:fill-box;transform-origin:50% 50%}
+
+
+#e7-p-pip *{transform-box:view-box}
+.e7-p-v{opacity:0} .e7-p-v.e7-p-on{opacity:1}
+#e7-p-pip,#e7-p-pip-squash{transform-origin:200px 384px}
+#e7-p-shadow{transform-box:view-box;transform-origin:200px 392px}
+#e7-p-head{transform-origin:200px 238px} #e7-p-antenna{transform-origin:200px 84px} #e7-p-antenna-glow{transform-origin:200px 28px}
+#e7-p-arm-l{transform-origin:148px 252px} #e7-p-arm-r{transform-origin:252px 252px}
+#e7-p-hand-l{transform-origin:148px 316px} #e7-p-hand-r{transform-origin:252px 316px}
+#e7-p-eyes{transform-origin:200px 160px} #e7-p-mouth{transform-origin:200px 196px} #e7-p-torso{transform-origin:200px 338px}
+#e7-p-cheeks{opacity:0} #e7-p-tear,#e7-p-burst,.e7-p-spark,#e7-p-ha-l,#e7-p-ha-r{opacity:0}
+#e7-p-gear{transform-origin:156px 82px} #e7-p-wrench{transform-origin:246px 96px}
+.e7-p-spark{transform-box:fill-box;transform-origin:50% 50%}
+@keyframes e7-p-w-arm{0%{transform:rotate(0);animation-timing-function:cubic-bezier(.45,0,.55,1)} 9%{transform:rotate(10deg);animation-timing-function:cubic-bezier(.34,1.6,.64,1)} 24%{transform:rotate(-104deg);animation-timing-function:cubic-bezier(.45,0,.55,1)} 33%{transform:rotate(-126deg)} 42%{transform:rotate(-90deg)} 51%{transform:rotate(-126deg)} 60%{transform:rotate(-90deg)} 69%{transform:rotate(-112deg)} 80%{transform:rotate(-102deg);animation-timing-function:cubic-bezier(.5,0,.3,1)} 94%,100%{transform:rotate(0)}}
+#e7-p-arm-r{animation:e7-p-w-arm 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-hand{0%,24%,80%,100%{transform:rotate(0)} 33%,51%{transform:rotate(-22deg)} 42%,60%{transform:rotate(18deg)} 69%{transform:rotate(-8deg)}}
+#e7-p-hand-r{animation:e7-p-w-hand 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-head{0%,12%,94%,100%{transform:rotate(0)} 28%,80%{transform:rotate(6deg) translateX(3px)}}
+#e7-p-head{animation:e7-p-w-head 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-lean{0%,10%,96%,100%{transform:rotate(0) scale(1)} 8%{transform:rotate(1deg) scale(1.02,.97)} 26%,80%{transform:rotate(-2.5deg) scale(1)}}
+#e7-p-pip-squash{animation:e7-p-w-lean 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-bob{0%,100%{transform:translateY(0)} 42%{transform:translateY(-5px)} 60%{transform:translateY(0)} 78%{transform:translateY(-4px)}}
+#e7-p-pip{animation:e7-p-w-bob 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-al{0%,100%{transform:rotate(0)} 50%{transform:rotate(-5deg)}}
+#e7-p-arm-l{animation:e7-p-w-al 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-ant{0%,20%,100%{transform:rotate(0)} 30%{transform:rotate(-10deg)} 40%{transform:rotate(7deg)} 52%{transform:rotate(-4deg)} 64%{transform:rotate(2deg)}}
+#e7-p-antenna{animation:e7-p-w-ant 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes e7-p-w-eo{0%,18%,90%,100%{opacity:1} 22%,86%{opacity:0}}
+#e7-p-eye-l-open,#e7-p-eye-r-open{animation:e7-p-w-eo 2.8s linear 0s infinite}
+@keyframes e7-p-w-eh{0%,18%,90%,100%{opacity:0} 22%,86%{opacity:1}}
+#e7-p-eye-l-happy,#e7-p-eye-r-happy{animation:e7-p-w-eh 2.8s linear 0s infinite}
+@keyframes e7-p-w-ms{0%,18%,90%,100%{opacity:1} 22%,86%{opacity:0}}
+#e7-p-mouth-smile{animation:e7-p-w-ms 2.8s linear 0s infinite}
+@keyframes e7-p-w-mg{0%,18%,90%,100%{opacity:0;transform:scale(.6)} 24%,86%{opacity:1;transform:scale(1)}}
+#e7-p-mouth-grin{animation:e7-p-w-mg 2.8s cubic-bezier(.34,1.6,.64,1) 0s infinite}
+@keyframes e7-p-w-ch{0%,18%,90%,100%{opacity:0} 26%,84%{opacity:1}}
+#e7-p-cheeks{animation:e7-p-w-ch 2.8s cubic-bezier(.45,0,.55,1) 0s infinite}
+
+
+
+@keyframes e7-k0{0.000%{transform:scale(1);animation-timing-function:cubic-bezier(.45,0,.55,1)}17.857%{transform:scale(1.14);animation-timing-function:cubic-bezier(.45,0,.55,1)}35.714%{transform:scale(1)}100.000%{transform:scale(1)}}#e7-plus{animation:e7-k0 2.8s linear 0s infinite both}
+@keyframes e7-k1{0.000%{opacity:.7;transform:scale(1);animation-timing-function:cubic-bezier(.22,1,.36,1)}35.714%{opacity:0;transform:scale(1.5);animation-timing-function:step-end}100.000%{opacity:0;transform:scale(1.5)}}#e7-ring{animation:e7-k1 2.8s linear 0s infinite both}
+@keyframes e7-k2{0.000%{stroke-dashoffset:0;animation-timing-function:linear}100.000%{stroke-dashoffset:-56}}#e7-dash{animation:e7-k2 2.8s linear 0s infinite both}
+@keyframes e7-k3{0.000%{transform:translateY(0px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}25.000%{transform:translateY(-6px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}50.000%{transform:translateY(0px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}75.000%{transform:translateY(-3px) rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:translateY(0px) rotate(0deg)}}#e7-card{animation:e7-k3 2.8s linear 0s infinite both}
+@keyframes e7-k4{0.000%{opacity:0;transform:scale(0) rotate(0deg);animation-timing-function:step-end}14.286%{opacity:1;transform:scale(0) rotate(0deg);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}25.000%{opacity:1;transform:scale(1) rotate(45deg);animation-timing-function:cubic-bezier(.55,0,.9,.4)}39.286%{opacity:0;transform:scale(0) rotate(90deg)}100.000%{opacity:0;transform:scale(0) rotate(90deg)}}#e7-sp0{animation:e7-k4 2.8s linear 0s infinite both}
+@keyframes e7-k5{0.000%{opacity:0;transform:scale(0) rotate(0deg);animation-timing-function:step-end}50.000%{opacity:1;transform:scale(0) rotate(0deg);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}60.714%{opacity:1;transform:scale(1) rotate(45deg);animation-timing-function:cubic-bezier(.55,0,.9,.4)}75.000%{opacity:0;transform:scale(0) rotate(90deg)}100.000%{opacity:0;transform:scale(0) rotate(90deg)}}#e7-sp1{animation:e7-k5 2.8s linear 0s infinite both}
+@keyframes e7-k6{0.000%{opacity:0;transform:scale(0) rotate(0deg);animation-timing-function:step-end}78.571%{opacity:1;transform:scale(0) rotate(0deg);animation-timing-function:cubic-bezier(.34,1.6,.64,1)}89.286%{opacity:1;transform:scale(1) rotate(45deg);animation-timing-function:cubic-bezier(.55,0,.9,.4)}100.000%{opacity:0;transform:scale(0) rotate(90deg)}}#e7-sp2{animation:e7-k6 2.8s linear 0s infinite both}
+@media (prefers-reduced-motion:reduce){#e7-root *{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+</style>
+<circle cx="300" cy="226" r="196" fill="#E6F9F7"/>
+<circle cx="300" cy="226" r="196" fill="none" stroke="#CCF2EE" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round"/>
+<ellipse cx="300" cy="424" rx="230" ry="14" fill="#0F172A" opacity=".05"/>
+<svg id="e7-p-rig" x="40" y="96" width="350" height="350" viewBox="-70 -110 540 540" overflow="visible"><defs>
+ <linearGradient id="e7-p-limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"/><stop offset=".4" stop-color="#22D9C7"/><stop offset="1" stop-color="#00A597"/></linearGradient>
+ <linearGradient id="e7-p-torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"/><stop offset=".32" stop-color="#2DDFCD"/><stop offset=".7" stop-color="#05C2B1"/><stop offset="1" stop-color="#009587"/></linearGradient>
+ <radialGradient id="e7-p-shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"/><stop offset=".45" stop-color="#0CC9B7"/><stop offset="1" stop-color="#009184"/></radialGradient>
+ <radialGradient id="e7-p-screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"/><stop offset="1" stop-color="#0D1838"/></radialGradient>
+ <radialGradient id="e7-p-earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#F2A900"/></radialGradient>
+ <radialGradient id="e7-p-ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"/><stop offset=".6" stop-color="#FF8A1F"/><stop offset="1" stop-color="#E86A00"/></radialGradient>
+ <clipPath id="e7-p-podTop"><rect x="60" y="-20" width="280" height="112"/></clipPath>
+</defs>
+<ellipse id="e7-p-shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity=".13"/>
+<g id="e7-p-fx-back"></g>
+<g id="e7-p-pip"><g id="e7-p-pip-squash">
+ <g id="e7-p-legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#e7-p-limb)"/><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#e7-p-limb)"/><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+ </g>
+ <g id="e7-p-torso">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#e7-p-torsoG)"/>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity=".32"/>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity=".28"/>
+  <g id="e7-p-chest-lights"><circle id="e7-p-led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"/><circle id="e7-p-led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"/><circle id="e7-p-led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"/></g>
+ </g>
+ <g id="e7-p-head">
+  <g id="e7-p-antenna">
+   <circle id="e7-p-antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity=".3"/>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"/>
+   <circle id="e7-p-antenna-ball" cx="200" cy="28" r="13" fill="url(#e7-p-ballG)"/><circle id="e7-p-antenna-dim" cx="200" cy="28" r="13" fill="#7C8799" opacity="0"/><circle cx="196" cy="23.5" r="4" fill="#fff" opacity=".7"/>
+  </g>
+  <g id="e7-p-ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#e7-p-earG)"/><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <g id="e7-p-ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#e7-p-earG)"/><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <rect id="e7-p-shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#e7-p-shellG)"/>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity=".35"/>
+  <ellipse id="e7-p-pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"/>
+  <g id="e7-p-toolkit" clip-path="url(#e7-p-podTop)">
+   <g id="e7-p-gear"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"/><circle cx="156" cy="82" r="8" fill="#E39A00"/><circle cx="153" cy="78" r="2.5" fill="#fff" opacity=".5"/></g>
+   <g id="e7-p-code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"/><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+   <g id="e7-p-wrench"><g transform="translate(248 60) rotate(18) scale(1.18)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"/><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"/><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity=".3"/></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"/>
+  <rect id="e7-p-face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"/>
+  <rect id="e7-p-screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#e7-p-screenG)"/>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".12"/>
+  <g id="e7-p-face">
+   <g id="e7-p-brows"></g>
+   <g id="e7-p-eyes"><g id="e7-p-eye-l"><g id="e7-p-eye-l-open" class="e7-p-v e7-p-on">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"/><circle cx="171" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="e7-p-eye-l-happy" class="e7-p-v"><path d="M152 165 Q166 145 180 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="e7-p-eye-l-sad" class="e7-p-v">
+      <rect x="154" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="163" cy="165" r="3.6" fill="#fff"/>
+      <path d="M149 139 L183 139 L183 147 L149 159Z" fill="#14234F"/>
+      <path d="M153 145 L178 135" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="e7-p-eye-l-squint" class="e7-p-v"><path d="M156 149 L175 160 L156 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="e7-p-eye-l-star" class="e7-p-v">
+      <ellipse cx="166" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="151" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M163 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="172" cy="168" r="2.4" fill="#fff"/></g></g><g id="e7-p-eye-r"><g id="e7-p-eye-r-open" class="e7-p-v e7-p-on">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"/><circle cx="239" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="e7-p-eye-r-happy" class="e7-p-v"><path d="M220 165 Q234 145 248 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="e7-p-eye-r-sad" class="e7-p-v">
+      <rect x="222" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="231" cy="165" r="3.6" fill="#fff"/>
+      <path d="M217 139 L251 139 L251 159 L217 147Z" fill="#14234F"/>
+      <path d="M222 135 L247 145" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="e7-p-eye-r-squint" class="e7-p-v"><path d="M244 149 L225 160 L244 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="e7-p-eye-r-star" class="e7-p-v">
+      <ellipse cx="234" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="219" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M231 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="240" cy="168" r="2.4" fill="#fff"/></g></g></g>
+   <g id="e7-p-cheeks"><ellipse cx="139" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/><ellipse cx="261" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/></g>
+   <g id="e7-p-mouth">
+    <g id="e7-p-mouth-smile" class="e7-p-v e7-p-on"><path d="M185 191 Q200 205 215 191" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="e7-p-mouth-grin" class="e7-p-v"><path d="M181 188 Q200 185 219 188 Q217 211 200 211 Q183 211 181 188Z" fill="#FF6B7D"/>
+      <path d="M190 205 Q200 197 210 205 Q206 211 200 211 Q194 211 190 205Z" fill="#FFB3BC"/></g>
+    <g id="e7-p-mouth-frown" class="e7-p-v"><path d="M187 200 Q200 189 213 200" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="e7-p-mouth-o" class="e7-p-v"><ellipse cx="200" cy="197" rx="12" ry="14" fill="#FF6B7D"/><ellipse cx="200" cy="204" rx="7" ry="5" fill="#FFB3BC"/></g>
+  </g>
+  </g>
+ </g>
+ <g id="e7-p-arm-l"><g transform="rotate(22 148 252)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#e7-p-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="e7-p-hand-l"><circle cx="148" cy="316" r="18.5" fill="url(#e7-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#e7-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g><g id="e7-p-arm-r"><g transform="rotate(-22 252 252)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#e7-p-limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="e7-p-hand-r"><circle cx="252" cy="316" r="18.5" fill="url(#e7-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#e7-p-limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g>
+</g></g>
+<g id="e7-p-fx-front"></g>
+</svg><g transform="translate(450 236)"><g id="e7-card" class="e7-a">
+ <rect x="-104" y="-118" width="208" height="236" rx="34" fill="#fff"/>
+ <circle id="e7-dash" cy="-30" r="56" fill="#F1F5F9" stroke="#94A3B8" stroke-width="5" stroke-dasharray="12 16" stroke-linecap="round"/>
+ <circle cy="-48" r="20" fill="#CBD5E1"/><path d="M-34 4 Q-34 -22 0 -22 Q34 -22 34 4Z" fill="#CBD5E1"/>
+ <rect x="-60" y="44" width="120" height="16" rx="8" fill="#E2E8F0"/><rect x="-40" y="72" width="80" height="12" rx="6" fill="#EEF1F5"/>
+ <g transform="translate(42 12)"><g id="e7-ring" class="e7-a"><circle r="26" fill="none" stroke="#00BFAE" stroke-width="5"/></g></g>
+ <g transform="translate(42 12)"><g id="e7-plus" class="e7-a"><circle r="26" fill="#007A70"/><path d="M0 -12 V12 M-12 0 H12" stroke="#fff" stroke-width="7" stroke-linecap="round"/></g></g>
+</g></g><g transform="translate(330 130)"><g id="e7-sp0" class="e7-a" opacity="0"><path d="M0 -12 Q2.4000000000000004 -2.4000000000000004 12 0 Q2.4000000000000004 2.4000000000000004 0 12 Q-2.4000000000000004 2.4000000000000004 -12 0 Q-2.4000000000000004 -2.4000000000000004 0 -12Z" fill="#FFB700" opacity="1"/></g></g><g transform="translate(572 120)"><g id="e7-sp1" class="e7-a" opacity="0"><path d="M0 -10 Q2.0 -2.0 10 0 Q2.0 2.0 0 10 Q-2.0 2.0 -10 0 Q-2.0 -2.0 0 -10Z" fill="#FF6B6B" opacity="1"/></g></g><g transform="translate(580 360)"><g id="e7-sp2" class="e7-a" opacity="0"><path d="M0 -11 Q2.2 -2.2 11 0 Q2.2 2.2 0 11 Q-2.2 2.2 -11 0 Q-2.2 -2.2 0 -11Z" fill="#7C3AED" opacity="1"/></g></g>
+</svg>

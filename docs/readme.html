@@ -1,0 +1,729 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Design pack README · TinkerPod design</title>
+<link rel="icon" href="../design-pack/assets/app-icon/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../site/site.css">
+</head><body class="doc"><header class="top slim"><a href="../index.html#docs" class="back">← TinkerPod design resources</a><a class="dl light" href="../design-pack/README.md" download><span>↓ Download README.md</span></a></header><main class="md"><h1 id="tinkerpod-design-pack">TinkerPod design pack</h1>
+<p>The implementation assets that were missing from <code>design/</code>. Everything here was made by the design team. <strong>The coding agent must not generate, redraw or "improve" any art.</strong> If an asset is missing, ask for it.</p>
+<p>The folders mirror <code>design/</code>, so you can merge this pack in later (<code>design-pack/fx</code> → <code>design/fx</code>, and so on). Nothing in <code>design/</code> was changed.</p>
+<p><strong>Tokens:</strong>
+- Font: Nunito.
+- Ink <code>#0F172A</code>.
+- Teal <code>#00BFAE</code> is for fills only; buttons and teal text use <code>#007A70</code>.
+- Kid purple <code>#7C3AED</code>, yellow <code>#FFB700</code>, coral <code>#FF6B6B</code>, blue <code>#2563EB</code>, green <code>#63C132</code>.
+- Background <code>#F8FAFC</code>, admin navy <code>#101B4D</code>.
+- Small text: green <code>#2F7D16</code>, coral <code>#C93A3A</code>, slate <code>#64748B</code>.</p>
+<p><strong>Mascot:</strong> he is <strong>Captain Jetty</strong> (short form "Captain") in every piece of user-facing text and in accessibility labels. The files keep the <code>pip-*</code> names on purpose, so the code doesn't need renaming.</p>
+<p><strong>Icons:</strong> use Lucide (app) and Heroicons (admin). Don't make a custom icon set. See <a href="icons.html">ICONS.md</a>.</p>
+<p><strong>Captain Jetty talking (new):</strong> voice + lip-sync sample in <a href="talk-readme.html"><code>talk/</code></a>. Open <code>talk/index.html</code>, or watch <code>talk/preview/captain-jetty-talk-preview.mp4</code>.</p>
+<p><strong>Preview:</strong> open <code>preview/index.html</code> (all visuals animated, every sound playable). The contact sheets are <code>preview/contact-sheet-*.png</code>, and the video with sound is <code>preview/tinkerpod-design-pack-preview.mp4</code>.</p>
+<h2 id="how-the-animated-svgs-work-read-this-first">How the animated SVGs work (read this first)</h2>
+<p>Every animated SVG uses <strong>CSS <code>@keyframes</code> inside its <code>&lt;style&gt;</code></strong>. There are no SVG filters, no SMIL and no scripts. Every animation has a <code>prefers-reduced-motion</code> fallback that stops on a still frame. Each file also ships with:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>What it is</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*.svg</code></td>
+<td>Animated master (CSS keyframes)</td>
+<td>Web, admin, Expo web, a <code>WebView</code>, and as the design reference</td>
+</tr>
+<tr>
+<td><code>*-static.svg</code></td>
+<td><strong>Baked</strong> hero frame: no <code>&lt;style&gt;</code>, no classes, plain attributes and transforms</td>
+<td><code>react-native-svg</code> (<code>SvgXml</code> or the transformer) and anywhere a still frame is needed</td>
+</tr>
+<tr>
+<td><code>*.png</code></td>
+<td>Transparent raster of the hero frame</td>
+<td>Lists, notifications, fallbacks</td>
+</tr>
+<tr>
+<td><code>*.motion.json</code></td>
+<td>Every keyframe track exported from Chrome: target id, duration, delay, iterations, easing, offsets, transform, opacity and dash values</td>
+<td>Rebuilding the motion in <strong>Reanimated</strong> on the baked SVG (ids match)</td>
+</tr>
+</tbody>
+</table>
+<p><code>react-native-svg</code> ignores CSS animations, so in the native app either:
+1. Render the baked <code>*-static.svg</code> and animate the listed ids with Reanimated using <code>*.motion.json</code> (recommended for Captain Jetty, the spinner, the progress ring, the download meter, the flame and pull-to-refresh), or
+2. Show the animated SVG in a transparent <code>react-native-webview</code> (fine for one-shot full-screen celebrations: fx06–fx09).</p>
+<p>Lottie JSON is <strong>not</strong> included (see Compromises).</p>
+<pre><code class="language-tsx">// 1) static + Reanimated (example: spinner arc rotation from fx/json/fx11-loading-spinner.motion.json)
+import Svg, { G, Circle } from &quot;react-native-svg&quot;;
+import Animated, { useSharedValue, useAnimatedProps, withRepeat, withTiming, Easing } from &quot;react-native-reanimated&quot;;
+const AG = Animated.createAnimatedComponent(G);
+const r = useSharedValue(0);
+useEffect(() =&gt; { r.value = withRepeat(withTiming(360, { duration: 1200, easing: Easing.linear }), -1); }, []);
+const arcProps = useAnimatedProps(() =&gt; ({ transform: [{ rotate: `${r.value}deg` }] }));   // origin: see transform_origin in the JSON
+// &lt;AG animatedProps={arcProps} originX={300} originY={300}&gt;…arc paths copied from fx11-loading-spinner-static.svg…&lt;/AG&gt;
+
+// 2) static only (any baked file)
+import { SvgXml } from &quot;react-native-svg&quot;;
+&lt;SvgXml xml={emptyOfflineXml} width=&quot;100%&quot; height={240} accessibilityLabel=&quot;No internet&quot; /&gt;
+
+// 3) one-shot celebration in a WebView overlay
+&lt;WebView source={{ html: `&lt;body style=&quot;margin:0;background:transparent&quot;&gt;${confettiSvg}&lt;/body&gt;` }} style={{ position:&quot;absolute&quot;, inset:0, backgroundColor:&quot;transparent&quot; }} pointerEvents=&quot;none&quot; /&gt;
+</code></pre>
+<pre><code class="language-tsx">// Sounds: expo-audio + expo-haptics, the cue values come from fx/src/cues.json
+import { useAudioPlayer } from &quot;expo-audio&quot;;
+import * as Haptics from &quot;expo-haptics&quot;;
+const tap = useAudioPlayer(require(&quot;../assets/sfx/ui-tap.ogg&quot;));   // .ogg on Android, .wav or .mp3 on iOS (see below)
+function onPress() { tap.volume = 0.6; tap.seekTo(0); tap.play(); Haptics.selectionAsync(); }
+</code></pre>
+<p><strong>Audio format guidance:</strong>
+- iOS can't play <code>.ogg</code>. Bundle <code>.wav</code> (best for sounds under 0.5 s) or <code>.mp3</code> for iOS, and <code>.ogg</code> for Android and web. Pick the file with <code>Platform.select</code>.
+- MP3 encoders add about 25 ms of silence at the start. Use the wav or ogg file for taps, PIN digits and ticks.
+- Respect a "Sounds" toggle in settings and the OS silent switch. The default for <code>setAudioModeAsync</code> is <code>playsInSilentMode: false</code>.</p>
+<h2 id="where-each-asset-lands-build_plan-milestones">Where each asset lands (BUILD_PLAN milestones)</h2>
+<table>
+<thead>
+<tr>
+<th>Milestone</th>
+<th>Assets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M0 Repo scaffold, CI, design import</td>
+<td>Merge this pack; <code>assets/logo/*</code>; <code>assets/app-icon/*</code> into <code>app.json</code>; ICONS.md set up (<code>lucide-react-native</code>)</td>
+</tr>
+<tr>
+<td>M1 Auth, roles, kid login</td>
+<td><code>tinkerpod-logo-intro</code>; <code>ui-tap</code>, <code>ui-toggle</code>, <code>ui-back</code>, <code>ui-sheet-open/close</code>, <code>ui-error</code>, <code>ui-success-small</code>, <code>ui-notification</code>; <code>ui-pin-digit/-wrong/-unlock</code> (kid PIN); fx11 spinner, fx13 skeleton, fx12 pull-to-refresh; <code>empty-error</code>, <code>empty-offline</code></td>
+</tr>
+<tr>
+<td>M2 Content, learning, quizzes, progress</td>
+<td>fx06 confetti, fx07 star burst, fx14 progress ring; <code>pip-thinking</code>, <code>pip-surprised</code>; <code>empty-no-lessons</code>, <code>empty-search-no-results</code>; <code>talk-01-welcome</code> (welcome back on kid home), <code>talk-03-help</code> (hint offer)</td>
+</tr>
+<tr>
+<td>M3 Gamification ledger</td>
+<td>fx08 badge + <code>ui-badge-earned</code>; fx10 streak flame (after design fx05); <code>pip-sleepy</code> / <code>pip-sleepy-wake</code> (streak), <code>pip-celebrate</code>; <code>talk-02-streak</code> (streak continue)</td>
+</tr>
+<tr>
+<td>M4 Content-pack engine, downloader, player</td>
+<td>fx15 download meter + <code>ui-download-complete</code>; <code>empty-no-packs</code>; <code>empty-offline</code> (offline packs)</td>
+</tr>
+<tr>
+<td>M5 Parent mode and billing</td>
+<td><code>ui-pin-*</code> (parent gate), <code>ui-purchase-complete</code>; <code>empty-no-kids</code>; fx14 on the parent dashboard</td>
+</tr>
+<tr>
+<td>M7 Live classes and project review</td>
+<td><code>ui-message-pop</code> (mentor messages)</td>
+</tr>
+<tr>
+<td>M8 League pilot with Reverb</td>
+<td><code>ui-countdown-tick/-go</code>, <code>ui-match-whistle</code>, <code>ui-match-win</code>, <code>ui-match-lose</code>; fx09 trophy; <code>empty-no-tournaments</code>; <code>pip-celebrate</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="files">Files</h2>
+<h3 id="assetslogo-logo-vectors-traced-from-the-approved-logo-colours-kept-from-it"><code>assets/logo/</code>: logo (vectors traced from the approved logo, colours kept from it)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+<th>Used in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tinkerpod-logo.svg</code></td>
+<td>Lockup: mark + wordmark, full colour (viewBox 1521×398)</td>
+<td>Splash, onboarding 08, web header, admin login</td>
+</tr>
+<tr>
+<td><code>tinkerpod-logo-white.svg</code></td>
+<td>Lockup, reversed white for navy or teal backgrounds</td>
+<td>Admin sidebar (navy), marketing</td>
+</tr>
+<tr>
+<td><code>tinkerpod-logo-ink.svg</code></td>
+<td>Lockup, one colour ink</td>
+<td>Print, receipts, emails in one colour</td>
+</tr>
+<tr>
+<td><code>tinkerpod-wordmark{,-white,-ink}.svg</code></td>
+<td>Wordmark only (viewBox 494 137 1027 190)</td>
+<td>Headers where the mark is shown separately</td>
+</tr>
+<tr>
+<td><code>tinkerpod-mark{,-white,-ink}.svg</code></td>
+<td>Icon mark only (482×398)</td>
+<td>Avatars, loading screen, app tab bar header</td>
+</tr>
+<tr>
+<td><code>tinkerpod-logo-intro.svg</code></td>
+<td>Animated intro, 1.5 s, plays once: parts pop in, then the antenna and wordmark</td>
+<td>App launch after the splash, web hero</td>
+</tr>
+<tr>
+<td><code>json/tinkerpod-logo-intro.motion.json</code></td>
+<td>Reanimated spec for the intro</td>
+<td>Native intro</td>
+</tr>
+<tr>
+<td><code>src/*.py, *.json</code></td>
+<td>Trace and build scripts plus traced geometry (python3 src/build_logo.py)</td>
+<td>Maintenance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assetsapp-icon-expo-icons-appjson"><code>assets/app-icon/</code>: Expo icons (<code>app.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th><code>app.json</code> key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icon.png</code></td>
+<td>1024², opaque RGB</td>
+<td><code>expo.icon</code>, <code>ios.icon</code></td>
+</tr>
+<tr>
+<td><code>adaptive-icon-foreground.png</code></td>
+<td>1024², transparent, mark inside the 66% safe zone</td>
+<td><code>android.adaptiveIcon.foregroundImage</code></td>
+</tr>
+<tr>
+<td><code>adaptive-icon-background.png</code></td>
+<td>1024², soft teal radial</td>
+<td><code>android.adaptiveIcon.backgroundImage</code> (or <code>backgroundColor: "#E6F9F7"</code>)</td>
+</tr>
+<tr>
+<td><code>adaptive-icon-monochrome.png</code></td>
+<td>1024², single-colour mark</td>
+<td><code>android.adaptiveIcon.monochromeImage</code> (Android 13 themed icons)</td>
+</tr>
+<tr>
+<td><code>splash-icon.png</code></td>
+<td>1024², transparent</td>
+<td><code>expo-splash-screen</code> plugin <code>image</code>, <code>backgroundColor: "#F8FAFC"</code>, <code>imageWidth: 200</code></td>
+</tr>
+<tr>
+<td><code>favicon.png / favicon.ico</code></td>
+<td>48² png; ico has 16, 32 and 48</td>
+<td><code>web.favicon</code></td>
+</tr>
+<tr>
+<td><code>notification-icon.png</code></td>
+<td>96², white silhouette on transparent</td>
+<td><code>expo-notifications</code> plugin <code>icon</code>, <code>color: "#007A70"</code></td>
+</tr>
+<tr>
+<td><code>src/*.svg, build_icons.py</code></td>
+<td>Source vectors for every PNG</td>
+<td>Regenerate with <code>python3 src/build_icons.py</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">&quot;icon&quot;: &quot;./assets/app-icon/icon.png&quot;,
+&quot;android&quot;: { &quot;adaptiveIcon&quot;: { &quot;foregroundImage&quot;: &quot;./assets/app-icon/adaptive-icon-foreground.png&quot;, &quot;backgroundImage&quot;: &quot;./assets/app-icon/adaptive-icon-background.png&quot;, &quot;monochromeImage&quot;: &quot;./assets/app-icon/adaptive-icon-monochrome.png&quot; } },
+&quot;web&quot;: { &quot;favicon&quot;: &quot;./assets/app-icon/favicon.png&quot; },
+&quot;plugins&quot;: [[&quot;expo-splash-screen&quot;, { &quot;image&quot;: &quot;./assets/app-icon/splash-icon.png&quot;, &quot;imageWidth&quot;: 200, &quot;backgroundColor&quot;: &quot;#F8FAFC&quot; }],
+            [&quot;expo-notifications&quot;, { &quot;icon&quot;: &quot;./assets/app-icon/notification-icon.png&quot;, &quot;color&quot;: &quot;#007A70&quot; }]]
+</code></pre>
+<h3 id="fxsvg-fxstatic-fxjson-fx-600600-artboard"><code>fx/svg/</code>, <code>fx/static/</code>, <code>fx/json/</code>: FX (600×600 artboard)</h3>
+<p>Use the <code>T</code> and event times in <code>fx/src/cues.json</code> to sync sounds and haptics: <code>sound</code>, <code>sound_at</code> (seconds after start), <code>haptic</code> and <code>loop</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Length</th>
+<th>Purpose</th>
+<th>Screen</th>
+<th>Sound</th>
+<th>Haptic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fx06-confetti-burst.svg</code> (91.9 KB)</td>
+<td>2.6 s</td>
+<td>Full-screen celebration overlay: lesson complete, mission done</td>
+<td>03 lesson end, 01 mission done, 15 match results</td>
+<td>ui-success-small @ 0.02 s</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+</tr>
+<tr>
+<td><code>fx07-star-burst.svg</code> (17.3 KB)</td>
+<td>1.8 s</td>
+<td>Star earned / perfect answer</td>
+<td>04 quiz (all correct), 03 lesson stars</td>
+<td>ui-success-small @ 0.04 s</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Medium)</code></td>
+</tr>
+<tr>
+<td><code>fx08-badge-reveal.svg</code> (10.8 KB)</td>
+<td>3.2 s</td>
+<td>New badge unlocked. Swap the <code>&lt;/&gt;</code> glyph and the ribbon text for each badge</td>
+<td>07 profile badges, post-lesson reward</td>
+<td>ui-badge-earned @ 0.02 s</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+</tr>
+<tr>
+<td><code>fx09-trophy-reveal.svg</code> (50.6 KB)</td>
+<td>3.4 s</td>
+<td>League / cup won</td>
+<td>15 match results, 06 league table, 17 champions league</td>
+<td>ui-match-win @ 0.36 s</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+</tr>
+<tr>
+<td><code>fx10-streak-flame-idle.svg</code> (6.3 KB)</td>
+<td>1.8 s loop</td>
+<td>Streak flame idle loop (after fx05 ignites it)</td>
+<td>01 kid home streak chip, 07 profile</td>
+<td>none</td>
+<td><code>none</code></td>
+</tr>
+<tr>
+<td><code>fx11-loading-spinner.svg</code> (3.6 KB)</td>
+<td>1.2 s loop</td>
+<td>Brand loading spinner for anything larger than 32 px</td>
+<td>All screens; 14 match live "testing code"</td>
+<td>none</td>
+<td><code>none</code></td>
+</tr>
+<tr>
+<td><code>fx12-pull-to-refresh.svg</code> (5.2 KB)</td>
+<td>2.6 s</td>
+<td>Pull-to-refresh indicator: 0–0.8 s follows the finger, then spinner and check</td>
+<td>01, 06, 12, 09 lists</td>
+<td>ui-tap @ 0.8 s</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Light) on release</code></td>
+</tr>
+<tr>
+<td><code>fx13-skeleton-shimmer.svg</code> (2.4 KB)</td>
+<td>1.4 s loop</td>
+<td>Loading placeholder for card lists</td>
+<td>05 pack store, 12 hub, 09 dashboard</td>
+<td>none</td>
+<td><code>none</code></td>
+</tr>
+<tr>
+<td><code>fx14-progress-ring.svg</code> (8.7 KB)</td>
+<td>2.8 s</td>
+<td>Daily goal ring; drive <code>strokeDashoffset</code> from real progress</td>
+<td>01 kid home, 09 parent dashboard</td>
+<td>ui-success-small @ 1.6 s</td>
+<td><code>Haptics.selectionAsync() at done</code></td>
+</tr>
+<tr>
+<td><code>fx15-download-meter.svg</code> (17.3 KB)</td>
+<td>3.6 s</td>
+<td>Offline pack download card: drive the bar width and the MB label from real progress</td>
+<td>05 pack store, 19 adventure detail</td>
+<td>ui-download-complete @ 2.4 s</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success) at done</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each FX also has <code>fx/static/&lt;name&gt;-static.svg</code> (baked hero frame), <code>fx/static/&lt;name&gt;.png</code> and <code>fx/json/&lt;name&gt;.motion.json</code>.</p>
+<p>Notes:
+- The text in fx08, fx09, fx12, fx14 and fx15 is sample copy in Nunito (badge name, league, pack, MB, %). In the app, draw that text as native <code>Text</code> over the art, or change the <code>&lt;text&gt;</code> nodes in the static SVG.
+- For fx12 (pull-to-refresh), map the pull distance to time 0–0.8 s, then play the rest.
+- For fx14 and fx15, drive the value from real progress; the files animate to 75% and 48 MB as a demo.</p>
+<h3 id="motion-captain-jetty-pip-rig"><code>motion/</code>: Captain Jetty (pip rig)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Length</th>
+<th>Purpose</th>
+<th>Screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>svg/pip-thinking.svg</code> <strong>(new)</strong></td>
+<td>3.6 s loop</td>
+<td>Thinking</td>
+<td>Hint loading, "let me think", quiz waiting (04, 14)</td>
+</tr>
+<tr>
+<td><code>svg/pip-sleepy.svg</code> <strong>(new)</strong></td>
+<td>5.2 s loop</td>
+<td>Sleepy, then wakes up to cheer you on</td>
+<td>Streak paused or inactive: dozes, wakes, grins and waves to cheer the kid on (never shaming) (01, 07)</td>
+</tr>
+<tr>
+<td><code>svg/pip-surprised.svg</code> <strong>(new)</strong></td>
+<td>2.0 s loop</td>
+<td>Surprised</td>
+<td>New item, unexpected result, "whoa!" moments (05, 10, 18)</td>
+</tr>
+<tr>
+<td><code>svg/pip-celebrate.svg</code> <strong>(new)</strong></td>
+<td>3.0 s loop</td>
+<td>Celebrate (victory dance)</td>
+<td>Victory dance: match won, world cleared (15, 02, 17)</td>
+</tr>
+<tr>
+<td><code>svg/pip-idle.svg</code></td>
+<td>3.2 s loop</td>
+<td>Idle: approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>svg/pip-wave.svg</code></td>
+<td>2.8 s loop</td>
+<td>Wave hello: approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>svg/pip-happy.svg</code></td>
+<td>2.6 s loop</td>
+<td>Happy smile: approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>svg/pip-sad.svg</code></td>
+<td>4.4 s loop</td>
+<td>Sad (streak broken): approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>svg/pip-laugh.svg</code></td>
+<td>1.4 s loop</td>
+<td>Laugh: approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>svg/pip-clap.svg</code></td>
+<td>1.8 s loop</td>
+<td>Clap: approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>svg/pip-cheer.svg</code></td>
+<td>3.2 s loop</td>
+<td>Cheer + confetti: approved mood, a copy re-titled "Captain Jetty" (unchanged art)</td>
+<td>as in design/motion</td>
+</tr>
+<tr>
+<td><code>moods.json</code></td>
+<td></td>
+<td>Durations and titles of all 11 moods (design/motion/moods.json plus 4 new)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>json/pip-{thinking,sleepy,surprised,celebrate}.motion.json</code></td>
+<td></td>
+<td>Reanimated specs (ids match the baked statics)</td>
+<td>Native</td>
+</tr>
+<tr>
+<td><code>src/pip_moods.py</code>, <code>src/pip_statics.py</code></td>
+<td></td>
+<td>Build scripts (they import design/motion/src/pip.py unchanged)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="talk-captain-jetty-talking-voice-lip-sync-sample"><code>talk/</code>: Captain Jetty talking (voice + lip-sync sample)</h3>
+<p>There are three founder-approved lines. Each one ends with a gesture:
+- <code>talk-01-welcome</code> ends with a happy hop.
+- <code>talk-02-streak</code> ends with a fist pump.
+- <code>talk-03-help</code> ends with a wave and a head tilt.</p>
+<p>Each line ships as:
+- <code>audio/*.wav|mp3|ogg</code>: the main voice is en-NG-AbeoNeural (pitch +16 Hz); the alternative is en-NG-EzinneNeural (<code>*-ezinne.*</code>). All are −16 LUFS.
+- <code>cues/*.mouth.json</code>: mouth shape by playback time, word times, gesture start and loudness envelope, for Reanimated.
+- <code>svg/*.svg</code>: the animated performance (CSS keyframes, same rig, no filters).</p>
+<p>Also in the folder:
+- <code>index.html</code>: the audio clock drives the SVG.
+- <code>preview/captain-jetty-talk-preview.mp4</code> and <code>preview/talk-contact-sheet.png</code>.</p>
+<p>See <a href="talk-readme.html">talk/README.md</a> for the expo-audio and Reanimated wiring, and for how the same cue format works for live server speech.</p>
+<h3 id="assetspip-captain-jetty-statics-same-convention-as-designassetspip"><code>assets/pip/</code>: Captain Jetty statics (same convention as design/assets/pip)</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pip-&lt;mood&gt;.svg</code></td>
+<td>Animated master, paused on the hero frame (full 540 box)</td>
+</tr>
+<tr>
+<td><code>pip-&lt;mood&gt;-t.svg</code></td>
+<td>The same, with a tight viewBox</td>
+</tr>
+<tr>
+<td><code>pip-&lt;mood&gt;-static.svg</code></td>
+<td><strong>Baked</strong>, CSS-free, tight viewBox: use with react-native-svg</td>
+</tr>
+<tr>
+<td><code>pip-&lt;mood&gt;.png</code></td>
+<td>512 px wide, transparent</td>
+</tr>
+</tbody>
+</table>
+<p>Moods: <code>thinking</code>, <code>sleepy</code> (eyes closed), <code>sleepy-wake</code> (awake and waving: use this for "come back, you can do it!"), <code>surprised</code>, <code>celebrate</code>.</p>
+<h3 id="assetsempty-empty-states-600480-text-free"><code>assets/empty/</code>: empty states (600×480, text-free)</h3>
+<p>The title, body and button are native text so they can be translated. Suggested copy is in the table. Keep the tone kind: never blame the child.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Captain Jetty</th>
+<th>Purpose</th>
+<th>Screen</th>
+<th>Suggested copy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>empty-no-lessons.svg</code></td>
+<td>wave</td>
+<td>Journey or world has no lessons yet</td>
+<td>02 journey map, 03</td>
+<td>"Lessons are on the way!": "Captain Jetty is building this world. Check back soon."</td>
+</tr>
+<tr>
+<td><code>empty-offline.svg</code></td>
+<td>thinking</td>
+<td>No internet; offline packs still work</td>
+<td>Any screen, global offline state</td>
+<td>"You're offline": "Your downloaded packs still work. [Try again]"</td>
+</tr>
+<tr>
+<td><code>empty-error.svg</code></td>
+<td>surprised</td>
+<td>Something went wrong: retry</td>
+<td>Any failed load</td>
+<td>"Oops, a gear popped out!": "That's on us, not you. [Try again]"</td>
+</tr>
+<tr>
+<td><code>empty-no-packs.svg</code></td>
+<td>idle</td>
+<td>No packs downloaded for offline use</td>
+<td>05 pack store, "Downloaded" tab</td>
+<td>"No packs yet": "Download a pack to play without internet. [Browse packs]"</td>
+</tr>
+<tr>
+<td><code>empty-no-tournaments.svg</code></td>
+<td>happy</td>
+<td>No tournaments or leagues yet</td>
+<td>12 tournaments hub, 16 fixtures</td>
+<td>"No tournaments yet": "The next league opens soon. We'll tell you!"</td>
+</tr>
+<tr>
+<td><code>empty-search-no-results.svg</code></td>
+<td>thinking</td>
+<td>Search found nothing</td>
+<td>Search in 05, 02, admin lists</td>
+<td>"No matches": "Try another word or check the spelling."</td>
+</tr>
+<tr>
+<td><code>empty-no-kids.svg</code></td>
+<td>wave</td>
+<td>Parent has not added a child yet: "Add child" CTA</td>
+<td>09 parent dashboard, after 08 onboarding</td>
+<td>"Add your first child": "Set up a profile to start their coding journey. [Add child]"</td>
+</tr>
+</tbody>
+</table>
+<p>Each one also has <code>static/empty-&lt;name&gt;-static.svg</code> (baked), <code>static/empty-&lt;name&gt;.png</code> (720 px) and <code>json/empty-&lt;name&gt;.motion.json</code>. Each SVG embeds the matching Captain Jetty mood rig.</p>
+<h3 id="fxaudio-20-ui-sounds-ui-wav-48-khz-24-bit-mp3-128k-ogg-q5"><code>fx/audio/</code>: 20 UI sounds (<code>ui-*.wav</code> 48 kHz 24-bit, <code>.mp3</code> 128k, <code>.ogg</code> q5)</h3>
+<p>All are mastered like the existing FX: −16 LUFS integrated, true peak ≤ −1.5 dBTP (<code>fx/audio/ui-master-report.json</code>). Kid-friendly and short. <code>ui-error</code> and <code>ui-pin-wrong</code> are soft and low, and <code>ui-match-lose</code> resolves up into a hopeful major chord.</p>
+<table>
+<thead>
+<tr>
+<th>Sound</th>
+<th>Length</th>
+<th>Use</th>
+<th>Haptic (expo-haptics)</th>
+<th>Volume</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ui-tap</code></td>
+<td>0.12 s</td>
+<td>Any button / card tap</td>
+<td><code>Haptics.selectionAsync()</code></td>
+<td>0.6</td>
+</tr>
+<tr>
+<td><code>ui-toggle</code></td>
+<td>0.16 s</td>
+<td>Switches, checkboxes, segmented controls</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Light)</code></td>
+<td>0.6</td>
+</tr>
+<tr>
+<td><code>ui-back</code></td>
+<td>0.22 s</td>
+<td>Back / navigate up, tab change</td>
+<td><code>Haptics.selectionAsync()</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>ui-sheet-open</code></td>
+<td>0.32 s</td>
+<td>Bottom sheet / modal opens</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Soft)</code></td>
+<td>0.6</td>
+</tr>
+<tr>
+<td><code>ui-sheet-close</code></td>
+<td>0.28 s</td>
+<td>Bottom sheet / modal closes</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Soft)</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>ui-error</code></td>
+<td>0.42 s</td>
+<td>Gentle "not quite" for form errors / failed actions (never shaming)</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Warning)</code></td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>ui-success-small</code></td>
+<td>0.55 s</td>
+<td>Small success: saved, step done</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td><code>ui-notification</code></td>
+<td>0.8 s</td>
+<td>In-app notification / toast</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td><code>ui-message-pop</code></td>
+<td>0.26 s</td>
+<td>New chat / mentor message bubble</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Light)</code></td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>ui-pin-digit</code></td>
+<td>0.1 s</td>
+<td>Each PIN pad digit (kid login, parent gate)</td>
+<td><code>Haptics.selectionAsync()</code></td>
+<td>0.6</td>
+</tr>
+<tr>
+<td><code>ui-pin-wrong</code></td>
+<td>0.4 s</td>
+<td>Wrong PIN (soft, with shake animation)</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Warning)</code></td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>ui-pin-unlock</code></td>
+<td>0.7 s</td>
+<td>Correct PIN / parent gate opened</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td><code>ui-countdown-tick</code></td>
+<td>0.22 s</td>
+<td>Match countdown 3-2-1</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Medium)</code></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td><code>ui-countdown-go</code></td>
+<td>0.7 s</td>
+<td>Countdown "Go!"</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Heavy)</code></td>
+<td>0.9</td>
+</tr>
+<tr>
+<td><code>ui-match-whistle</code></td>
+<td>0.8 s</td>
+<td>League match start</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Medium)</code></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td><code>ui-match-win</code></td>
+<td>2.3 s</td>
+<td>League match won (fanfare)</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><code>ui-match-lose</code></td>
+<td>1.5 s</td>
+<td>League match lost: encouraging "next time" motif</td>
+<td><code>Haptics.impactAsync(ImpactFeedbackStyle.Soft)</code></td>
+<td>0.9</td>
+</tr>
+<tr>
+<td><code>ui-badge-earned</code></td>
+<td>1.4 s</td>
+<td>Badge unlocked (pairs with fx08-badge-reveal)</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><code>ui-purchase-complete</code></td>
+<td>1.1 s</td>
+<td>Parent purchase / subscription confirmed</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>0.9</td>
+</tr>
+<tr>
+<td><code>ui-download-complete</code></td>
+<td>0.95 s</td>
+<td>Content pack download finished (pairs with fx15)</td>
+<td><code>Haptics.notificationAsync(NotificationFeedbackType.Success)</code></td>
+<td>0.8</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fxsrc"><code>fx/src/</code></h3>
+<ul>
+<li><code>cues.json</code>: the cue sheet. It contains <code>design/fx/src/cues.json</code> (fx01–05, unchanged) plus <code>ui-*</code> entries (<code>kind: "ui-sound"</code>, files, haptic, volume, purpose) and fx06–15 entries (<code>kind: "fx"</code>, T, event times, sound, sound_at, haptic, loop). <strong>Replace</strong> design's cues.json with this one when you merge.</li>
+<li><code>ui_synth.py</code>: synthesises and masters the 20 UI sounds. It reuses <code>design/fx/src/synth.py</code>.</li>
+<li><code>build_fx2.py</code>: builds fx06–15. It reuses <code>design/fx/src/fxlib.py</code>.</li>
+</ul>
+<h3 id="tools"><code>tools/</code></h3>
+<p>Chrome (playwright) render and bake helpers: <code>render.py</code>, <code>sheet.py</code> (frame strips), <code>bake.py</code> (CSS → static SVG + motion JSON), <code>statics.py</code>, <code>build_statics.py</code>, <code>record_preview.py</code> (MP4), <code>build_index.py</code>, <code>contact_sheets.py</code>, <code>build_readme.py</code>, <code>build_manifest.py</code>.</p>
+<h3 id="preview"><code>preview/</code></h3>
+<p><code>index.html</code> · <code>contact-sheet-01…07-*.png</code> · <code>tinkerpod-design-pack-preview.mp4</code> (720², about 100 s, with sound).</p>
+<h2 id="rebuild-order">Rebuild order</h2>
+<pre><code>python3 assets/logo/src/build_logo.py &amp;&amp; python3 assets/app-icon/src/build_icons.py
+python3 fx/src/ui_synth.py &amp;&amp; python3 fx/src/build_fx2.py
+python3 motion/src/pip_moods.py &amp;&amp; python3 motion/src/pip_statics.py
+python3 assets/empty/src/build_empty.py &amp;&amp; python3 tools/build_statics.py
+python3 tools/build_index.py &amp;&amp; python3 tools/contact_sheets.py &amp;&amp; python3 tools/record_preview.py
+cd talk/src &amp;&amp; python3 build_talk.py &amp;&amp; python3 build_talk_index.py &amp;&amp; python3 record_talk.py &amp;&amp; cd ../..   # re-voice first with python3 tts.py (needs internet); raw TTS is in talk/src/raw
+python3 tools/build_readme.py &amp;&amp; python3 tools/build_manifest.py
+</code></pre>
+<p>Requirements: python3, numpy, scipy, soundfile, pyloudnorm, lxml, Pillow, playwright with Chrome, ffmpeg, and edge-tts (for <code>talk/</code> only). The build scripts expect <code>design/</code> next to <code>design-pack/</code>.</p>
+<h2 id="compromises-and-known-limits">Compromises and known limits</h2>
+<ul>
+<li><strong>No Lottie.</strong> The animation is CSS keyframes plus an exported motion JSON and baked statics. Native playback needs Reanimated wiring (or a WebView). A Lottie export would need After Effects or a converter that doesn't handle CSS keyframes reliably.</li>
+<li><strong>Logo colours</strong> are sampled from the approved logo PNG, not snapped to the tokens. The logo is a traced vector of that artwork, so curves are very close to the PNG but not identical.</li>
+<li><strong>Loudness on very short sounds:</strong> sounds under 400 ms are measured padded with silence to 400 ms (the BS.1770 gate needs 400 ms). <code>ui-back</code> reads −16.35 LUFS because the limiter caps it.</li>
+<li><strong>MP3 encoder delay:</strong> about 25 ms of silence at the start; use wav or ogg for short sounds.</li>
+<li><strong>Original moods</strong> in <code>motion/svg</code> are re-titled copies, so their user-visible label says Captain Jetty. The art is unchanged. <code>pip-sad</code> (approved) is still in the set; prefer <code>pip-sleepy-wake</code> for streak-broken moments so kids are never shamed.</li>
+<li>Sample text inside FX (badge and league names, MB values) is placeholder; draw real text natively.</li>
+<li><strong>Talk sample:</strong> the voices come from edge-tts (Microsoft's online neural TTS). Check the licence before production, or move to Azure Speech. Lip-sync uses a lexicon plus word timing, not a forced aligner. See talk/README.md.</li>
+<li><code>design/html/13-cohort-lobby.html</code> says "Pip bot". Show "Captain Jetty bot" in the app.</li>
+</ul></main></body></html>

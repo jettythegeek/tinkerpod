@@ -1,0 +1,62 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <!-- purple Learn header -->
+  <div style="position:absolute;inset:0 0 auto 0;height:188px;background:radial-gradient(120% 90% at 85% 0%,#A78BFA 0%,#7C3AED 45%,#5B21B6 100%);border-radius:0 0 32px 32px;box-shadow:0 10px 24px -12px rgba(30,0,80,.5)"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0">
+   <div class="flex items-center justify-between">
+    <div class="text-white"><div class="over" style="color:#DDD6FE">Journey 1 · Explorer</div><div style="font-size:28px;font-weight:900;line-height:1.1">Learn</div></div>
+    <span data-podchip="coding,design"></span>
+   </div>
+   <div class="seg3 mt-4"><span><i data-lucide="map"></i>Journey</span><span class="on"><i data-lucide="target"></i>Missions</span><span><i data-lucide="swords"></i>Compete</span></div>
+  </div>
+
+  <div style="position:relative;padding:32px 16px 0;display:flex;flex-direction:column;gap:10px">
+   <!-- adventure -->
+   <div class="card" style="border-radius:24px;overflow:hidden">
+    <div style="height:104px;background:url(../assets/adventure-ngodo.jpg) center 45%/cover;position:relative">
+     <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,27,77,.78),rgba(16,27,77,.1) 75%)"></div>
+     <div style="position:absolute;left:14px;top:12px;color:#fff"><span class="st nodot" style="height:22px;font-size:11px;background:#FFB700;color:#0F172A"><i data-lucide="map" style="width:12px"></i>Adventure · 5 missions</span><div style="font-size:22px;font-weight:900;line-height:1.1;margin-top:6px">Trip to Ngodo</div><div style="font-size:12.5px;font-weight:700;opacity:.9">A story told one mission at a time</div></div>
+     <span class="st nodot" style="position:absolute;right:10px;top:10px;height:24px;background:rgba(255,255,255,.92);color:#0F172A;font-size:11px"><i data-lucide="download" style="width:12px"></i>Offline</span>
+    </div>
+    <div class="flex items-center gap-3" style="padding:10px 12px 12px 14px">
+     <div class="flex-1"><div class="flex items-center gap-1" id="dots"></div><div style="font-size:12px;font-weight:800;color:var(--muted);margin-top:5px">Mission 3 of 5 · <b style="color:#0F172A">Cross the river</b></div></div>
+     <div class="btn sm" style="height:42px;padding:0 16px">Continue</div>
+    </div>
+   </div>
+   <div class="flex justify-between items-end mt-1"><div class="h3">Unlocked missions</div><div class="cap">2 ready</div></div>
+   <!-- codazanga -->
+   <div class="card flex items-center gap-3" style="padding:10px 12px 10px 10px;border-radius:22px;box-shadow:0 0 0 2.5px #FFB700 inset,0 10px 22px -12px rgba(201,143,0,.7);background:linear-gradient(135deg,#fff 55%,#FFF6DB)">
+    <div style="width:62px;height:62px;border-radius:18px;overflow:hidden;flex:none;position:relative"><img src="../assets/journey-map-bg.jpg" style="width:100%;height:100%;object-fit:cover;object-position:50% 2%;transform:scale(2.2);transform-origin:50% 0"></div>
+    <div class="flex-1 min-w-0"><div class="flex items-center gap-1.5"><span class="st y nodot" style="height:20px;font-size:10.5px">NEW</span><span style="font-size:11.5px;font-weight:800;color:var(--muted)">From Level 2</span></div><div style="font-weight:900;font-size:15.5px;line-height:1.2;margin-top:2px">Golden Gate of Codazanga</div><div class="flex items-center gap-2 mt-0.5" style="font-size:12px;font-weight:900"><span class="flex items-center gap-1"><span data-ic="xp" data-s="15"></span>+300</span><span class="flex items-center gap-1"><span data-ic="gem" data-s="14"></span>+5</span><span style="color:var(--muted);font-weight:800">· 3 chapters</span></div></div>
+    <div class="btn sm yellow" style="height:40px;padding:0 14px">Start</div>
+   </div>
+   <div class="card flex items-center gap-3" style="padding:10px 12px 10px 10px;border-radius:22px">
+    <div style="width:62px;height:62px;border-radius:18px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;flex:none"><i data-lucide="shopping-basket" style="width:28px;height:28px"></i></div>
+    <div class="flex-1 min-w-0"><div style="font-size:11.5px;font-weight:800;color:var(--muted)">From Level 1 · Welcome Island</div><div style="font-weight:900;font-size:15.5px;line-height:1.2">Market Day Robot</div><div class="flex items-center gap-2 mt-1"><div class="bar flex-1" style="height:7px;background:#DCE7FF"><i style="width:60%;background:#2563EB"></i></div><span style="font-size:11.5px;font-weight:900">3/5</span></div></div>
+    <i data-lucide="chevron-right" style="color:#94A3B8"></i>
+   </div>
+   <div class="flex justify-between items-end mt-1"><div class="h3">Locked</div><div class="cap">Finish a level to unlock</div></div>
+   <div class="card flex items-center gap-3" style="padding:9px 12px 9px 10px;border-radius:20px;background:#F8FAFC;box-shadow:0 0 0 1.5px #E2E8F0 inset">
+    <div style="width:44px;height:44px;border-radius:14px;background:#EEF2F6;color:#94A3B8;display:flex;align-items:center;justify-content:center;flex:none"><i data-lucide="landmark"></i></div>
+    <div class="flex-1 min-w-0"><div style="font-weight:900;font-size:14.5px;color:#475569">Bridge of Loops</div><div style="font-size:12px;font-weight:800;color:var(--muted)">Finish Level 3 · 2 of 4 units done</div></div>
+    <span data-ic="lock" data-s="20"></span>
+   </div>
+  </div>
+  <div data-kidnav="learn"></div>
+ </div>
+</div>
+</div>
+<script>
+const D=[2,2,1,0,0];
+document.getElementById('dots').innerHTML=D.map((s,i)=>`${i?`<i style="flex:1;height:3px;border-radius:3px;background:${s==2||D[i-1]==2&&s==1?'#63C132':'#E2E8F0'}"></i>`:''}<span style="width:24px;height:24px;border-radius:99px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;${s==2?'background:#63C132;color:#fff':s==1?'background:#7C3AED;color:#fff;box-shadow:0 0 0 3px #E9E3F8':'background:#F1F5F9;color:#94A3B8'}">${s==2?'<i data-lucide="check" style="width:13px;stroke-width:3.4"></i>':i+1}</span>`).join('');
+</script>
+<script>tpInit()</script></body></html>

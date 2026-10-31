@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web" style="background:#F6F9FB">
+ <div data-side="mentor:progress"></div>
+ <div class="main"><div data-top="mentor"></div>
+  <div class="content" style="padding-top:18px">
+   <div class="crumbs">Child progress / Lekki A / Amara Okafor</div>
+   <div class="panel mt-2" style="padding:14px 18px;display:flex;align-items:center;gap:16px">
+    <img src="../assets/av2.png" class="mini-av" style="width:64px;height:64px">
+    <div><div style="font-size:22px;font-weight:900">Amara Okafor <span style="font-size:14px;color:#64748B;font-weight:800">· 9 · Junior</span></div>
+     <div class="flex gap-2 mt-1"><span class="st nodot p">Title: Jango-Jango</span><span class="st nodot t">Lekki A</span><span class="st nodot y">🔥 12-day streak</span><span class="st nodot s">Parent: Mrs. N. Okafor</span></div></div>
+    <div style="margin-left:auto;width:270px"><div class="flex justify-between" style="font-size:12.5px;font-weight:800"><span>2,480 XP</span><span style="color:#64748B">520 to Design Sultan</span></div><div class="bar xp mt-1.5" style="height:10px"><i style="width:83%"></i></div></div>
+    <span class="wbtn sec"><i data-lucide="message-circle"></i>Message parent</span><span class="wbtn"><i data-lucide="file-text"></i>Progress report</span>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="panel"><div class="ph"><b>Skills</b><span style="font-size:12px;font-weight:800;color:#64748B">vs pod average</span></div><div style="padding:6px 18px 12px" id="sk"></div></div>
+    <div class="panel"><div class="ph"><b>Worlds & packs</b><span style="font-size:12px;font-weight:800;color:#64748B">4 of 6 started</span></div><div style="padding:4px 18px 10px" id="wd"></div></div>
+    <div class="panel"><div class="ph"><b>Weekly activity</b><span style="font-size:12px;font-weight:800;color:#64748B">minutes coding</span></div><div style="padding:10px 18px 12px" id="wk"></div></div>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1.3fr 1fr 1fr">
+    <div class="panel"><div class="ph"><b>Recent work</b><span style="font-size:12px;font-weight:800;color:#007A70">All projects</span></div><table class="tbl" id="rw"></table><style>#rw td{padding-top:7px;padding-bottom:7px}</style></div>
+    <div class="panel"><div class="ph"><b class="flex items-center gap-2"><span data-emb="league" data-s="22"></span>AfriTech League</b><span class="st g">5th · 13 pts</span></div>
+     <div style="padding:8px 18px 12px"><div class="flex gap-1.5" id="form"></div><div style="font-size:12px;font-weight:700;color:#64748B;margin-top:8px">Last 8 matches · W4 D1 L3 · next: vs Chidi (Sat, home)</div>
+     <div class="grid grid-cols-3 gap-2 mt-3 text-center"><div style="background:#F8FAFC;border-radius:10px;padding:7px"><div style="font-weight:900;font-size:18px">71%</div><div style="font-size:11px;font-weight:800;color:#64748B">task accuracy</div></div><div style="background:#F8FAFC;border-radius:10px;padding:7px"><div style="font-weight:900;font-size:18px">2:48</div><div style="font-size:11px;font-weight:800;color:#64748B">avg per task</div></div><div style="background:#F8FAFC;border-radius:10px;padding:7px"><div style="font-weight:900;font-size:18px">Loops</div><div style="font-size:11px;font-weight:800;color:#64748B">best topic</div></div></div>
+     <div class="flex items-center gap-2 mt-3" style="background:#EEF2FF;border-radius:10px;padding:8px 10px;font-size:12.5px;font-weight:800;color:#101B4D"><span data-emb="ucl" data-s="22"></span>1 place from a Champions League spot</div></div></div>
+    <div class="panel"><div class="ph"><b>Mentor notes</b><span class="wbtn sec sm"><i data-lucide="plus"></i>Note</span></div>
+     <div style="padding:6px 18px 12px;font-size:12.5px;font-weight:700;color:#334155;display:flex;flex-direction:column;gap:9px">
+      <div><span style="color:#94A3B8">Oct 28 ·</span> Confident with loops now. Ready for variables in World 5.</div>
+      <div><span style="color:#94A3B8">Oct 14 ·</span> Rushes match tasks; practise reading the task twice.</div>
+      <div><span style="color:#94A3B8">Sep 30 ·</span> Loves sound and story. Suggest the Ngodo adventure.</div>
+      <div><span style="color:#94A3B8">Sep 16 ·</span> Attendance 11/12 this term. Parent asked about the Cup.</div>
+      <div class="flex items-center gap-2" style="background:#F3EEFF;border-radius:10px;padding:7px 10px;color:#5B21B6"><i data-lucide="eye-off" style="width:14px"></i>Notes are private to mentors & admins</div>
+     </div></div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+document.getElementById('sk').innerHTML=[['Sequencing',92,80],['Loops',85,66],['Events',70,62],['Conditionals',54,58],['Variables',30,41],['Debugging',62,55]].map(([n,v,a])=>`<div style="padding:5px 0"><div class="flex justify-between" style="font-size:12.5px;font-weight:800"><span>${n}</span><span style="color:${v>=a?'#2F7D16':'#B45309'}">${v}%</span></div><div style="position:relative;height:8px;background:#EEF1F5;border-radius:99px;margin-top:4px"><i style="position:absolute;left:0;top:0;bottom:0;width:${v}%;border-radius:99px;background:${v>=a?'#00BFAE':'#FFB700'}"></i><i style="position:absolute;left:${a}%;top:-3px;width:2px;height:14px;background:#101B4D"></i></div></div>`).join('');
+document.getElementById('wd').innerHTML=[['#00BFAE','tree-palm','Welcome Island',100,'Done'],['#63C132','trees','Functions Forest',100,'Done'],['#7C3AED','repeat','Loops Valley',58,'L7 of 12'],['#FFB700','bus','Trip to Ngodo',40,'Stop 2 of 5'],['#2563EB','lock','Variables Village',0,'Locked']].map(([c,i,n,v,t])=>`<div class="flex items-center gap-3" style="padding:6px 0"><div style="width:30px;height:30px;border-radius:9px;background:${v?c:'#CBD5E1'};color:#fff;display:flex;align-items:center;justify-content:center"><i data-lucide="${i}" style="width:15px"></i></div><div class="flex-1"><div class="flex justify-between" style="font-size:13px;font-weight:800"><span>${n}</span><span style="color:#64748B;font-size:12px">${t}</span></div><div class="bar teal mt-1" style="height:6px;background:#EEF1F5"><i style="width:${v}%;background:${c}"></i></div></div></div>`).join('');
+const w=[35,50,20,65,40,90,75],d=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+document.getElementById('wk').innerHTML=`<div class="flex items-end gap-3" style="height:150px">${w.map((v,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:11px;font-weight:800;color:#64748B">${v}</span><div style="width:100%;height:${v*1.4}px;border-radius:7px;background:${i==5?'#7C3AED':'#C4B5FD'}"></div><span style="font-size:11.5px;font-weight:800;color:#64748B">${d[i]}</span></div>`).join('')}</div><div style="font-size:12px;font-weight:700;color:#64748B;margin-top:6px">6h 15m this week · ▲ 40 min vs last week</div>`;
+let h='<tr><th>Project</th><th>Result</th><th>Date</th></tr>';[['Danfo Race · Loops final','y','Waiting review','Wed'],['Market maths stop','g','Approved · 3★','Oct 24'],['Forest story','g','Approved · 4★','Oct 17'],['Loops L6 quiz','b','Auto-graded 8/10','Oct 15'],['Welcome Island badge','g','Completed','Oct 02'],['Pip practice match','b','Won vs Pip bot','Sep 28']].forEach(r=>h+=`<tr><td>${r[0]}</td><td><span class="st ${r[1]}">${r[2]}</span></td><td class="sub">${r[3]}</td></tr>`);document.getElementById('rw').innerHTML=h;
+document.getElementById('form').innerHTML='WWLDWLWL'.split('').map(x=>`<span style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;background:${x=='W'?'#63C132':x=='D'?'#94A3B8':'#FF6B6B'}">${x}</span>`).join('');
+</script>
+<script>tpInit()</script></body></html>

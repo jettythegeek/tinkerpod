@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:packs"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Learning / Content packs</div><div class="ptitle">Content packs</div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="upload"></i>Upload .tpk</span><span class="wbtn"><i data-lucide="plus"></i>New pack</span></div>
+   </div>
+   <div class="grid grid-cols-4 gap-4 mt-4">
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Published</div><div class="v" style="font-size:24px">24</div></div>
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Drafts</div><div class="v" style="font-size:24px">7</div></div>
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Downloads (30d)</div><div class="v" style="font-size:24px">18,420</div></div>
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Avg pack size</div><div class="v" style="font-size:24px">34 MB</div></div>
+   </div>
+   <div class="panel mt-4">
+    <div class="flex items-center gap-2" style="padding:12px 14px;border-bottom:1px solid #EEF1F5">
+     <div class="tabs" style="border:0"><span class="on">All 31</span><span>Published 24</span><span>Draft 7</span><span>Archived 3</span></div>
+     <div style="flex:1"></div>
+     <div class="inp ph-t" style="width:240px"><i data-lucide="search" style="width:15px"></i>Search packs…</div>
+     <span class="wbtn sec sm"><i data-lucide="filter"></i>Age: All</span><span class="wbtn sec sm"><i data-lucide="tag"></i>Access: All</span>
+    </div>
+    <table class="tbl" id="t"></table><style>#t td{padding-top:6px;padding-bottom:6px}</style>
+    <div class="flex justify-between items-center" style="padding:10px 16px;font-size:12.5px;font-weight:700;color:#64748B;border-top:1px solid #EEF1F5"><span>Showing 1–9 of 31</span><div class="flex gap-1"><span class="wbtn sec sm">Prev</span><span class="wbtn sm navy">1</span><span class="wbtn sec sm">2</span><span class="wbtn sec sm">3</span><span class="wbtn sec sm">4</span><span class="wbtn sec sm">Next</span></div></div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+const P=[['Loops Valley','World 4 · 12 lessons','#7C3AED','repeat','5–11','v2.3.0','pub','Paid','6,210','Oct 28'],
+['Welcome Island','World 1 · 8 lessons','#00BFAE','tree-palm','5–11','v3.1.2','pub','Free','9,884','Oct 12'],
+['Trip to Ngodo','Adventure · 5 stops','#FFB700','bus','7–11','v1.0.0','pub','Paid','1,402','Oct 25'],
+['The Lost Key','Mission · startup','#FF6B6B','key-round','12–18','v1.1.0','pub','Paid','880','Oct 20'],
+['Game Builder: Okada Rush','Project · JS 2D','#2563EB','gamepad-2','12–18','v2.0.0-rc1','draft','Paid','—','Oct 29'],
+['Functions Forest','World 3 · 10 lessons','#63C132','trees','5–11','v2.0.4','pub','Paid','5,033','Sep 30'],
+['Python Basics','Track · 14 lessons','#101B4D','terminal','12–18','v1.4.0','pub','Paid','2,317','Oct 02'],
+['Market Day Maths','Adventure · 4 stops','#FFB700','shopping-basket','5–8','v0.9.0','draft','Free','—','Oct 30'],
+['Tournament Prep S4','Match practice set','#7C3AED','trophy','All','v1.0.0','review','Free','—','Oct 30']];
+const ST={pub:['g','Published'],draft:['s','Draft'],review:['y','In review']};
+let h='<tr><th style="width:30px"><input type="checkbox"></th><th>Pack</th><th>Ages</th><th>Version</th><th>Status</th><th>Access</th><th style="text-align:right">Downloads</th><th>Updated</th><th></th></tr>';
+P.forEach(p=>{h+=`<tr><td><input type="checkbox"></td><td><div class="flex items-center gap-3"><div style="width:36px;height:36px;border-radius:10px;background:${p[2]};color:#fff;display:flex;align-items:center;justify-content:center"><i data-lucide="${p[3]}" style="width:18px"></i></div><div><div>${p[0]}</div><div class="sub">${p[1]}</div></div></div></td>
+<td>${p[4]}</td><td><code style="font-size:12.5px;background:#F1F5F9;border-radius:6px;padding:2px 6px">${p[5]}</code></td><td><span class="st ${ST[p[6]][0]}">${ST[p[6]][1]}</span></td>
+<td><span class="st nodot ${p[7]=='Free'?'t':'p'}">${p[7]}</span></td><td style="text-align:right">${p[8]}</td><td class="sub">${p[9]}</td><td><div class="flex items-center justify-end gap-2"><span class="wbtn sec sm"><i data-lucide="pencil"></i>Edit</span><i data-lucide="more-horizontal" style="width:18px;color:#94A3B8"></i></div></td></tr>`});
+document.getElementById('t').innerHTML=h;
+</script>
+<script>tpInit()</script></body></html>

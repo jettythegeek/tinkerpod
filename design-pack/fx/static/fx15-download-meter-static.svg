@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Content pack download">
+<title>Content pack download</title>
+
+<g id="f15-card"><rect x="70" y="155" width="460" height="300" rx="30" fill="#0F172A" opacity="0.07"></rect><rect x="70" y="150" width="460" height="300" rx="30" fill="#fff"></rect>
+ <g transform="translate(150 228)"><g id="f15-box">
+  <path d="M-46 -16 L0 -38 L46 -16 L46 30 L0 52 L-46 30Z" fill="#FFB700"></path><path d="M-46 -16 L0 6 L46 -16 L0 -38Z" fill="#FFD54A"></path><path d="M0 6 L0 52 L-46 30 L-46 -16Z" fill="#E09A00"></path>
+  <path d="M-23 -27 L23 -5 L23 12" fill="none" stroke="#FFF1B8" stroke-width="7" stroke-linejoin="round"></path></g></g>
+ <text x="222" y="218" font-size="30" fill="#0F172A" text-anchor="start" font-family="Nunito" font-weight="900">Adventure Pack</text>
+ <text x="222" y="252" font-size="20" fill="#64748B" text-anchor="start" font-family="Nunito" font-weight="900">5 lessons · Obudu Ranch</text>
+ <g id="f15-done"><text x="480" y="312" font-size="24" fill="#2F7D16" text-anchor="end" font-family="Nunito" font-weight="900">Ready offline</text></g>
+ <text x="120" y="312" font-size="22" fill="#64748B" text-anchor="start" font-family="Nunito" font-weight="900"></text>
+ <rect x="120" y="330" width="360" height="22" rx="11" fill="#EEF1F5"></rect>
+ <defs><clipPath id="f15-clip"><rect id="f15-bar" x="120" y="330" width="360" height="22" rx="11"></rect></clipPath></defs>
+ <g clip-path="url(#f15-clip)"><rect id="f15-barfill" x="120" y="330" width="360" height="22" fill="rgb(99, 193, 50)"></rect></g>
+ <g id="f15-m10"><text x="120" y="400" font-size="20" fill="#64748B" text-anchor="start" font-family="Nunito" font-weight="900">48.0 of 48 MB</text></g>
+ <g transform="translate(470 395)">
+  
+  <g id="f15-ok"><circle r="26" fill="#63C132"></circle><path d="M-11 1 L-3 9 L12 -8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path></g>
+ </g>
+</g>
+</svg>

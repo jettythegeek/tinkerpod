@@ -1,0 +1,91 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="width:1680px;padding:56px 64px 64px;background:#fff">
+ <div class="flex items-center justify-between">
+  <div class="flex items-center gap-6"><img src="../assets/logo.png" style="height:64px"><div style="width:2px;height:48px;background:#E2E8F0"></div><div><div style="font-size:34px;font-weight:900;line-height:1">Design System</div><div style="font-weight:700;color:#64748B;margin-top:4px">v1.0 · Kid mode + Parent mode · one theme flag for ages 5–11 / 12–18</div></div></div>
+  <div class="flex gap-2"><span class="chip">Nunito 400–900</span><span class="chip">8-pt grid</span><span class="chip">WCAG 2.2 AA</span></div>
+ </div>
+ <!-- COLOURS -->
+ <div class="sec">Colour</div>
+ <div class="grid grid-cols-6 gap-4" id="sw"></div>
+ <div class="note mt-4"><i data-lucide="info" style="width:18px;color:#007A70;flex:none"></i><div><b>Button teal changed from #00857A to #007A70.</b> #00857A gives 4.53:1 with white text on a white page, which barely passes. As text on the #F8FAFC background it drops to 4.33:1 and fails AA. #007A70 gives 5.23:1 (white text on it) and 5.00:1 (as text on #F8FAFC). Brand teal #00BFAE stays for fills, rings and illustration only, with ink text on top, never white.</div></div>
+ <div class="flex gap-12 mt-2">
+ <!-- TYPE -->
+ <div style="width:520px">
+  <div class="sec">Type · Nunito</div>
+  <div id="type" class="flex flex-col gap-3"></div>
+  <div class="sec">Game tokens</div>
+  <div class="flex gap-5 items-center" id="tok"></div>
+  <div class="sec">Mascot moods · “Pip” (placeholder name)</div>
+  <div class="grid grid-cols-4 gap-3" id="moods"></div>
+ </div>
+ <!-- THEMES -->
+ <div class="flex-1">
+  <div class="sec">Components · same parts, one theme flag</div>
+  <div class="grid grid-cols-2 gap-6">
+   <div class="tcol theme-junior" style="background:#FBF9FF"><div class="thead"><span class="chip on">theme="junior"</span><b>Ages 5–11 · playful</b></div><div class="parts"></div></div>
+   <div class="tcol theme-senior" style="background:#F8FAFC"><div class="thead"><span class="chip on">theme="senior"</span><b>Ages 12–18 · focused</b></div><div class="parts"></div></div>
+  </div>
+ </div>
+ </div>
+</div>
+<style>
+.sec{font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#64748B;margin:36px 0 14px;display:flex;align-items:center;gap:10px}
+.sec:after{content:"";flex:1;height:1px;background:#E2E8F0}
+.sw{border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px #E2E8F0}
+.sw .c{height:96px;padding:12px;display:flex;align-items:flex-end;justify-content:space-between;font-weight:900;font-size:22px}
+.sw .m{padding:10px 12px 12px;font-size:12px;font-weight:700;color:#334155;line-height:1.5}
+.sw .m b{font-size:14px;color:#0F172A;display:block}
+.ok{color:#2F7D16;font-weight:900}.no{color:#B91C1C;font-weight:900}
+.note{display:flex;gap:10px;padding:14px 16px;border-radius:14px;background:#E6F9F7;font-size:14px;font-weight:600;color:#0F172A;line-height:1.5}
+.tcol{border-radius:24px;padding:20px;box-shadow:0 0 0 1px #E2E8F0}
+.thead{display:flex;align-items:center;gap:10px;margin-bottom:16px}.thead b{font-weight:900}
+.lbl{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#64748B;margin:16px 0 8px}
+</style>
+<script>
+const SW=[
+['#00BFAE','Brand teal','Fills, rings, illustration','Ink 7.71:1 <span class=ok>AA</span> · White 2.32:1 <span class=no>✗</span>','#0F172A'],
+['#007A70','Button teal','Buttons, links, teal text','White 5.23:1 <span class=ok>AA</span> · on #F8FAFC 5.00:1 <span class=ok>AA</span>','#fff'],
+['#7C3AED','Kid lead purple','Junior primary actions','White 5.70:1 <span class=ok>AA</span>','#fff'],
+['#0F172A','Ink','Text, icons','On white 17.9:1 <span class=ok>AAA</span>','#fff'],
+['#101B4D','Navy','Admin sidebar, leagues','White 16.3:1 <span class=ok>AAA</span>','#fff'],
+['#F8FAFC','Background','App canvas','Ink 17.1:1 · Muted #64748B 4.6:1','#0F172A'],
+['#FFB700','Sun yellow','Coins, XP, highlight CTA','Ink 10.2:1 <span class=ok>AA</span> · never white text','#0F172A'],
+['#FF6B6B','Coral','Hearts, alerts, drop zone','Ink 6.43:1 <span class=ok>AA</span> · White 2.78:1 <span class=no>✗</span>','#0F172A'],
+['#2563EB','Blue','Info, gems, quiz B','White 5.17:1 <span class=ok>AA</span>','#fff'],
+['#63C132','Success green','Done, correct','Ink 7.82:1 · text variant #2F7D16 5.16:1','#0F172A'],
+['#F3EEFF','Purple tint','Junior surfaces, tags','Purple text 5.02:1 <span class=ok>AA</span>','#5B21B6'],
+['#E6F9F7','Teal tint','Senior surfaces, notes','Button teal text 4.79:1 <span class=ok>AA</span>','#005E56'],
+];
+document.getElementById('sw').innerHTML=SW.map(([h,n,u,c,t])=>`<div class="sw"><div class="c" style="background:${h};color:${t}"><span>Aa</span><span style="font-size:13px">${h}</span></div><div class="m"><b>${n}</b>${u}<br>${c}</div></div>`).join('');
+const T=[['Display','32 / 900 / -1%','Odogwu unlocked!',32,900],['H1','28 / 900 junior · 24 / 800 senior','How old is your child?',28,900],['H2','20 / 900','Daily Missions',20,900],['H3','17 / 800','Repeat and Count',17,800],['Body','16 / 600 / 1.45','Teach your robot to repeat things.',16,600],['Caption','13 / 700','2,340 / 3,000 XP',13,700],['Overline','11 / 900 / +8% caps','LEVEL 12 · JANGO-JANGO',11,900]];
+document.getElementById('type').innerHTML=T.map(([n,s,e,z,w])=>`<div class="flex items-baseline gap-4" style="border-bottom:1px solid #F1F5F9;padding-bottom:10px"><div style="width:118px;flex:none"><div style="font-weight:900;font-size:13px">${n}</div><div style="font-size:11px;font-weight:700;color:#64748B">${s}</div></div><div style="font-size:${z}px;font-weight:${w};line-height:1.15;${n==='Overline'?'letter-spacing:.08em;color:#7C3AED':''}">${e}</div></div>`).join('');
+document.getElementById('tok').innerHTML=[['coin','Coins'],['gem','Gems'],['xp','XP'],['flame','Streak'],['flameoff','Broken'],['trophy','Trophy'],['star','Star'],['lock','Locked']].map(([k,n])=>`<div class="text-center"><span data-ic="${k}" data-s="40"></span><div style="font-size:11px;font-weight:800;color:#64748B;margin-top:4px">${n}</div></div>`).join('');
+document.getElementById('moods').innerHTML=[['happy','Happy','Default, lesson done'],['cheering','Cheering','Level up, streak, win'],['thinking','Thinking','Quiz, hint, loading'],['sleepy','Sleepy / sad','Streak broken, idle']].map(([k,n,d])=>`<div style="border-radius:20px;background:#F8FAFC;padding:12px 8px;text-align:center;box-shadow:0 0 0 1px #E2E8F0"><img src="../assets/mascot-${k}.png" style="height:104px;margin:0 auto;object-fit:contain"><div style="font-weight:900;font-size:14px;margin-top:6px">${n}</div><div style="font-size:11px;font-weight:700;color:#64748B">${d}</div></div>`).join('');
+const parts=`
+<div class="lbl" style="margin-top:0">Buttons</div>
+<div class="flex flex-col gap-3"><div class="flex gap-3"><div class="btn flex-1">Start Lesson</div><div class="btn yellow flex-1">Check answer</div></div>
+<div class="flex gap-3"><div class="btn teal flex-1">Continue</div><div class="btn ghost flex-1">Log in</div><div class="btn sm" style="height:56px"><i data-lucide="play" style="fill:#fff"></i></div></div></div>
+<div class="lbl">Chips</div>
+<div class="flex gap-2 flex-wrap"><span class="chip on">All</span><span class="chip">Adventures</span><span class="chip"><i data-lucide="clock" style="width:14px"></i>8 min</span><span class="chip" style="background:var(--lead-soft);color:var(--lead);box-shadow:none">+30 XP</span></div>
+<div class="lbl">Pill card · mission</div>
+<div class="card flex items-center gap-3" style="padding:10px 14px 10px 10px"><div style="width:44px;height:44px;border-radius:calc(var(--r-card) * .55);background:#FFF6DB;display:flex;align-items:center;justify-content:center;color:#B45309"><i data-lucide="puzzle"></i></div><div class="flex-1"><div style="font-weight:800">Solve 3 code puzzles</div><div class="flex items-center gap-2 mt-1"><div class="bar flex-1" style="height:8px;background:#FFF1CC"><i style="width:66%;background:#FFB700"></i></div><span style="font-size:12px;font-weight:900">2/3</span></div></div><span data-ic="coin" data-s="22"></span></div>
+<div class="lbl">Progress · XP bar</div>
+<div class="flex items-center gap-2"><span data-ic="xp" data-s="26"></span><div class="bar xp flex-1" style="height:16px;background:#FFF1CC"><i style="width:78%"></i></div><span style="font-weight:900;font-size:13px">2,340 XP</span></div>
+<div class="flex gap-3 mt-3"><div class="bar flex-1"><i style="width:30%"></i></div><div class="bar teal flex-1"><i style="width:60%"></i></div><div class="bar green flex-1" style="background:#EAF7E2"><i style="width:100%"></i></div></div>
+<div class="lbl">Badges & stats</div>
+<div class="flex items-center gap-3"><div class="badge-hex" style="width:52px;height:58px;background:linear-gradient(160deg,#7C3AED,#5B21B6)"><i data-lucide="repeat"></i></div><div class="badge-hex" style="width:52px;height:58px;background:linear-gradient(160deg,#FF6B6B,#D94848)"><i data-lucide="bug"></i></div><div class="badge-hex" style="width:52px;height:58px;background:#E2E8F0"><span data-ic="lock" data-s="20"></span></div><div class="flex-1"></div><span class="stat"><span data-ic="flame" data-s="22"></span>7</span><span class="stat"><span data-ic="coin" data-s="22"></span>1,250</span></div>
+<div class="lbl">Floating bottom nav</div>
+<div style="position:relative;height:80px"><nav class="nav" style="left:0;right:0;bottom:4px"><a class="on"><i data-lucide="house"></i><span>Home</span></a><a><i data-lucide="map"></i><span>Journey</span></a><a><i data-lucide="target"></i><span>Missions</span></a><a><i data-lucide="trophy"></i><span>League</span></a><a><i data-lucide="smile"></i><span>Me</span></a></nav></div>
+<div class="lbl">Tokens</div>
+<div style="font-size:12px;font-weight:700;color:#334155;line-height:1.7" class="tokline"></div>`;
+document.querySelectorAll('.parts').forEach(p=>p.innerHTML=parts);
+document.querySelectorAll('.theme-junior .tokline')[0].innerHTML='lead #7C3AED · card radius 28 · button pill 999 + 5px press-shadow · H1 28/900 · body 16 · touch target ≥ 56';
+document.querySelectorAll('.theme-senior .tokline')[0].innerHTML='lead #007A70 · card radius 16 · button radius 12, flat · H1 24/800 · body 15 · touch target ≥ 44';
+</script>
+<script>tpInit()</script></body></html>

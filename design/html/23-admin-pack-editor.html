@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:packs"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Learning / Content packs / Game Builder: Okada Rush</div><div class="ptitle flex items-center gap-3">Edit pack <span class="st s">Draft</span><code style="font-size:14px;font-weight:800;background:#F1F5F9;border-radius:8px;padding:3px 8px">v2.0.0-rc1</code></div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="eye"></i>Preview on device</span><span class="wbtn sec"><i data-lucide="save"></i>Save draft</span><span class="wbtn"><i data-lucide="rocket"></i>Publish v2.0.0</span></div>
+   </div>
+   <div class="tabs mt-3"><span class="on">Details</span><span>Lessons (9)</span><span>Assets</span><span>Manifest</span><span>Versions</span></div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1.25fr 1fr">
+    <div class="flex flex-col gap-4">
+     <div class="panel" style="padding:16px 18px">
+      <div class="grid grid-cols-2 gap-3">
+       <div class="field" style="grid-column:span 2"><label>Pack title</label><div class="inp">Game Builder: Okada Rush</div></div>
+       <div class="field"><label>Type</label><div class="inp">Project <i data-lucide="chevron-down" style="width:15px;margin-left:auto;color:#94A3B8"></i></div></div>
+       <div class="field"><label>Age division</label><div class="inp">Senior · 12–18 <i data-lucide="chevron-down" style="width:15px;margin-left:auto;color:#94A3B8"></i></div></div>
+       <div class="field"><label>Access</label><div class="flex" style="background:#F1F5F9;border-radius:9px;padding:3px"><span style="flex:1;text-align:center;padding:6px;font-weight:800;color:#64748B">Free</span><span style="flex:1;text-align:center;padding:6px;font-weight:900;background:#fff;border-radius:7px;box-shadow:0 1px 2px rgba(15,23,42,.1)">Paid (in plan)</span></div></div>
+       <div class="field"><label>Unlock XP / title</label><div class="inp">Eze Code</div></div>
+      </div>
+     </div>
+     <div class="panel" style="padding:16px 18px">
+      <div class="flex justify-between items-center"><b style="font-size:15px">Upload pack build</b><span style="font-size:12px;font-weight:800;color:#64748B">.tpk · max 120 MB</span></div>
+      <div style="margin-top:10px;border:2px dashed #B8C2D3;border-radius:12px;background:#F8FAFC;padding:16px;display:flex;align-items:center;gap:14px">
+       <div style="width:44px;height:44px;border-radius:12px;background:#E6F9F7;color:#007A70;display:flex;align-items:center;justify-content:center"><i data-lucide="file-archive"></i></div>
+       <div class="flex-1"><div style="font-weight:800">okada-rush-2.0.0-rc1.tpk</div><div style="font-size:12px;font-weight:700;color:#64748B">41.8 MB · uploaded 12 min ago · SHA 9f3c…a21e</div><div class="bar teal mt-2" style="height:6px;background:#E2E8F0"><i style="width:100%"></i></div></div>
+       <span class="wbtn sec sm"><i data-lucide="refresh-cw"></i>Replace</span>
+      </div>
+      <div class="flex flex-col gap-2 mt-3" id="checks"></div>
+     </div>
+     <div class="panel"><div class="ph" style="padding-top:10px;padding-bottom:10px"><b>Version history</b><span style="font-size:12px;font-weight:800;color:#64748B">2 of 3 builds</span></div>
+      <div style="padding:2px 18px 8px;font-size:13px;font-weight:700" id="vers"></div></div>
+    </div>
+    <div class="flex flex-col gap-4">
+     <div class="panel"><div class="ph"><b>manifest.json</b><span class="st g">Valid</span></div>
+      <pre id="man" style="margin:0;padding:12px 16px;font-size:12px;line-height:1.55;font-family:ui-monospace,Menlo,monospace;background:#0F172A;color:#CBD5E1;border-radius:0 0 14px 14px;overflow:hidden"></pre></div>
+     <div class="panel" style="padding:14px 18px">
+      <b style="font-size:15px">Publish settings</b>
+      <div class="flex items-center justify-between mt-3"><span style="font-weight:700">Staged rollout</span><div class="flex items-center gap-2"><span style="font-weight:900">25%</span><div class="tog"></div></div></div>
+      <div class="flex items-center justify-between mt-2.5"><span style="font-weight:700">Notify parents of new pack</span><div class="tog"></div></div>
+      <div class="flex items-center justify-between mt-2.5"><span style="font-weight:700">Force update (breaking)</span><div class="tog off"></div></div>
+      <div class="field mt-3"><label>Release notes</label><div class="inp" style="height:52px;align-items:flex-start;padding-top:8px;font-weight:600;color:#334155">New level 4: Third Mainland Bridge. Fixes collision bug.</div></div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+document.getElementById('checks').innerHTML=[['g','check-circle-2','Manifest schema valid','tp-pack v3'],['g','check-circle-2','9 lessons · 214 assets resolved',''],['g','check-circle-2','Offline bundle under limit','41.8 / 120 MB'],['y','alert-triangle','2 images missing alt text','Lesson 6']].map(([c,i,t,d])=>`<div class="flex items-center gap-2" style="font-weight:700;font-size:13px"><i data-lucide="${i}" style="width:16px;color:${c=='g'?'#2F7D16':'#B45309'}"></i>${t}<span style="margin-left:auto;color:#64748B;font-size:12px">${d}</span></div>`).join('');
+document.getElementById('vers').innerHTML=[['v2.0.0-rc1','s','Draft','Today · Admin user'],['v1.3.2','g','Live · 100%','Sep 18 · 2,940 downloads']].map(([a,c,t,d])=>`<div class="flex items-center gap-3" style="padding:5px 0"><code style="width:96px;font-size:12px">${a}</code><span class="st ${c}">${t}</span><span style="margin-left:auto;color:#64748B;font-size:12px">${d}</span></div>`).join('');
+const k=s=>`<span style="color:#5EEAD4">"${s}"</span>`,v=s=>`<span style="color:#FDE68A">"${s}"</span>`,n=s=>`<span style="color:#C4B5FD">${s}</span>`;
+document.getElementById('man').innerHTML=`{
+  ${k('id')}: ${v('pack.game-builder.okada-rush')},
+  ${k('version')}: ${v('2.0.0-rc1')},
+  ${k('minAppVersion')}: ${v('1.8.0')},
+  ${k('division')}: ${v('senior')}, ${k('ages')}: [${n(12)}, ${n(18)}],
+  ${k('access')}: ${v('paid')},
+  ${k('language')}: ${v('javascript')},
+  ${k('lessons')}: [${v('l01-setup')}, ${v('l02-sprites')}, … ${n(9)}],
+  ${k('rewards')}: { ${k('xp')}: ${n(1200)}, ${k('title')}: ${v('eze-code')} },
+  ${k('offline')}: ${n('true')}, ${k('sizeMB')}: ${n(41.8)},
+  ${k('mascotMoods')}: [${v('happy')}, ${v('cheer')}, ${v('sad')}]
+}`;
+</script>
+<script>tpInit()</script></body></html>

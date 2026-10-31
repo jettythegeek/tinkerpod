@@ -1,0 +1,116 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SCREENS.md: screen index · TinkerPod design</title>
+<link rel="icon" href="../design-pack/assets/app-icon/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../site/site.css">
+</head><body class="doc"><header class="top slim"><a href="../index.html#docs" class="back">← TinkerPod design resources</a><a class="dl light" href="../design/SCREENS.md" download><span>↓ Download SCREENS.md</span></a></header><main class="md"><h1 id="tinkerpod-design-screen-index">TinkerPod design: screen index</h1>
+<p>Each screen is built from <code>html/src/NN-name.body.html</code>. Run <code>python3 build.py NN-name</code> from inside <code>html/</code>. This writes <code>html/NN-name.html</code> and <code>png/NN-name.png</code>. Kid screens are 390 × 844 at 2×, so each PNG is 900 × 1808. All screens use Nunito, Lucide 0.460, <code>tp.css</code> and <code>tp.js</code>.</p>
+<h2 id="key-screens-v1-0011-board-pngoverview-boardpng">Key screens v1 (00–11) · board: <code>png/overview-board.png</code></h2>
+<p>00 design-system · 01 kid-home · 02 journey-map · 03 lesson-detail · 04 quiz · 05 pack-store · 06 league-table · 07 profile · 08 parent-onboarding · 09 parent-dashboard · 10 teen-home · 11 mascot-sheet</p>
+<h2 id="tournaments-adventures-missions-v1-1220-board-pngboard-tournamentspng">Tournaments, Adventures &amp; Missions v1 (12–20) · board: <code>png/board-tournaments.png</code></h2>
+<p>12 tournaments-hub · 13 cohort-lobby · 14 match-live · 15 match-results · 16 fixtures · 17 champions-league · 18 world-cup-teaser · 19 adventure-detail · 20 mission-detail</p>
+<h2 id="admin-mentor-2132-board-pngboard-admin-mentorpng">Admin &amp; Mentor (21–32) · board: <code>png/board-admin-mentor.png</code></h2>
+<p>21 admin-overview · 22 admin-packs · 23 admin-pack-editor · 24 admin-tournaments · 25 admin-children-parents · 26 admin-pods-mentors · 27 admin-billing · 28 admin-reviews · 29 mentor-today · 30 mentor-review · 31 mentor-child-progress · 32 mentor-attendance</p>
+<h2 id="pods-learn-compete-rewards-build-v2-3348-board-pngboard-learn-competepng-copy-preview-new-screenspng">Pods, Learn, Compete, Rewards &amp; Build v2 (33–48) · board: <code>png/board-learn-compete.png</code> (copy: <code>preview-new-screens.png</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>File</th>
+<th>Screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>33</td>
+<td>33-learn-journey</td>
+<td>Learn hub, Journey tab: level/unit map, pod switcher chip</td>
+</tr>
+<tr>
+<td>34</td>
+<td>34-unit-detail</td>
+<td>Unit detail: lessons with quiz status, locked assignment card</td>
+</tr>
+<tr>
+<td>35</td>
+<td>35-assignment-card-states</td>
+<td>Component sheet: assignment card locked / unlocked / submitted / reviewed</td>
+</tr>
+<tr>
+<td>36</td>
+<td>36-assignment-submit</td>
+<td>Assignment: brief, what to make, code or upload, send to mentor</td>
+</tr>
+<tr>
+<td>37</td>
+<td>37-assignment-reviewed</td>
+<td>Assignment after mentor review: stars, feedback, rewards, saved to Build</td>
+</tr>
+<tr>
+<td>38</td>
+<td>38-learn-missions</td>
+<td>Learn hub, Missions tab: Adventure card plus unlocked and locked missions</td>
+</tr>
+<tr>
+<td>39</td>
+<td>39-mission-codazanga</td>
+<td>Mission detail: Golden Gate of Codazanga, Captain Jetty story, rewards</td>
+</tr>
+<tr>
+<td>40</td>
+<td>40-compete-coming-soon</td>
+<td>Learn hub, Compete tab: League, Cup and World Cup locked ("coming soon")</td>
+</tr>
+<tr>
+<td>41</td>
+<td>41-league-division</td>
+<td>Weekly League: mentor group of 20, Silver division, promotion and relegation, aliases</td>
+</tr>
+<tr>
+<td>42</td>
+<td>42-cup-bracket</td>
+<td>Pod Cup: knockout bracket inside a pod, next match</td>
+</tr>
+<tr>
+<td>43</td>
+<td>43-world-cup-overview</td>
+<td>World Cup: nationwide pod table, next match, road League → Cup → World Cup</td>
+</tr>
+<tr>
+<td>44</td>
+<td>44-rewards</td>
+<td>Rewards tab: level and Naija title, XP/coins/gems, Lagos-day streak, badges</td>
+</tr>
+<tr>
+<td>45</td>
+<td>45-rewards-streak-paused</td>
+<td>Rewards tab with a paused streak (sleepy Captain Jetty, never sad)</td>
+</tr>
+<tr>
+<td>46</td>
+<td>46-build-portfolio</td>
+<td>Build tab: portfolio of submitted assignments</td>
+</tr>
+<tr>
+<td>47</td>
+<td>47-build-empty</td>
+<td>Build tab: empty state</td>
+</tr>
+<tr>
+<td>48</td>
+<td>48-parent-add-child-pods</td>
+<td>Parent, add a child: pod picker with a recommendation and plan note</td>
+</tr>
+</tbody>
+</table>
+<h3 id="whats-new-in-v2">What's new in v2</h3>
+<ul>
+<li><strong>New kid bottom nav:</strong> Home, Learn, Build, Rewards, Me (<code>&lt;div data-kidnav="learn"&gt;</code> in <code>tp.js</code>). It replaces the old nav, which still appears on screens 01, 02, 07, 10, 12 and 17 (<code>data-nav</code>). Those PNGs were left unchanged.</li>
+<li><strong>Pods:</strong> Coding, AI, Design, Robotics and Founder. The palette is <code>PODS</code> in <code>tp.js</code>. Helpers: <code>data-podchip="coding,design"</code> is the switcher chip shown when a child has 2+ pods. <code>data-podicon="ai:40"</code> draws a pod icon.</li>
+<li><strong>New CSS</strong> (appended to <code>tp.css</code>): <code>.podchip</code>, and <code>.seg3</code>, the 3-way Learn tabs (Journey / Missions / Compete).</li>
+<li><strong>Mascot:</strong> called "Captain Jetty" in all user-facing text. The art files keep their <code>pip-*</code> names.</li>
+<li><strong>Art from <code>../design-pack/</code>, referenced in place and not copied:</strong> <code>assets/pip/pip-celebrate.png</code>, <code>pip-surprised.png</code>, <code>pip-sleepy.png</code>; <code>assets/empty/static/empty-no-tournaments.png</code> and <code>empty-no-packs.png</code>; <code>fx/static/fx10-streak-flame-idle.png</code>. Merge the pack into <code>design/assets</code> before handoff, then update the <code>../../design-pack/</code> paths.</li>
+</ul></main></body></html>

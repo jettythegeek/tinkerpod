@@ -1,0 +1,63 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:206px;background:radial-gradient(100% 120% at 80% 0%,#00BFAE 0%,#005E56 72%);border-radius:0 0 32px 32px"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0;color:#fff">
+   <div class="flex items-center gap-3">
+    <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center"><i data-lucide="chevron-left"></i></div>
+    <div class="flex-1"><div style="font-size:21px;font-weight:900;line-height:1.1">Coding Pod Cup</div><div style="font-size:12px;font-weight:700;opacity:.85">Knockout · 16 coders · win or go home</div></div>
+    <span data-emb="cup" data-s="42"></span>
+   </div>
+   <div class="flex mt-4" style="background:rgba(255,255,255,.14);border-radius:99px;padding:4px;font-size:13px">
+    <span style="flex:1;text-align:center;font-weight:800;padding:7px 0;opacity:.85">Last 16 ✓</span>
+    <span style="flex:1;text-align:center;background:#fff;color:#005E56;border-radius:99px;font-weight:900;padding:7px 0">Quarters</span>
+    <span style="flex:1;text-align:center;font-weight:800;padding:7px 0">Semis</span>
+    <span style="flex:1;text-align:center;font-weight:800;padding:7px 0">Final</span>
+   </div>
+  </div>
+  <div style="position:relative;padding:22px 14px 0">
+   <!-- next match -->
+   <div class="card flex items-center gap-3" style="padding:12px 14px;border-radius:22px">
+    <div class="text-center" style="width:64px"><span style="width:42px;height:42px;border-radius:99px;background:#7C3AED;color:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #E9E3F8"><i data-lucide="bus" style="width:22px"></i></span><div style="font-size:11.5px;font-weight:900;margin-top:2px">You</div></div>
+    <div class="flex-1 text-center"><div class="over" style="color:#007A70">Quarter-final · Sat 4 PM</div><div style="font-size:22px;font-weight:900;line-height:1.1;margin-top:2px">VS</div><div class="flex justify-center gap-1 mt-1" style="font-weight:900;font-size:12px"><span style="background:#E6F9F7;color:#005E56;border-radius:8px;padding:2px 7px">2d</span><span style="background:#E6F9F7;color:#005E56;border-radius:8px;padding:2px 7px">06h</span><span style="background:#E6F9F7;color:#005E56;border-radius:8px;padding:2px 7px">41m</span></div></div>
+    <div class="text-center" style="width:64px"><span style="width:42px;height:42px;border-radius:99px;background:#C026D3;color:#fff;display:inline-flex;align-items:center;justify-content:center"><i data-lucide="star" style="width:22px"></i></span><div style="font-size:11.5px;font-weight:900;margin-top:2px;white-space:nowrap">Zobo Comet</div></div>
+   </div>
+   <div class="flex justify-between items-baseline mt-4"><span class="h3">Bracket</span><span class="cap">Final · Sat, Dec 5 · live</span></div>
+   <div class="card mt-2" style="padding:12px 10px;border-radius:22px">
+    <div class="flex" style="font-size:10px;font-weight:900;color:#94A3B8;letter-spacing:.06em"><span style="width:136px">QUARTER-FINAL</span><span style="width:116px">SEMI-FINAL</span><span style="flex:1;text-align:center">FINAL</span></div>
+    <div style="position:relative;height:262px;margin-top:6px" id="br"></div>
+   </div>
+   <div class="flex items-center gap-2.5 mt-3" style="background:#EAF7E2;border-radius:16px;padding:9px 12px;font-size:12.5px;font-weight:800;color:#1E293B">
+    <span data-ic="check" data-s="22"></span><span class="flex-1">Last 16: you beat <b>Kunu Kite</b> 3–1</span><span style="color:#2F7D16;font-weight:900">+60 XP</span>
+   </div>
+   <div class="grid grid-cols-3 gap-2 mt-3" id="rules"></div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const slot=(a,b,y,x,w,hl,win)=>`<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;border-radius:11px;background:${hl?'#F3EEFF':'#F8FAFC'};box-shadow:inset 0 0 0 1.5px ${hl?'#7C3AED':'#E2E8F0'};font-size:11.5px;font-weight:800;overflow:hidden">
+<div style="height:24px;display:flex;align-items:center;justify-content:space-between;padding:0 7px;border-bottom:1px solid #E2E8F0;${hl&&win!==2?'color:#6D28D9':''}${win===1?';background:#EAF7E2':''}"><span style="white-space:nowrap">${a[0]}</span><b>${a[1]||''}</b></div><div style="height:24px;display:flex;align-items:center;justify-content:space-between;padding:0 7px;${win===2?'background:#EAF7E2;':''}color:${hl?'#6D28D9':win?'#0F172A':'#94A3B8'}"><span style="white-space:nowrap">${b[0]}</span><b>${b[1]||''}</b></div></div>`;
+let h='';
+const QF=[[['Suya Spark','2'],['Eko Eagle','1'],1],[['Agege Bolt','0'],['Kola Knight','2'],2],[['Danfo Dash (you)'],['Zobo Comet'],0,1],[['Jollof Ninja'],['Okada Racer'],0]];
+QF.forEach((m,i)=>h+=slot(m[0],m[1],i*68,0,124,m[3],m[2]));
+h+=slot(['Suya Spark'],['Kola Knight'],34,136,104,0,0);
+h+=slot(['Winner QF3'],['Winner QF4'],170,136,104,0,0);
+h+=`<div style="position:absolute;left:250px;top:44px;width:86px;text-align:center"><span data-ic="trophy" data-s="44"></span><div style="font-size:11px;font-weight:900;margin-top:2px">Cup final</div></div>`;
+h+=slot(['SF1 winner'],['SF2 winner'],112,252,84,0,0);
+h+=`<svg style="position:absolute;inset:0;pointer-events:none" width="340" height="262"><g fill="none" stroke="#CBD5E1" stroke-width="1.5">
+<path d="M124 24 h6 v68 h-6 M130 58 h6"/><path d="M124 160 h6 v68 h-6 M130 194 h6"/><path d="M240 58 h6 v136 h-6 M246 136 h6"/></g>
+<path d="M124 160 h6 v34 h6" fill="none" stroke="#7C3AED" stroke-width="2"/></svg>`;
+document.getElementById('br').innerHTML=h;
+document.getElementById('rules').innerHTML=[['users-round','Coding Pod only'],['swords','1 match a round'],['zap','Tie = speed round']].map(([i,t])=>`<div class="card text-center" style="padding:9px 6px;border-radius:16px"><i data-lucide="${i}" style="width:20px;color:#007A70;margin:0 auto"></i><div style="font-size:11.5px;font-weight:900;margin-top:3px">${t}</div></div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

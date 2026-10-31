@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="f11-root" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Loading">
+<title>Loading</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&amp;display=swap');
+#f11-root text{font-family:Nunito,'Arial Rounded MT Bold',system-ui,sans-serif;font-weight:900}
+#f11-root .f11-a{transform-box:fill-box;transform-origin:50% 50%}
+@keyframes f11-k0{0.000%{transform:rotate(0deg);animation-timing-function:linear}100.000%{transform:rotate(360deg)}}#f11-arc{animation:f11-k0 1.2s linear 0s infinite both}
+@keyframes f11-k1{0.000%{stroke-dasharray:16 84;transform:rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}50.000%{stroke-dasharray:52 48;transform:rotate(80deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{stroke-dasharray:16 84;transform:rotate(360deg)}}#f11-arc2{animation:f11-k1 1.2s linear 0s infinite both}
+@keyframes f11-k2{0.000%{transform:rotate(0deg);animation-timing-function:linear}100.000%{transform:rotate(-90deg)}}#f11-gear{animation:f11-k2 1.2s linear 0s infinite both}
+@keyframes f11-k3{0.000%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}16.667%{transform:scale(1.15);animation-timing-function:cubic-bezier(.45,0,.55,1)}50.000%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:scale(.6)}}#f11-dot0{animation:f11-k3 1.2s linear 0s infinite both}
+@keyframes f11-k4{0.000%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}33.333%{transform:scale(1.15);animation-timing-function:cubic-bezier(.45,0,.55,1)}66.667%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:scale(.6)}}#f11-dot1{animation:f11-k4 1.2s linear 0s infinite both}
+@keyframes f11-k5{0.000%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}50.000%{transform:scale(1.15);animation-timing-function:cubic-bezier(.45,0,.55,1)}83.333%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,0,.55,1)}100.000%{transform:scale(.6)}}#f11-dot2{animation:f11-k5 1.2s linear 0s infinite both}
+@media (prefers-reduced-motion:reduce){#f11-root *{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+</style>
+<g transform="translate(300 270)">
+ <circle r="100" fill="none" stroke="#E6F9F7" stroke-width="22"/>
+ <g id="f11-arc" class="f11-a" style="transform-origin:50% 50%"><g transform="rotate(-90)">
+  <circle id="f11-arc2" r="100" fill="none" stroke="#00BFAE" stroke-width="22" stroke-linecap="round" pathLength="100" stroke-dasharray="16 84" style="transform-box:view-box;transform-origin:0 0"/>
+ </g></g>
+ <circle r="58" fill="#fff"/><circle r="58" fill="none" stroke="#E2E8F0" stroke-width="3"/>
+ <g id="f11-gear" class="f11-a"><path d="M22.0,0.0 L29.4,5.9 L27.7,11.5 L18.3,12.2 L15.6,15.6 L16.7,24.9 L11.5,27.7 L4.3,21.6 L0.0,22.0 L-5.9,29.4 L-11.5,27.7 L-12.2,18.3 L-15.6,15.6 L-24.9,16.7 L-27.7,11.5 L-21.6,4.3 L-22.0,0.0 L-29.4,-5.9 L-27.7,-11.5 L-18.3,-12.2 L-15.6,-15.6 L-16.7,-24.9 L-11.5,-27.7 L-4.3,-21.6 L-0.0,-22.0 L5.9,-29.4 L11.5,-27.7 L12.2,-18.3 L15.6,-15.6 L24.9,-16.7 L27.7,-11.5 L21.6,-4.3Z M10 0 A10 10 0 1 0 -10 0 A10 10 0 1 0 10 0Z" fill="#FFB700" fill-rule="evenodd"/></g>
+</g>
+<g transform="translate(300 440)"><g transform="translate(-30 0)"><g id="f11-dot0" class="f11-a"><circle r="9" fill="#00BFAE"/></g></g><g transform="translate(0 0)"><g id="f11-dot1" class="f11-a"><circle r="9" fill="#7C3AED"/></g></g><g transform="translate(30 0)"><g id="f11-dot2" class="f11-a"><circle r="9" fill="#FFB700"/></g></g></g>
+</svg>

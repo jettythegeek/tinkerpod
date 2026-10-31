@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:reviews"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Learning / Project reviews</div><div class="ptitle">Project reviews queue</div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="settings-2"></i>Rubrics</span><span class="wbtn"><i data-lucide="shuffle"></i>Auto-assign 6 unassigned</span></div>
+   </div>
+   <div class="grid grid-cols-4 gap-4 mt-4">
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Waiting</div><div class="v" style="font-size:24px">18</div><div class="d" style="color:#475569">6 unassigned</div></div>
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Over 48h SLA</div><div class="v" style="font-size:24px;color:#D92D20">3</div><div class="d" style="color:#B42318">Oldest 3d 4h</div></div>
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Reviewed this week</div><div class="v" style="font-size:24px">74</div><div class="d" style="color:#2F7D16">+18 vs last week</div></div>
+    <div class="panel kpi" style="padding:12px 16px"><div class="l">Median review time</div><div class="v" style="font-size:24px">11h</div><div class="d" style="color:#475569">target under 24h</div></div>
+   </div>
+   <div class="panel mt-4">
+    <div class="flex items-center gap-2" style="padding:12px 14px;border-bottom:1px solid #EEF1F5">
+     <div class="tabs" style="border:0"><span class="on">Waiting 18</span><span>In review 7</span><span>Changes requested 5</span><span>Approved</span></div><div style="flex:1"></div>
+     <span class="wbtn sec sm"><i data-lucide="filter"></i>Type</span><span class="wbtn sec sm"><i data-lucide="filter"></i>Mentor</span><span class="wbtn sec sm"><i data-lucide="arrow-up-down"></i>Oldest first</span>
+    </div>
+    <table class="tbl" id="t"></table><style>#t td{padding-top:7px;padding-bottom:7px}</style>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+const R=[['#00BFAE','gamepad-2','Okada Rush · level 4','Project · JS 2D','av4','Tobi Adewale','Senior','Abuja Wuse','av4','Mr. Musa D.','3d 4h','r'],
+['#FF6B6B','key-round','KeyHub prototype','Mission · The Lost Key','av6','Zainab Musa','Senior','Online','','Unassigned','2d 9h','r'],
+['#7C3AED','repeat','Loops Valley final','World 4 · project','av2','Amara Okafor','Junior','Lekki A','av5','Mr. Femi A.','2d 1h','r'],
+['#FFB700','bus','Market maths animation','Adventure · Ngodo','av5','Emeka Nnaji','Junior','—','','Unassigned','1d 6h','y'],
+['#2563EB','terminal','Naira converter','Python Basics · L9','av3','Obi Okafor','Senior','Online','av6','Mrs. Ify K.','20h','y'],
+['#63C132','trees','Animated forest story','World 3 · project','av-girl','Ada Nwosu','Junior','Lekki A','av5','Mr. Femi A.','9h','g'],
+['#101B4D','globe','My first website','HTML track · L4','av1','Chidi Obi','Junior','Ikeja Juniors','','Unassigned','5h','g'],
+['#00BFAE','gamepad-2','Jollof catcher game','Project · Scratch','av4','David Eze','Junior','Ikeja Juniors','av-girl','Ms. Tolu B.','2h','g']];
+let h='<tr><th style="width:30px"><input type="checkbox"></th><th>Submission</th><th>Child</th><th>Pod</th><th>Assigned mentor</th><th>Waiting</th><th></th></tr>';
+R.forEach(r=>h+=`<tr><td><input type="checkbox"></td><td><div class="flex items-center gap-3"><div style="width:34px;height:34px;border-radius:10px;background:${r[0]};color:#fff;display:flex;align-items:center;justify-content:center"><i data-lucide="${r[1]}" style="width:17px"></i></div><div><div>${r[2]}</div><div class="sub">${r[3]}</div></div></div></td>
+<td><div class="flex items-center gap-2"><img src="../assets/${r[4]}.png" class="mini-av" style="width:26px;height:26px">${r[5]}<span class="st nodot ${r[6]=='Junior'?'p':'b'}">${r[6]}</span></div></td><td class="sub">${r[7]}</td>
+<td>${r[8]?`<div class="flex items-center gap-2"><img src="../assets/${r[8]}.png" class="mini-av" style="width:24px;height:24px">${r[9]}</div>`:`<span class="wbtn sec sm" style="color:#B42318"><i data-lucide="user-plus"></i>Assign</span>`}</td>
+<td><span class="st ${r[11]}">${r[10]}</span></td><td><div class="flex justify-end gap-2"><span class="wbtn sec sm"><i data-lucide="play"></i>Open</span></div></td></tr>`);
+document.getElementById('t').innerHTML=h;
+</script>
+<script>tpInit()</script></body></html>

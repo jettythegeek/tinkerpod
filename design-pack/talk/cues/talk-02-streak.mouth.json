@@ -1,0 +1,363 @@
+{
+ "line": "talk-02-streak",
+ "text": "Hello! Let's continue your streak from yesterday!",
+ "voice": "en-NG-AbeoNeural",
+ "voice_role": "main",
+ "audio": [
+  "talk/audio/talk-02-streak.wav",
+  "talk/audio/talk-02-streak.mp3",
+  "talk/audio/talk-02-streak.ogg"
+ ],
+ "audio_duration": 3.399,
+ "loudness": {
+  "lufs": -16.0,
+  "dbtp": -1.68
+ },
+ "timeline_duration": 5.353,
+ "t0": "audio start (t=0 s is the first sample of the audio file)",
+ "shapes": {
+  "rest": {
+   "svg_group": "m-rest",
+   "desc": "closed, soft smile (silence)"
+  },
+  "mbp": {
+   "svg_group": "m-mbp",
+   "desc": "lips pressed (M B P)"
+  },
+  "small": {
+   "svg_group": "m-small",
+   "desc": "small open (most consonants, schwa, I)"
+  },
+  "wide": {
+   "svg_group": "m-wide",
+   "desc": "wide open (A, AH, AY)"
+  },
+  "round": {
+   "svg_group": "m-round",
+   "desc": "round (O, U, W)"
+  },
+  "e": {
+   "svg_group": "m-e",
+   "desc": "wide smile (E, EE, AY-end)"
+  },
+  "fv": {
+   "svg_group": "m-fv",
+   "desc": "top teeth on lip (F V)"
+  },
+  "grin": {
+   "svg_group": "mouth-grin",
+   "desc": "big grin (end gesture)"
+  }
+ },
+ "words": [
+  {
+   "word": "Hello",
+   "start": 0.189,
+   "end": 0.522
+  },
+  {
+   "word": "Let's",
+   "start": 1.435,
+   "end": 1.709
+  },
+  {
+   "word": "continue",
+   "start": 1.769,
+   "end": 2.161
+  },
+  {
+   "word": "your",
+   "start": 2.221,
+   "end": 2.304
+  },
+  {
+   "word": "streak",
+   "start": 2.34,
+   "end": 2.59
+  },
+  {
+   "word": "from",
+   "start": 2.602,
+   "end": 2.816
+  },
+  {
+   "word": "yesterday",
+   "start": 2.828,
+   "end": 3.233
+  }
+ ],
+ "mouth": [
+  {
+   "t": 0.0,
+   "shape": "rest"
+  },
+  {
+   "t": 0.149,
+   "shape": "small"
+  },
+  {
+   "t": 0.201,
+   "shape": "e"
+  },
+  {
+   "t": 0.296,
+   "shape": "small"
+  },
+  {
+   "t": 0.349,
+   "shape": "round"
+  },
+  {
+   "t": 0.482,
+   "shape": "rest"
+  },
+  {
+   "t": 1.395,
+   "shape": "small"
+  },
+  {
+   "t": 1.452,
+   "shape": "e"
+  },
+  {
+   "t": 1.555,
+   "shape": "small"
+  },
+  {
+   "t": 2.053,
+   "shape": "round"
+  },
+  {
+   "t": 2.242,
+   "shape": "small"
+  },
+  {
+   "t": 2.429,
+   "shape": "e"
+  },
+  {
+   "t": 2.507,
+   "shape": "small"
+  },
+  {
+   "t": 2.562,
+   "shape": "fv"
+  },
+  {
+   "t": 2.615,
+   "shape": "small"
+  },
+  {
+   "t": 2.723,
+   "shape": "mbp"
+  },
+  {
+   "t": 2.788,
+   "shape": "e"
+  },
+  {
+   "t": 2.902,
+   "shape": "small"
+  },
+  {
+   "t": 3.097,
+   "shape": "e"
+  },
+  {
+   "t": 3.353,
+   "shape": "grin"
+  }
+ ],
+ "speech_end": 3.233,
+ "gesture": {
+  "name": "cheer",
+  "label": "smile + fist pump",
+  "start": 3.353,
+  "duration": 1.9,
+  "mood_reference": "pip-cheer"
+ },
+ "blinks": [
+  0.9,
+  2.271
+ ],
+ "envelope": {
+  "fps": 50,
+  "values": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.15,
+   0.31,
+   0.62,
+   0.93,
+   0.98,
+   0.95,
+   0.87,
+   0.94,
+   0.98,
+   0.99,
+   1.0,
+   1.0,
+   0.99,
+   0.94,
+   0.85,
+   0.73,
+   0.55,
+   0.31,
+   0.06,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.28,
+   0.7,
+   0.9,
+   0.96,
+   0.99,
+   0.99,
+   0.99,
+   0.97,
+   0.62,
+   0.2,
+   0.66,
+   0.83,
+   0.52,
+   0.16,
+   0.0,
+   0.37,
+   0.7,
+   0.96,
+   0.98,
+   0.98,
+   0.97,
+   0.85,
+   0.45,
+   0.49,
+   0.85,
+   0.85,
+   0.74,
+   0.85,
+   0.98,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   0.99,
+   1.0,
+   1.0,
+   0.97,
+   0.87,
+   0.78,
+   0.86,
+   0.9,
+   0.83,
+   0.54,
+   0.24,
+   0.51,
+   0.7,
+   0.79,
+   0.99,
+   1.0,
+   0.86,
+   0.34,
+   0.12,
+   0.37,
+   0.53,
+   0.56,
+   0.59,
+   0.56,
+   0.82,
+   0.97,
+   0.92,
+   0.87,
+   0.88,
+   0.88,
+   0.87,
+   0.88,
+   0.89,
+   0.95,
+   0.99,
+   0.96,
+   0.83,
+   0.83,
+   0.83,
+   0.57,
+   0.27,
+   0.56,
+   0.7,
+   0.83,
+   0.75,
+   0.62,
+   0.7,
+   0.82,
+   0.78,
+   0.64,
+   0.49,
+   0.37,
+   0.29,
+   0.19,
+   0.04,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "source": {
+  "tts": "edge-tts (Microsoft Edge neural voice)",
+  "boundary_offset_applied_s": 0.09,
+  "lip_sync": "phoneme lexicon + word boundaries + loudness gating, 40 ms visual lead"
+ }
+}

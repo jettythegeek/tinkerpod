@@ -1,0 +1,46 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:overview"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Dashboard</div><div class="ptitle">Good morning 👋</div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="calendar"></i>Last 30 days</span><span class="wbtn sec"><i data-lucide="download"></i>Export</span><span class="wbtn"><i data-lucide="plus"></i>New content pack</span></div>
+   </div>
+   <div class="grid grid-cols-4 gap-4 mt-4" id="kpis"></div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1.65fr 1fr">
+    <div class="panel"><div class="ph"><b>Children & subscriptions</b><div class="flex gap-3" style="font-size:12px;font-weight:800;color:#64748B"><span class="flex items-center gap-1.5"><i style="width:10px;height:10px;border-radius:3px;background:#00BFAE"></i>Active subs</span><span class="flex items-center gap-1.5"><i style="width:10px;height:10px;border-radius:3px;background:#C7D2FE"></i>Free / trial</span></div></div>
+     <div style="padding:14px 18px 10px" id="chart"></div></div>
+    <div class="panel"><div class="ph"><b>Tournaments now</b><span class="st g">3 live</span></div>
+     <div style="padding:0 18px 4px" id="tours"></div></div>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="panel"><div class="ph"><b>Project reviews</b><span class="st r">18 waiting</span></div><div style="padding:4px 18px 10px" id="rev"></div></div>
+    <div class="panel"><div class="ph"><b>Recent payments</b><span style="font-size:12px;font-weight:800;color:#64748B">via Paystack</span></div><div style="padding:4px 18px 10px" id="pay"></div></div>
+    <div class="panel"><div class="ph"><b>Pods health</b><span style="font-size:12px;font-weight:800;color:#64748B">42 pods</span></div><div style="padding:8px 18px 12px" id="pods"></div></div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+const K=[['Children','baby','#E6F9F7','#007A70','1,248','+86 this month','#2F7D16'],['Active subscriptions','badge-check','#F3EEFF','#7C3AED','864','69% of children','#475569'],['MRR (₦)','wallet','#FFF6DB','#B45309','₦X.XM','placeholder · +12%','#8A5A00'],['Pods','users-round','#EAF1FF','#2563EB','42','11 mentors · 3 cities','#475569']];
+document.getElementById('kpis').innerHTML=K.map(([l,i,b,c,v,d,dc])=>`<div class="panel kpi"><div class="l"><span class="kic" style="background:${b};color:${c}"><i data-lucide="${i}"></i></span>${l}</div><div class="v">${v}</div><div class="d" style="color:${dc}">${d}</div></div>`).join('');
+// chart
+const a=[420,450,470,520,560,600,640,690,730,780,820,864],f=[300,310,330,320,340,350,360,355,370,375,380,384];const m=['Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'];
+let W=780,H=172,mx=1500,bw=34;let s=`<svg width="${W}" height="${H+26}" viewBox="0 -6 ${W} ${H+32}">`;
+[0,500,1000,1500].forEach(v=>{const y=H-v/mx*H;s+=`<line x1="40" x2="${W}" y1="${y}" y2="${y}" stroke="#EEF1F5"/><text x="0" y="${y+4}" font-size="11" font-weight="700" fill="#94A3B8" font-family="Nunito">${v}</text>`});
+a.forEach((v,i)=>{const x=56+i*60,h1=v/mx*H,h2=f[i]/mx*H;s+=`<rect x="${x}" y="${H-h1-h2}" width="${bw}" height="${h2}" rx="6" fill="#C7D2FE"/><rect x="${x}" y="${H-h1}" width="${bw}" height="${h1}" rx="6" fill="${i==11?'#00BFAE':'#7FDCD3'}"/><text x="${x+bw/2}" y="${H+18}" text-anchor="middle" font-size="11.5" font-weight="800" fill="#64748B" font-family="Nunito">${m[i]}</text>`});
+s+=`<g transform="translate(${56+11*60-30} ${H-(864+384)/mx*H-34})"><rect width="94" height="26" rx="8" fill="#101B4D"/><text x="47" y="17" text-anchor="middle" fill="#fff" font-size="12" font-weight="800" font-family="Nunito">864 · 1,248</text></g></svg>`;
+document.getElementById('chart').innerHTML=s;
+document.getElementById('tours').innerHTML=[['league','AfriTech League · Junior','Week 6 of 19 · 12 cohorts','g','Live'],['league','AfriTech League · Senior','Week 6 of 19 · 8 cohorts','g','Live'],['ucl','Champions League','Group MD2 · both divisions','g','Live'],['cup','TinkerPod Cup','Registration · 41/64','y','Filling'],['wc','Code World Cup','Planning · 2027','s','Draft']].map(([e,n,d,c,st])=>`<div class="flex items-center gap-3" style="padding:6px 0;border-bottom:1px solid #F1F4F8"><span data-emb="${e}" data-s="30"></span><div class="flex-1"><div style="font-weight:800">${n}</div><div class="sub" style="font-size:12px;color:#64748B;font-weight:700">${d}</div></div><span class="st ${c}">${st}</span></div>`).join('');
+document.getElementById('rev').innerHTML=[['av1','Tobi A.','Okada Rush · 2D game','2h'],['av6','Zainab M.','KeyHub · Lost Key mission','3h'],['av4','Kemi O.','Loops Valley · final project','5h']].map(([a,n,p,t])=>`<div class="flex items-center gap-3" style="padding:7px 0"><img src="../assets/${a}.png" class="mini-av" style="width:32px;height:32px"><div class="flex-1" style="min-width:0"><div style="font-weight:800">${n}</div><div style="font-size:12px;color:#64748B;font-weight:700">${p}</div></div><span style="font-size:12px;font-weight:800;color:#94A3B8">${t}</span></div>`).join('');
+document.getElementById('pay').innerHTML=[['Mrs. Okafor','Family · monthly','g','Paid'],['Mr. Bello','Single · yearly','g','Paid'],['Mrs. Eze','Family · monthly','r','Failed']].map(([n,p,c,s])=>`<div class="flex items-center gap-3" style="padding:7px 0"><div style="width:32px;height:32px;border-radius:9px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;color:#475569"><i data-lucide="receipt" style="width:16px"></i></div><div class="flex-1"><div style="font-weight:800">${n}</div><div style="font-size:12px;color:#64748B;font-weight:700">${p}</div></div><div style="text-align:right"><div style="font-weight:900">₦X,XXX</div><span class="st ${c}" style="height:20px;font-size:11px">${s}</span></div></div>`).join('');
+document.getElementById('pods').innerHTML=[['Lekki A · Sat AM',92],['Ikeja Juniors',84],['Abuja Wuse Seniors',71],['Online · Port Harcourt',58]].map(([n,v])=>`<div style="padding:6px 0"><div class="flex justify-between" style="font-weight:800;font-size:13px"><span>${n}</span><span style="color:${v>80?'#2F7D16':v>65?'#8A5A00':'#B42318'}">${v}% attendance</span></div><div class="bar teal mt-1.5" style="height:8px;background:#EEF1F5"><i style="width:${v}%;${v<65?'background:#FF6B6B':''}"></i></div></div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

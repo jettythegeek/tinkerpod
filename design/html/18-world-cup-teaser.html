@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen" style="background:radial-gradient(120% 70% at 50% 25%,#3B82F6 0%,#1D3FB8 45%,#101B4D 100%);color:#fff">
+  <div style="position:absolute;inset:0;background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.18) 0 2px,transparent 3px),radial-gradient(circle at 80% 22%,rgba(255,255,255,.25) 0 2px,transparent 3px),radial-gradient(circle at 65% 8%,rgba(255,255,255,.2) 0 1.5px,transparent 2.5px),radial-gradient(circle at 12% 40%,rgba(255,255,255,.18) 0 1.5px,transparent 2.5px),radial-gradient(circle at 90% 44%,rgba(255,255,255,.2) 0 2px,transparent 3px)"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0">
+   <div class="flex items-center justify-between">
+    <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center"><i data-lucide="chevron-left"></i></div>
+    <span class="st nodot" style="background:rgba(255,255,255,.16);color:#fff">Coming 2027</span>
+   </div>
+   <div style="text-align:center;margin-top:8px">
+    <div class="over" style="color:#FFD25E">The biggest stage</div>
+    <div style="font-size:36px;font-weight:900;line-height:1.02;margin-top:4px">Code World Cup</div>
+    <div style="font-size:14.5px;font-weight:700;opacity:.88;margin-top:6px">Team up for your country. Code against kids across Africa.</div>
+   </div>
+   <div style="position:relative;height:230px;margin-top:6px">
+    <div style="position:absolute;left:50%;top:22px;transform:translateX(-50%);width:200px;height:200px;border-radius:99px;background:radial-gradient(circle at 35% 30%,#93C5FD,#2563EB 60%,#1E40AF);box-shadow:0 0 0 10px rgba(255,255,255,.06),0 0 0 24px rgba(255,255,255,.04)"><svg viewBox="0 0 200 200" width="200" height="200" style="position:absolute;inset:0"><path d="M88 30c18-4 34 4 38 16s-6 16-2 30 22 12 24 30-10 30-22 40-16 26-30 22-6-20-14-34-26-14-26-34 10-30 8-44 6-22 24-26z" fill="#4ADE80" opacity=".55"/><ellipse cx="100" cy="100" rx="40" ry="99" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/><path d="M2 100h196M14 60h172M14 140h172" stroke="rgba(255,255,255,.2)" stroke-width="2"/></svg></div>
+    <img src="../assets/pip/pip-cheer-t.svg" style="position:absolute;left:50%;transform:translateX(-50%);bottom:-6px;height:212px">
+   </div>
+  </div>
+  <div style="position:relative;margin:4px 16px 0;background:rgba(255,255,255,.1);border-radius:22px;padding:12px 14px">
+   <div class="flex justify-between items-center"><span style="font-weight:900;font-size:14px">Nations warming up</span><span style="font-size:12px;font-weight:800;opacity:.75">8 so far</span></div>
+   <div class="flex gap-2 mt-2.5 flex-wrap" id="flags"></div>
+  </div>
+  <div style="position:relative;margin:10px 16px 0;background:#fff;color:#0F172A;border-radius:22px;padding:12px 14px">
+   <div style="font-weight:900;font-size:14px">Your road to the squad</div>
+   <div class="flex items-center mt-2.5" style="gap:6px" id="road"></div>
+  </div>
+  <div style="position:absolute;left:16px;right:16px;bottom:30px">
+   <div class="btn yellow" style="height:54px"><i data-lucide="bell-ring" style="width:18px"></i>Notify me when it opens</div>
+  </div>
+  <div class="homebar" style="background:#fff"></div>
+ </div>
+</div>
+</div>
+<script>
+const F=[['Nigeria',['#008751','#fff','#008751'],1],['Ghana',['#CE1126','#FCD116','#006B3F']],['Kenya',['#000','#BB0000','#006600']],['South Africa',['#007A4D','#FFB612','#DE3831']],['Egypt',['#CE1126','#fff','#000'],0,1],['Rwanda',['#00A1DE','#FAD201','#20603D'],0,1],['Senegal',['#00853F','#FDEF42','#E31B23']],['Cameroon',['#007A5E','#CE1126','#FCD116']]];
+document.getElementById('flags').innerHTML=F.map(([n,c,me,h])=>`<span class="flex items-center gap-1.5" style="height:28px;padding:0 9px 0 5px;border-radius:99px;background:${me?'#fff':'rgba(255,255,255,.12)'};color:${me?'#0F172A':'#fff'};font-size:12px;font-weight:800"><span style="width:22px;height:15px;border-radius:3px;overflow:hidden;display:flex;flex-direction:${h?'column':'row'}">${c.map(x=>`<i style="flex:1;background:${x}"></i>`).join('')}</span>${n}${me?' · you':''}</span>`).join('');
+const S=[['AfriTech League','league','Top 4',1],['Champions League','ucl','Reach semis',0],['Nigeria squad','wc','5 coders',0]];
+document.getElementById('road').innerHTML=S.map(([n,e,s,d],i)=>`${i?'<i data-lucide="chevron-right" style="width:16px;color:#94A3B8;flex:none"></i>':''}<div style="flex:1;text-align:center"><span data-emb="${e}" data-s="34"></span><div style="font-size:11.5px;font-weight:900;line-height:1.15;margin-top:3px">${n}</div><div style="font-size:10.5px;font-weight:800;color:${d?'#2F7D16':'#64748B'}">${d?'In progress':s}</div></div>`).join('');
+</script>
+<script>tpInit()</script></body></html>

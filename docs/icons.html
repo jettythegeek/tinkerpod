@@ -1,0 +1,530 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ICONS.md: icon map · TinkerPod design</title>
+<link rel="icon" href="../design-pack/assets/app-icon/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../site/site.css">
+</head><body class="doc"><header class="top slim"><a href="../index.html#docs" class="back">← TinkerPod design resources</a><a class="dl light" href="../design-pack/ICONS.md" download><span>↓ Download ICONS.md</span></a></header><main class="md"><h1 id="iconsmd-icon-map-lucide-not-a-custom-set">ICONS.md — icon map (Lucide, not a custom set)</h1>
+<p>TinkerPod uses <strong>Lucide</strong> in the kid and parent apps (<code>lucide-react-native</code>) and <strong>Heroicons</strong> in the web admin (screens 21–32, already specified in those mockups). There is no custom icon set: the table maps every icon that appears in mockups 00–20 to its Lucide name. Brand art (Captain Jetty, badges, trophies, empty states, FX) lives in this pack as SVG and is <em>not</em> an icon.</p>
+<p>Defaults: <code>size={24}</code> (20 in dense rows, 28 in the bottom nav), <code>strokeWidth={2.25}</code>, <code>color</code> from tokens: ink <code>#0F172A</code>, slate <code>#64748B</code> (inactive), button teal <code>#007A70</code>, kid purple <code>#7C3AED</code> (active nav). Never use <code>#00BFAE</code> teal for an icon on white (contrast); it is fill-only.</p>
+<pre><code class="language-tsx">import { House, Map, Target, Trophy, Smile } from &quot;lucide-react-native&quot;;
+&lt;House size={28} strokeWidth={2.25} color={active ? &quot;#7C3AED&quot; : &quot;#64748B&quot;} /&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Semantic name</th>
+<th>Lucide (kebab)</th>
+<th>Component</th>
+<th>Mockups</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>info / note</td>
+<td><code>info</code></td>
+<td><code>Info</code></td>
+<td>00</td>
+</tr>
+<tr>
+<td>play / continue / run</td>
+<td><code>play</code></td>
+<td><code>Play</code></td>
+<td>00, 01, 14</td>
+</tr>
+<tr>
+<td>time estimate</td>
+<td><code>clock</code></td>
+<td><code>Clock</code></td>
+<td>00, 01, 03</td>
+</tr>
+<tr>
+<td>puzzle mission</td>
+<td><code>puzzle</code></td>
+<td><code>Puzzle</code></td>
+<td>00, 01</td>
+</tr>
+<tr>
+<td>loops topic</td>
+<td><code>repeat</code></td>
+<td><code>Repeat</code></td>
+<td>00, 02, 03, 07, 13</td>
+</tr>
+<tr>
+<td>debugging / bug hunt</td>
+<td><code>bug</code></td>
+<td><code>Bug</code></td>
+<td>00, 07, 13</td>
+</tr>
+<tr>
+<td>nav: Home</td>
+<td><code>house</code></td>
+<td><code>House</code></td>
+<td>00, 01, 02, 07, 10, 12, 16, 17</td>
+</tr>
+<tr>
+<td>nav: Journey</td>
+<td><code>map</code></td>
+<td><code>Map</code></td>
+<td>00, 01, 02, 07, 10, 12, 16, 17</td>
+</tr>
+<tr>
+<td>nav: Missions</td>
+<td><code>target</code></td>
+<td><code>Target</code></td>
+<td>00, 01, 02, 07, 10, 12, 16, 17</td>
+</tr>
+<tr>
+<td>nav: League / trophy</td>
+<td><code>trophy</code></td>
+<td><code>Trophy</code></td>
+<td>00, 01, 02, 07, 10, 12, 16, 17</td>
+</tr>
+<tr>
+<td>nav: Me (profile)</td>
+<td><code>smile</code></td>
+<td><code>Smile</code></td>
+<td>00, 01, 02, 07, 10, 12, 16, 17</td>
+</tr>
+<tr>
+<td>notifications / reminder</td>
+<td><code>bell</code></td>
+<td><code>Bell</code></td>
+<td>01, 08, 09</td>
+</tr>
+<tr>
+<td>lesson done mission</td>
+<td><code>book-open-check</code></td>
+<td><code>BookOpenCheck</code></td>
+<td>01</td>
+</tr>
+<tr>
+<td>timed mission / match clock</td>
+<td><code>timer</code></td>
+<td><code>Timer</code></td>
+<td>01, 13</td>
+</tr>
+<tr>
+<td>coding / build step</td>
+<td><code>code-xml</code></td>
+<td><code>CodeXml</code></td>
+<td>02, 20</td>
+</tr>
+<tr>
+<td>world: Welcome Island</td>
+<td><code>tree-palm</code></td>
+<td><code>TreePalm</code></td>
+<td>02</td>
+</tr>
+<tr>
+<td>world: Logic Land</td>
+<td><code>git-branch</code></td>
+<td><code>GitBranch</code></td>
+<td>02</td>
+</tr>
+<tr>
+<td>world: Functions Forest</td>
+<td><code>trees</code></td>
+<td><code>Trees</code></td>
+<td>02</td>
+</tr>
+<tr>
+<td>back</td>
+<td><code>chevron-left</code></td>
+<td><code>ChevronLeft</code></td>
+<td>03, 05, 06, 08, 13, 16, 17, 18, 19, 20</td>
+</tr>
+<tr>
+<td>watch video intro</td>
+<td><code>circle-play</code></td>
+<td><code>CirclePlay</code></td>
+<td>03</td>
+</tr>
+<tr>
+<td>difficulty level</td>
+<td><code>signal</code></td>
+<td><code>Signal</code></td>
+<td>03</td>
+</tr>
+<tr>
+<td>steps count / First Steps badge</td>
+<td><code>footprints</code></td>
+<td><code>Footprints</code></td>
+<td>03, 07</td>
+</tr>
+<tr>
+<td>primary CTA arrow</td>
+<td><code>arrow-right</code></td>
+<td><code>ArrowRight</code></td>
+<td>03</td>
+</tr>
+<tr>
+<td>close / exit</td>
+<td><code>x</code></td>
+<td><code>X</code></td>
+<td>04, 09, 14</td>
+</tr>
+<tr>
+<td>lives / hearts</td>
+<td><code>heart</code></td>
+<td><code>Heart</code></td>
+<td>04</td>
+</tr>
+<tr>
+<td>hint</td>
+<td><code>lightbulb</code></td>
+<td><code>Lightbulb</code></td>
+<td>04, 14</td>
+</tr>
+<tr>
+<td>adventure pack</td>
+<td><code>tent-tree</code></td>
+<td><code>TentTree</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>pause download</td>
+<td><code>pause</code></td>
+<td><code>Pause</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>mission / startup pack</td>
+<td><code>rocket</code></td>
+<td><code>Rocket</code></td>
+<td>05, 20</td>
+</tr>
+<tr>
+<td>parent-locked (ask parent)</td>
+<td><code>lock-keyhole</code></td>
+<td><code>LockKeyhole</code></td>
+<td>05, 09</td>
+</tr>
+<tr>
+<td>pack art: Wakanda</td>
+<td><code>shield</code></td>
+<td><code>Shield</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>done / installed / selected</td>
+<td><code>check</code></td>
+<td><code>Check</code></td>
+<td>05, 07, 08, 20</td>
+</tr>
+<tr>
+<td>pack: Guangzhou; bank payment</td>
+<td><code>landmark</code></td>
+<td><code>Landmark</code></td>
+<td>05, 08</td>
+</tr>
+<tr>
+<td>download / offline ready</td>
+<td><code>download</code></td>
+<td><code>Download</code></td>
+<td>05, 19</td>
+</tr>
+<tr>
+<td>mission: The Lost Key</td>
+<td><code>key-round</code></td>
+<td><code>KeyRound</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>mission: Golden Gate</td>
+<td><code>door-open</code></td>
+<td><code>DoorOpen</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>players / seats</td>
+<td><code>users-round</code></td>
+<td><code>UsersRound</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>storage used</td>
+<td><code>hard-drive</code></td>
+<td><code>HardDrive</code></td>
+<td>05</td>
+</tr>
+<tr>
+<td>Champions League</td>
+<td><code>swords</code></td>
+<td><code>Swords</code></td>
+<td>06</td>
+</tr>
+<tr>
+<td>settings</td>
+<td><code>settings</code></td>
+<td><code>Settings</code></td>
+<td>07, 09</td>
+</tr>
+<tr>
+<td>avatar styling</td>
+<td><code>shirt</code></td>
+<td><code>Shirt</code></td>
+<td>07</td>
+</tr>
+<tr>
+<td>equipped title / top rank</td>
+<td><code>crown</code></td>
+<td><code>Crown</code></td>
+<td>07</td>
+</tr>
+<tr>
+<td>locked item</td>
+<td><code>lock</code></td>
+<td><code>Lock</code></td>
+<td>07</td>
+</tr>
+<tr>
+<td>Quiz Champ badge</td>
+<td><code>brain</code></td>
+<td><code>Brain</code></td>
+<td>07</td>
+</tr>
+<tr>
+<td>safety / parent check / trust</td>
+<td><code>shield-check</code></td>
+<td><code>ShieldCheck</code></td>
+<td>08, 09, 12</td>
+</tr>
+<tr>
+<td>unlock (trial timeline)</td>
+<td><code>unlock</code></td>
+<td><code>Unlock</code></td>
+<td>08</td>
+</tr>
+<tr>
+<td>card payment</td>
+<td><code>credit-card</code></td>
+<td><code>CreditCard</code></td>
+<td>08</td>
+</tr>
+<tr>
+<td>USSD payment</td>
+<td><code>smartphone</code></td>
+<td><code>Smartphone</code></td>
+<td>08</td>
+</tr>
+<tr>
+<td>parent dashboard / overview tab</td>
+<td><code>layout-dashboard</code></td>
+<td><code>LayoutDashboard</code></td>
+<td>09</td>
+</tr>
+<tr>
+<td>add child / add</td>
+<td><code>plus</code></td>
+<td><code>Plus</code></td>
+<td>09</td>
+</tr>
+<tr>
+<td>dropdown / date range</td>
+<td><code>chevron-down</code></td>
+<td><code>ChevronDown</code></td>
+<td>09</td>
+</tr>
+<tr>
+<td>screen time / limits</td>
+<td><code>hourglass</code></td>
+<td><code>Hourglass</code></td>
+<td>09</td>
+</tr>
+<tr>
+<td>reports</td>
+<td><code>chart-no-axes-column</code></td>
+<td><code>ChartNoAxesColumn</code></td>
+<td>09</td>
+</tr>
+<tr>
+<td>billing</td>
+<td><code>wallet</code></td>
+<td><code>Wallet</code></td>
+<td>09</td>
+</tr>
+<tr>
+<td>game builder project</td>
+<td><code>gamepad-2</code></td>
+<td><code>Gamepad2</code></td>
+<td>10</td>
+</tr>
+<tr>
+<td>share / invite</td>
+<td><code>share-2</code></td>
+<td><code>Share2</code></td>
+<td>10, 13</td>
+</tr>
+<tr>
+<td>go to / drill in</td>
+<td><code>chevron-right</code></td>
+<td><code>ChevronRight</code></td>
+<td>12, 18</td>
+</tr>
+<tr>
+<td>sound on</td>
+<td><code>volume-2</code></td>
+<td><code>Volume2</code></td>
+<td>14</td>
+</tr>
+<tr>
+<td>opponent working (spinner)</td>
+<td><code>loader</code></td>
+<td><code>Loader</code></td>
+<td>14</td>
+</tr>
+<tr>
+<td>submit answer</td>
+<td><code>send</code></td>
+<td><code>Send</code></td>
+<td>14</td>
+</tr>
+<tr>
+<td>public visibility</td>
+<td><code>eye</code></td>
+<td><code>Eye</code></td>
+<td>16</td>
+</tr>
+<tr>
+<td>notify me</td>
+<td><code>bell-ring</code></td>
+<td><code>BellRing</code></td>
+<td>18</td>
+</tr>
+<tr>
+<td>adventure step: luggage</td>
+<td><code>luggage</code></td>
+<td><code>Luggage</code></td>
+<td>19</td>
+</tr>
+<tr>
+<td>adventure step: market</td>
+<td><code>shopping-basket</code></td>
+<td><code>ShoppingBasket</code></td>
+<td>19</td>
+</tr>
+<tr>
+<td>adventure step: river</td>
+<td><code>waves</code></td>
+<td><code>Waves</code></td>
+<td>19</td>
+</tr>
+<tr>
+<td>adventure step: selfie</td>
+<td><code>camera</code></td>
+<td><code>Camera</code></td>
+<td>19</td>
+</tr>
+<tr>
+<td>adventure step: cave</td>
+<td><code>mountain</code></td>
+<td><code>Mountain</code></td>
+<td>19</td>
+</tr>
+<tr>
+<td>continue (danfo bus)</td>
+<td><code>bus</code></td>
+<td><code>Bus</code></td>
+<td>19</td>
+</tr>
+<tr>
+<td>design step</td>
+<td><code>pen-tool</code></td>
+<td><code>PenTool</code></td>
+<td>20</td>
+</tr>
+<tr>
+<td>pitch step</td>
+<td><code>presentation</code></td>
+<td><code>Presentation</code></td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<h2 id="renamed-lucide-icons">Renamed Lucide icons</h2>
+<p>The mockups use some legacy Lucide names. Use the current names:</p>
+<table>
+<thead>
+<tr>
+<th>Legacy name in mockup</th>
+<th>Current Lucide name</th>
+<th>Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code-2</code></td>
+<td><code>code-xml</code></td>
+<td><code>CodeXml</code></td>
+</tr>
+<tr>
+<td><code>play-circle</code></td>
+<td><code>circle-play</code></td>
+<td><code>CirclePlay</code></td>
+</tr>
+<tr>
+<td><code>palmtree</code></td>
+<td><code>tree-palm</code></td>
+<td><code>TreePalm</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="extra-icons-for-the-new-states-in-this-pack">Extra icons for the new states in this pack</h2>
+<p>These icons are not in mockups 00–20 but the new screens need them:</p>
+<table>
+<thead>
+<tr>
+<th>Semantic name</th>
+<th>Lucide</th>
+<th>Component</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offline banner</td>
+<td><code>wifi-off</code></td>
+<td><code>WifiOff</code></td>
+<td>offline toast / banner beside <code>empty-offline</code></td>
+</tr>
+<tr>
+<td>retry</td>
+<td><code>rotate-cw</code></td>
+<td><code>RotateCw</code></td>
+<td>error and offline CTA button</td>
+</tr>
+<tr>
+<td>search field</td>
+<td><code>search</code></td>
+<td><code>Search</code></td>
+<td>search bar above <code>empty-search-no-results</code></td>
+</tr>
+<tr>
+<td>add child</td>
+<td><code>user-round-plus</code></td>
+<td><code>UserRoundPlus</code></td>
+<td>CTA under <code>empty-no-kids</code></td>
+</tr>
+<tr>
+<td>streak</td>
+<td><code>flame</code></td>
+<td><code>Flame</code></td>
+<td>small streak counter (big animated flame = fx05/fx10)</td>
+</tr>
+<tr>
+<td>sound off</td>
+<td><code>volume-x</code></td>
+<td><code>VolumeX</code></td>
+<td>mute toggle paired with <code>volume-2</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>11-mascot-sheet and 15-match-results use no Lucide icons; they use brand art only.</li>
+<li>13-cohort-lobby says "Practice match vs Pip bot". Change the visible text to "Captain Jetty bot" when you build it; the mascot is called Captain Jetty.</li>
+<li><code>loader</code> in 14-match-live can be swapped for <code>fx11-loading-spinner</code> when the spinner is bigger than 32 px.</li>
+</ul></main></body></html>

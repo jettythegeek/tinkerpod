@@ -1,0 +1,58 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web">
+ <div data-side="admin:children"></div>
+ <div class="main"><div data-top="admin"></div>
+  <div class="content" style="display:flex;gap:16px">
+   <div style="flex:1;min-width:0">
+    <div class="flex items-end justify-between">
+     <div><div class="crumbs">People / Children & parents</div><div class="ptitle">Children & parents</div></div>
+     <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="download"></i>CSV</span><span class="wbtn"><i data-lucide="user-plus"></i>Add family</span></div>
+    </div>
+    <div class="panel mt-4">
+     <div class="flex items-center gap-2" style="padding:12px 14px;border-bottom:1px solid #EEF1F5">
+      <div class="tabs" style="border:0"><span class="on">Children 1,248</span><span>Parents 902</span></div><div style="flex:1"></div>
+      <div class="inp ph-t" style="width:210px"><i data-lucide="search" style="width:15px"></i>Name, phone, pod…</div>
+      <span class="wbtn sec sm"><i data-lucide="filter"></i>Division</span><span class="wbtn sec sm"><i data-lucide="filter"></i>Plan</span>
+     </div>
+     <table class="tbl" id="t"></table><style>#t td{padding-top:7px;padding-bottom:7px}</style>
+    </div>
+   </div>
+   <!-- drawer -->
+   <div class="panel" style="width:360px;flex:none;align-self:stretch;padding:18px;display:flex;flex-direction:column;gap:14px">
+    <div class="flex justify-between items-center"><span class="over" style="color:#64748B">Family</span><i data-lucide="x" style="width:18px;color:#94A3B8"></i></div>
+    <div class="flex items-center gap-3"><div style="width:48px;height:48px;border-radius:14px;background:#101B4D;color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center">NO</div><div><div style="font-size:18px;font-weight:900">Mrs. Ngozi Okafor</div><div style="font-size:12.5px;font-weight:700;color:#64748B">Parent · Lekki, Lagos · joined Mar 2026</div></div></div>
+    <div class="grid grid-cols-2 gap-2" style="font-size:12.5px;font-weight:700">
+     <div style="background:#F8FAFC;border-radius:10px;padding:8px 10px"><div style="color:#64748B">Phone</div><div style="font-weight:900">+234 80X XXX 1142</div></div>
+     <div style="background:#F8FAFC;border-radius:10px;padding:8px 10px"><div style="color:#64748B">Plan</div><div style="font-weight:900">Family · ₦X,XXX/mo</div></div>
+     <div style="background:#F8FAFC;border-radius:10px;padding:8px 10px"><div style="color:#64748B">Next charge</div><div style="font-weight:900">Nov 12 · Paystack</div></div>
+     <div style="background:#F8FAFC;border-radius:10px;padding:8px 10px"><div style="color:#64748B">Approvals</div><div style="font-weight:900">1 pending</div></div>
+    </div>
+    <div><div class="over" style="color:#64748B;margin-bottom:6px">Children (2)</div>
+     <div class="flex items-center gap-3" style="padding:8px;border-radius:12px;box-shadow:0 0 0 1px #E6EAF0"><img src="../assets/av2.png" class="mini-av" style="width:38px;height:38px"><div class="flex-1"><div style="font-weight:900">Amara Okafor · 9</div><div style="font-size:12px;font-weight:700;color:#64748B">Junior · Jango-Jango · Lekki A</div></div><span class="st g">Active</span></div>
+     <div class="flex items-center gap-3 mt-2" style="padding:8px;border-radius:12px;box-shadow:0 0 0 1px #E6EAF0"><img src="../assets/av3.png" class="mini-av" style="width:38px;height:38px"><div class="flex-1"><div style="font-weight:900">Obi Okafor · 14</div><div style="font-size:12px;font-weight:700;color:#64748B">Senior · Eze Code · Online</div></div><span class="st g">Active</span></div>
+    </div>
+    <div style="background:#FFF6DB;border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:700;color:#7A4B00"><div class="flex items-center gap-2" style="font-weight:900"><i data-lucide="hand" style="width:16px"></i>Ask-parent request</div>Amara wants to enter TinkerPod Cup · ₦X,XXX entry · sent 2h ago</div>
+    <div><div class="over" style="color:#64748B;margin-bottom:6px">Recent activity</div>
+     <div style="font-size:12.5px;font-weight:700;color:#334155;display:flex;flex-direction:column;gap:7px">
+      <div class="flex gap-2"><i data-lucide="trophy" style="width:15px;color:#7C3AED"></i>Amara won MD 5 vs Kemi · 4–2<span style="margin-left:auto;color:#94A3B8">Sat</span></div>
+      <div class="flex gap-2"><i data-lucide="badge-check" style="width:15px;color:#007A70"></i>Payment ₦X,XXX received · Paystack<span style="margin-left:auto;color:#94A3B8">Oct 12</span></div>
+      <div class="flex gap-2"><i data-lucide="message-square" style="width:15px;color:#2563EB"></i>Mentor feedback on Obi's project<span style="margin-left:auto;color:#94A3B8">Oct 9</span></div>
+     </div></div>
+    <div style="margin-top:auto" class="flex gap-2"><span class="wbtn sec" style="flex:1;justify-content:center"><i data-lucide="message-circle"></i>Message</span><span class="wbtn sec" style="flex:1;justify-content:center"><i data-lucide="credit-card"></i>Billing</span></div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+const R=[['av2','Amara Okafor',9,'Junior','Jango-Jango','Mrs. N. Okafor','Family','g','Active','Lekki A',true],['av1','Chidi Obi',10,'Junior','Design Sultan','Mr. K. Obi','Single','g','Active','Ikeja Juniors'],['av3','Obi Okafor',14,'Senior','Eze Code','Mrs. N. Okafor','Family','g','Active','Online'],['av4','Tobi Adewale',13,'Senior','Code Dragon','Mrs. F. Adewale','Single','y','Past due','Abuja Wuse'],['av6','Zainab Musa',15,'Senior','Design Jango','Mr. I. Musa','Family','g','Active','Online'],['av-girl','Ada Nwosu',8,'Junior','Cody Coda','Mrs. C. Nwosu','Trial','b','Trial · 4d','Lekki A'],['av5','Emeka Nnaji',11,'Junior','Jango-Jango','Mr. E. Nnaji','Free','s','Free','—'],['av1','Kemi Ojo',12,'Senior','Eze Code','Mrs. B. Ojo','Single','r','Cancelled','Ikeja Seniors'],['av4','David Eze',7,'Junior','Cody Coda','Mrs. A. Eze','Family','g','Active','Ikeja Juniors'],['av6','Fatima Bello',16,'Senior','Odogwu','Mr. S. Bello','Single','g','Active','Abuja Wuse']];
+let h='<tr><th>Child</th><th>Division</th><th>Title</th><th>Parent</th><th>Plan</th><th>Pod</th></tr>';
+R.forEach(r=>h+=`<tr${r[10]?' style="background:#F0FBFA;box-shadow:inset 3px 0 0 #00BFAE"':''}><td><div class="flex items-center gap-2.5"><img src="../assets/${r[0]}.png" class="mini-av" style="width:30px;height:30px"><div><div>${r[1]}</div><div class="sub">Age ${r[2]}</div></div></div></td><td><span class="st nodot ${r[3]=='Junior'?'p':'b'}">${r[3]}</span></td><td>${r[4]}</td><td>${r[5]}</td><td><div class="flex items-center gap-2">${r[6]}<span class="st ${r[7]}">${r[8]}</span></div></td><td class="sub">${r[9]}</td></tr>`);
+document.getElementById('t').innerHTML=h;
+</script>
+<script>tpInit()</script></body></html>

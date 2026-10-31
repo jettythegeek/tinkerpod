@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture"><div class="web" style="background:#F6F9FB">
+ <div data-side="mentor:home"></div>
+ <div class="main"><div data-top="mentor"></div>
+  <div class="content">
+   <div class="flex items-end justify-between">
+    <div><div class="crumbs">Friday, 30 October</div><div class="ptitle">Good afternoon, Mr. Femi 👋</div></div>
+    <div class="flex gap-2"><span class="wbtn sec"><i data-lucide="calendar-plus"></i>Add extra class</span><span class="wbtn"><i data-lucide="clipboard-check"></i>Review 7 projects</span></div>
+   </div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1.35fr 1fr">
+    <div class="panel"><div class="ph"><b>Today's live classes</b><span style="font-size:12px;font-weight:800;color:#64748B">3 classes · times in WAT</span></div>
+     <div style="padding:6px 18px 14px" id="cls"></div></div>
+    <div class="flex flex-col gap-4">
+     <div class="grid grid-cols-3 gap-3">
+      <div class="panel kpi" style="padding:12px 14px"><div class="l">My kids</div><div class="v" style="font-size:24px">42</div></div>
+      <div class="panel kpi" style="padding:12px 14px"><div class="l">Attendance</div><div class="v" style="font-size:24px">89%</div></div>
+      <div class="panel kpi" style="padding:12px 14px"><div class="l">To review</div><div class="v" style="font-size:24px;color:#D92D20">7</div></div>
+     </div>
+     <div class="panel"><div class="ph"><b>Review queue</b><span class="wbtn sec sm">Open queue</span></div><div style="padding:2px 16px 8px" id="rq"></div></div>
+    </div>
+   </div>
+   <div class="flex items-center justify-between mt-4"><b style="font-size:16px">My pods</b><span style="font-size:12.5px;font-weight:800;color:#007A70">View all</span></div>
+   <div class="grid grid-cols-3 gap-4 mt-2" id="pods"></div>
+   <div class="grid gap-4 mt-4" style="grid-template-columns:1fr 1fr">
+    <div class="panel" style="padding:12px 16px"><div class="flex items-center justify-between"><b class="flex items-center gap-2"><span data-emb="league" data-s="22"></span>My kids in AfriTech League · tomorrow</b><span style="font-size:12px;font-weight:800;color:#64748B">MD 12 · home legs</span></div>
+     <div class="flex gap-2 mt-2.5" id="tw"></div></div>
+    <div class="panel" style="padding:12px 16px"><div class="flex items-center justify-between"><b class="flex items-center gap-2"><i data-lucide="alert-triangle" style="width:17px;color:#B45309"></i>Needs a nudge</b><span style="font-size:12px;font-weight:800;color:#64748B">3 kids</span></div>
+     <div class="flex gap-2 mt-2.5" id="nn"></div></div>
+   </div>
+  </div>
+ </div>
+</div></div>
+<script>
+const C=[['3:30 PM','4:30 PM','Lekki A · Loops Valley L7','"Repeat until": the danfo race','Google Meet','meet.google.com/tpx-lkka-sat','#00BFAE',16,'now'],['5:00 PM','6:00 PM','Yaba Makers · Okada Rush build','Collisions & scoring','Zoom','zoom.us/j/84X XXX 2210','#2563EB',14,''],['6:30 PM','7:00 PM','Lekki Juniors Online · Match prep','AfriTech League MD 12 warm-up','Google Meet','meet.google.com/tpx-ljo-mdp','#7C3AED',9,'']];
+document.getElementById('cls').innerHTML=C.map(c=>`<div class="flex gap-4" style="padding:12px 0;border-bottom:1px solid #F1F4F8">
+<div style="width:70px;flex:none"><div style="font-weight:900;font-size:15px">${c[0]}</div><div style="font-size:12px;font-weight:700;color:#94A3B8">${c[1]}</div></div>
+<div style="width:4px;border-radius:2px;background:${c[6]}"></div>
+<div class="flex-1" style="min-width:0"><div class="flex items-center gap-2"><b style="font-size:14.5px">${c[2]}</b>${c[8]?'<span class="st r">Starts in 25 min</span>':''}</div><div style="font-size:12.5px;font-weight:700;color:#64748B">${c[3]} · ${c[7]} kids</div>
+<div class="flex items-center gap-2 mt-2" style="font-size:12.5px;font-weight:700;color:#334155"><span style="width:22px;height:22px;border-radius:6px;background:${c[4]=='Zoom'?'#2D8CFF':'#00897B'};color:#fff;display:flex;align-items:center;justify-content:center"><i data-lucide="video" style="width:13px"></i></span>${c[4]} · <span style="color:#2563EB;text-decoration:underline">${c[5]}</span><i data-lucide="copy" style="width:14px;color:#94A3B8"></i></div></div>
+<div class="flex flex-col gap-2 items-end justify-center">${c[8]?`<span class="wbtn"><i data-lucide="video"></i>Join ${c[4]}</span>`:`<span class="wbtn sec"><i data-lucide="video"></i>Join ${c[4]}</span>`}<span style="font-size:12px;font-weight:800;color:#007A70">Lesson plan</span></div></div>`).join('');
+document.getElementById('rq').innerHTML=[['av2','Amara Okafor','Loops Valley final','2d 1h','r'],['av-girl','Ada Nwosu','Animated forest story','9h','g'],['av3','Ike Balogun','Okada Rush · level 2','6h','g']].map(([a,n,p,t,c])=>`<div class="flex items-center gap-3" style="padding:6px 0"><img src="../assets/${a}.png" class="mini-av" style="width:30px;height:30px"><div class="flex-1"><div style="font-weight:800">${n}</div><div style="font-size:12px;font-weight:700;color:#64748B">${p}</div></div><span class="st ${c}">${t}</span></div>`).join('');
+document.getElementById('pods').innerHTML=[['Lekki A','Junior','Sat 10am · in person + today\'s Meet','#00BFAE',16,92,'Loops Valley · L7 of 12',58,['av2','av1','av4','av6','av-girl']],['Yaba Makers','Senior','Sat 2pm · in person','#FFB700',14,88,'Game Builder · L5 of 9',55,['av3','av4','av5','av6']],['Lekki Juniors Online','Junior','Tue & Fri · Google Meet','#7C3AED',12,81,'Functions Forest · L3 of 10',30,['av1','av-girl','av2']]].map(p=>`<div class="panel" style="padding:14px 16px;border-top:4px solid ${p[3]}"><div class="flex justify-between"><div><b style="font-size:15px">${p[0]}</b><div style="font-size:12px;font-weight:700;color:#64748B">${p[2]}</div></div><span class="st nodot ${p[1]=='Junior'?'p':'b'}">${p[1]}</span></div>
+<div class="flex justify-between mt-3" style="font-size:12.5px;font-weight:800"><span>${p[6]}</span><span style="color:#64748B">${p[7]}%</span></div><div class="bar teal mt-1" style="height:7px;background:#EEF1F5"><i style="width:${p[7]}%"></i></div>
+<div class="flex items-center justify-between mt-3"><div class="flex">${p[8].map((a,i)=>`<img src="../assets/${a}.png" class="mini-av" style="width:28px;height:28px;margin-left:${i?-8:0}px;box-shadow:0 0 0 2px #fff">`).join('')}<span style="font-size:12px;font-weight:800;color:#64748B;margin-left:8px;align-self:center">${p[4]} kids</span></div><span style="font-size:12px;font-weight:800;color:#2F7D16">${p[5]}% attend.</span></div></div>`).join('');
+document.getElementById('tw').innerHTML=[['av2','Amara','vs Chidi'],['av4','Tobi','vs Ada'],['av6','Kemi','vs Obi']].map(([a,n,v])=>`<div class="flex items-center gap-2" style="flex:1;background:#F3EEFF;border-radius:10px;padding:6px 8px"><img src="../assets/${a}.png" class="mini-av" style="width:26px;height:26px"><div style="line-height:1.15"><div style="font-weight:900;font-size:13px">${n}</div><div style="font-size:11.5px;font-weight:700;color:#6D28D9">${v}</div></div></div>`).join('');
+document.getElementById('nn').innerHTML=[['av1','David','Missed 2 classes'],['av-girl','Ada','Stuck on L6 · 3 days'],['av5','Emeka','No login 5 days']].map(([a,n,v])=>`<div class="flex items-center gap-2" style="flex:1;background:#FFF6DB;border-radius:10px;padding:6px 8px"><img src="../assets/${a}.png" class="mini-av" style="width:26px;height:26px"><div style="line-height:1.15"><div style="font-weight:900;font-size:13px">${n}</div><div style="font-size:11.5px;font-weight:700;color:#8A5A00">${v}</div></div></div>`).join('');
+</script>
+<script>tpInit()</script></body></html>
