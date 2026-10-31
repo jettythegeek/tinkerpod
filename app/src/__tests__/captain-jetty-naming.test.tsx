@@ -10,7 +10,10 @@ import { PinPadScreen } from '../features/auth/screens/PinPadScreen';
 import { ProfilePickerScreen } from '../features/auth/screens/ProfilePickerScreen';
 import { WelcomeScreen } from '../features/auth/screens/WelcomeScreen';
 import { BootPlaceholderScreen } from '../features/boot/BootPlaceholderScreen';
+import { JourneyMapScreen } from '../features/kid/JourneyMapScreen';
 import { KidHomeScreen } from '../features/kid/KidHomeScreen';
+import { LessonDetailScreen } from '../features/kid/LessonDetailScreen';
+import { QuizScreen } from '../features/kid/QuizScreen';
 import { ParentHomeScreen } from '../features/parent/ParentHomeScreen';
 import { RootNavigator } from '../navigation/RootNavigator';
 import { PipIdleSvg } from '../pip/PipIdleSvg';
@@ -54,6 +57,29 @@ jest.mock('expo-secure-store', () => ({
   deleteItemAsync: jest.fn(() => Promise.resolve()),
 }));
 
+jest.mock('expo-audio', () => ({
+  createAudioPlayer: jest.fn(() => ({
+    play: jest.fn(),
+    pause: jest.fn(),
+    remove: jest.fn(),
+  })),
+}));
+
+jest.mock('expo-video', () => {
+  const ReactActual = jest.requireActual<typeof import('react')>('react');
+  const RN = jest.requireActual<typeof import('react-native')>('react-native');
+  return {
+    useVideoPlayer: jest.fn(() => ({
+      loop: false,
+      muted: false,
+      currentTime: 0,
+      play: jest.fn(),
+      pause: jest.fn(),
+    })),
+    VideoView: (props: Record<string, unknown>) => ReactActual.createElement(RN.View, props),
+  };
+});
+
 function Harness({ children }: { readonly children: React.ReactNode }): React.JSX.Element {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -88,6 +114,9 @@ describe('Captain Jetty user-facing naming and M2.0 navigation hygiene', () => {
         onNavigateParentRegister={jest.fn()}
       />,
       <KidHomeScreen key="kid-home" />,
+      <JourneyMapScreen key="journey-map" />,
+      <LessonDetailScreen key="lesson-detail" />,
+      <QuizScreen key="quiz" />,
       <BootPlaceholderScreen key="boot" />,
       <KidLoginScreen
         key="kid-login"
