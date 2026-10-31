@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Auth\ParentAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\Kid\KidAuthController;
 use App\Http\Controllers\Api\V1\Kid\KidCatalogueController;
+use App\Http\Controllers\Api\V1\Kid\KidLessonProgressController;
 use App\Http\Controllers\Api\V1\Kid\KidProfileController;
 use App\Http\Controllers\Api\V1\Parent\ParentChildController;
 use App\Support\ApiResponse;
@@ -79,6 +80,7 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/journey-map', [KidCatalogueController::class, 'journeyMap'])->name('api.v1.kid.journey-map');
             Route::get('/pods/{pod}/journey-map', [KidCatalogueController::class, 'podJourneyMap'])->name('api.v1.kid.pods.journey-map');
             Route::get('/lessons/{lesson}', [KidCatalogueController::class, 'lessonDetail'])->name('api.v1.kid.lessons.show');
+            Route::put('/lessons/{lesson}/progress', [KidLessonProgressController::class, 'update'])->name('api.v1.kid.lessons.progress.update');
             Route::get('/lessons/{lesson}/quiz', [KidCatalogueController::class, 'lessonQuiz'])->name('api.v1.kid.lessons.quiz');
             Route::get('/quizzes/{quiz}', [KidCatalogueController::class, 'quizDetail'])->name('api.v1.kid.quizzes.show');
         });
