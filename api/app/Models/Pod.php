@@ -96,4 +96,12 @@ class Pod extends Model
     {
         return $this->hasMany(World::class, 'pod_id')->orderBy('sort_order');
     }
+
+    /**
+     * @return HasMany<Enrollment, $this>
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class, 'pod_id');
+    }
 }

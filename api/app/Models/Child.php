@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -99,6 +101,24 @@ class Child extends Authenticatable
     public function parent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    /**
+     * @return HasMany<Enrollment, $this>
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class, 'child_id');
+    }
+
+    /**
+     * @return BelongsToMany<Pod, $this>
+     */
+    public function pods(): BelongsToMany
+    {
+        return $this->belongsToMany(Pod::class, 'enrollments', 'child_id', 'pod_id')
+            ->withPivot(['status', 'enrolled_at'])
+            ->withTimestamps();
     }
 
     public function isLocked(): bool
