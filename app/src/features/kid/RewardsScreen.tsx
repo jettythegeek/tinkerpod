@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import {
+  fetchKidProfile,
+  KidProfileSummaryDto,
+  resolveTitleName,
+} from '../../api/learningApi';
 import {
   APPROVED_FX10_FLAME_IDLE_PNG,
   APPROVED_PIP_SLEEPY_PNG,
 } from '../../assets/approvedAssets';
 import { TpIcon, TpIconName } from '../../components/TpIcon';
 import { useTheme } from '../../theme';
+import { useAuth } from '../auth/AuthContext';
 import { KidBottomNav, KidNavTab } from './components/KidBottomNav';
 
 export interface RewardBadgeItem {
@@ -28,6 +34,7 @@ export interface RewardsScreenProps {
   readonly streakDays?: number;
   readonly streakPaused?: boolean;
   readonly badges?: readonly RewardBadgeItem[];
+  readonly autoFetch?: boolean;
   readonly onWakeJetty?: () => void;
   readonly onSelectTab?: (tab: KidNavTab) => void;
 }
@@ -44,23 +51,80 @@ export const DEFAULT_REWARD_BADGES: readonly RewardBadgeItem[] = [
 ];
 
 export function RewardsScreen({
-  xp = 680,
-  nextLevelXp = 1000,
-  coins = 420,
-  gems = 18,
-  level = 4,
-  title = 'Jango-Jango',
-  nextTitle = 'Eze Code',
-  streakDays = 7,
-  streakPaused = false,
-  badges = DEFAULT_REWARD_BADGES,
+  xp,
+  nextLevelXp,
+  coins,
+  gems,
+  level,
+  title,
+  nextTitle,
+  streakDays,
+  streakPaused,
+  badges,
+  autoFetch,
   onWakeJetty,
   onSelectTab,
 }: RewardsScreenProps = {}): React.JSX.Element {
   const { tokens } = useTheme();
-  const safeNextXp = Math.max(1, nextLevelXp);
-  const progressPct = Math.min(100, Math.round((xp / safeNextXp) * 100));
-  const earnedCount = badges.filter((b) => b.earned).length;
+  const { token } = useAuth();
+  const [liveProfile, setLiveProfile] = useState<KidProfileSummaryDto | null>(null);
+
+  const shouldFetch = autoFetch ?? Boolean(token && xp === undefined);
+
+  const loadRewards = useCallback(async () => {
+    try {
+      const res = await fetchKidProfile();
+      if (res.data?.profile) {
+        setLiveProfile(res.data.profile);
+      }
+    } catch {
+      // Fall back to props / demo values if offline
+    }
+  }, []);
+
+  useEffect(() => {
+    if (shouldFetch) {
+      void loadRewards();
+    }
+  }, [loadRewards, shouldFetch]);
+
+  const resolvedXp = xp ?? liveProfile?.xp ?? 680;
+  const resolvedNextLevelXp =
+    nextLevelXp ?? liveProfile?.next_level_xp ?? (liveProfile ? liveProfile.current_level_xp + 100 : 1000);
+  const resolvedCoins = coins ?? liveProfile?.coins ?? 420;
+  const resolvedGems = gems ?? liveProfile?.gems ?? 18;
+  const resolvedLevel = level ?? liveProfile?.level ?? 4;
+  const resolvedTitle =
+    title ?? (liveProfile ? resolveTitleName(liveProfile.title, 'Cody Coda') : 'Jango-Jango');
+  const resolvedNextTitle =
+    nextTitle ?? (liveProfile ? resolveTitleName(liveProfile.next_title, 'Odogwu') : 'Eze Code');
+  const resolvedStreakDays =
+    streakDays ??
+    (liveProfile
+      ? liveProfile.streak.is_paused
+        ? liveProfile.streak.best_streak
+        : liveProfile.streak.current_streak
+      : 7);
+  const resolvedStreakPaused = streakPaused ?? liveProfile?.streak.is_paused ?? false;
+
+  const resolvedBadges: readonly RewardBadgeItem[] =
+    badges ??
+    (liveProfile?.badges.all
+      ? liveProfile.badges.all.map((b) => ({
+          slug: b.slug,
+          name: b.name,
+          icon: (b.icon as TpIconName) || 'trophy',
+          earned: Boolean(b.is_earned),
+          color: b.color || '#7C3AED',
+        }))
+      : DEFAULT_REWARD_BADGES);
+
+  const safeNextXp = Math.max(1, resolvedNextLevelXp);
+  const progressPct =
+    liveProfile && xp === undefined
+      ? liveProfile.progress_percent
+      : Math.min(100, Math.round((resolvedXp / safeNextXp) * 100));
+  const earnedCount = resolvedBadges.filter((b) => b.earned).length;
 
   return (
     <View testID="rewards-screen" style={styles.root}>
@@ -79,13 +143,13 @@ export function RewardsScreen({
             <View testID="rewards-coins-chip" style={styles.headerGlassChip}>
               <TpIcon name="coin" size={13} color="#FDE68A" />
               <Text style={[styles.headerGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
-                {coins}
+                {resolvedCoins}
               </Text>
             </View>
             <View testID="rewards-gems-chip" style={styles.headerGlassChip}>
               <TpIcon name="gem" size={13} color="#99F6E4" />
               <Text style={[styles.headerGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
-                {gems}
+                {resolvedGems}
               </Text>
             </View>
           </View>
@@ -98,14 +162,14 @@ export function RewardsScreen({
               LVL
             </Text>
             <Text style={[styles.levelBadgeNumber, { fontFamily: tokens.fonts.black }]}>
-              {level}
+              {resolvedLevel}
             </Text>
           </View>
           <View style={styles.levelCardBody}>
             <View style={styles.naijaTitleChip}>
               <TpIcon name="crown" size={12} color="#92400E" />
               <Text style={[styles.naijaTitleText, { fontFamily: tokens.fonts.black }]}>
-                {title}
+                {resolvedTitle}
               </Text>
             </View>
             <View style={styles.levelProgressTrack}>
@@ -113,10 +177,10 @@ export function RewardsScreen({
             </View>
             <View style={styles.levelProgressMetaRow}>
               <Text style={[styles.levelMetaText, { fontFamily: tokens.fonts.extrabold }]}>
-                {xp} / {safeNextXp} XP
+                {resolvedXp} / {safeNextXp} XP
               </Text>
               <Text style={[styles.levelMetaPurple, { fontFamily: tokens.fonts.extrabold }]}>
-                Next: {nextTitle} →
+                Next: {resolvedNextTitle} →
               </Text>
             </View>
           </View>
@@ -125,7 +189,7 @@ export function RewardsScreen({
 
       <ScrollView contentContainerStyle={styles.bodyScroll}>
         {/* Streak Card: Active (44) vs Paused (45) */}
-        {streakPaused ? (
+        {resolvedStreakPaused ? (
           <View testID="rewards-streak-paused-card" style={styles.streakPausedCard}>
             <View style={styles.streakPausedTop}>
               <Image
@@ -140,7 +204,7 @@ export function RewardsScreen({
                   Streak paused — Captain Jetty is napping
                 </Text>
                 <Text style={[styles.streakPausedSub, { fontFamily: tokens.fonts.bold }]}>
-                  Captain Jetty kept your spot warm! Your {streakDays} days are safe — do one
+                  Captain Jetty kept your spot warm! Your {resolvedStreakDays} days are safe — do one
                   lesson today to start a new streak.
                 </Text>
               </View>
@@ -208,7 +272,7 @@ export function RewardsScreen({
               />
               <View style={styles.streakTextCol}>
                 <Text style={[styles.streakActiveTitle, { fontFamily: tokens.fonts.black }]}>
-                  {streakDays}-day streak · on fire!
+                  {resolvedStreakDays}-day streak · on fire!
                 </Text>
                 <Text style={[styles.streakActiveSub, { fontFamily: tokens.fonts.bold }]}>
                   Lagos time · 1 grace day saved if life gets busy
@@ -236,7 +300,7 @@ export function RewardsScreen({
           <View style={styles.currencyTile}>
             <TpIcon name="xp" size={20} color="#6B2FD6" />
             <Text style={[styles.currencyTileValue, { fontFamily: tokens.fonts.black }]}>
-              {xp}
+              {resolvedXp}
             </Text>
             <Text style={[styles.currencyTileLabel, { fontFamily: tokens.fonts.extrabold }]}>
               Total XP
@@ -245,7 +309,7 @@ export function RewardsScreen({
           <View style={styles.currencyTile}>
             <TpIcon name="coin" size={20} color="#D97706" />
             <Text style={[styles.currencyTileValue, { fontFamily: tokens.fonts.black }]}>
-              {coins}
+              {resolvedCoins}
             </Text>
             <Text style={[styles.currencyTileLabel, { fontFamily: tokens.fonts.extrabold }]}>
               Coins
@@ -254,7 +318,7 @@ export function RewardsScreen({
           <View style={styles.currencyTile}>
             <TpIcon name="gem" size={20} color="#0D9488" />
             <Text style={[styles.currencyTileValue, { fontFamily: tokens.fonts.black }]}>
-              {gems}
+              {resolvedGems}
             </Text>
             <Text style={[styles.currencyTileLabel, { fontFamily: tokens.fonts.extrabold }]}>
               Gems
@@ -268,12 +332,12 @@ export function RewardsScreen({
             Badges
           </Text>
           <Text style={[styles.badgesCountText, { fontFamily: tokens.fonts.extrabold }]}>
-            {earnedCount} of {badges.length} earned
+            {earnedCount} of {resolvedBadges.length} earned
           </Text>
         </View>
 
         <View testID="rewards-badges-grid" style={styles.badgesGrid}>
-          {badges.map((badge) => (
+          {resolvedBadges.map((badge) => (
             <View
               key={badge.slug}
               testID={`reward-badge-${badge.slug}`}

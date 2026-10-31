@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import {
+  fetchKidProfile,
+  KidProfileFullData,
+  resolveTitleName,
+} from '../../api/learningApi';
 import { APPROVED_GIRL_CUTOUT_ASSET } from '../../assets/approvedAssets';
-import { TpIcon } from '../../components/TpIcon';
+import { TpIcon, TpIconName } from '../../components/TpIcon';
 import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { KidBottomNav, KidNavTab } from './components/KidBottomNav';
@@ -20,12 +25,15 @@ export interface KidProfileScreenProps {
   readonly ageBand?: string;
   readonly level?: number;
   readonly title?: string;
+  readonly nextTitle?: string;
   readonly streakDays?: number;
   readonly lessonsCompleted?: number;
   readonly totalXp?: number;
+  readonly nextLevelXp?: number;
   readonly badgesEarnedCount?: number;
   readonly titleLadder?: readonly TitleLadderStep[];
   readonly badges?: readonly RewardBadgeItem[];
+  readonly autoFetch?: boolean;
   readonly onSelectTab?: (tab: KidNavTab) => void;
 }
 
@@ -39,21 +47,96 @@ export const DEFAULT_TITLE_LADDER: readonly TitleLadderStep[] = [
 export function KidProfileScreen({
   firstName,
   ageBand,
-  level = 4,
-  title = 'Jango-Jango',
-  streakDays = 7,
+  level,
+  title,
+  nextTitle,
+  streakDays,
   lessonsCompleted = 24,
-  totalXp = 680,
-  badgesEarnedCount = 5,
-  titleLadder = DEFAULT_TITLE_LADDER,
-  badges = DEFAULT_REWARD_BADGES.slice(0, 6),
+  totalXp,
+  nextLevelXp,
+  badgesEarnedCount,
+  titleLadder,
+  badges,
+  autoFetch,
   onSelectTab,
 }: KidProfileScreenProps = {}): React.JSX.Element {
   const { tokens } = useTheme();
-  const { kidProfile: child } = useAuth();
+  const { kidProfile: child, token } = useAuth();
+  const [liveData, setLiveData] = useState<KidProfileFullData | null>(null);
 
-  const resolvedFirstName = firstName ?? child?.first_name ?? 'Amara';
-  const resolvedAgeBand = ageBand ?? child?.age_band ?? '8–11';
+  const shouldFetch = autoFetch ?? Boolean(token && totalXp === undefined);
+
+  const loadProfile = useCallback(async () => {
+    try {
+      const res = await fetchKidProfile();
+      if (res.data?.profile) {
+        setLiveData(res.data);
+      }
+    } catch {
+      // Fall back to props / demo values if offline
+    }
+  }, []);
+
+  useEffect(() => {
+    if (shouldFetch) {
+      void loadProfile();
+    }
+  }, [loadProfile, shouldFetch]);
+
+  const liveProfile = liveData?.profile;
+  const resolvedFirstName =
+    firstName ?? liveData?.child?.first_name ?? child?.first_name ?? 'Amara';
+  const resolvedAgeBand =
+    ageBand ?? liveData?.child?.age_band ?? child?.age_band ?? '8–11';
+  const resolvedLevel = level ?? liveProfile?.level ?? 4;
+  const resolvedTitle =
+    title ?? (liveProfile ? resolveTitleName(liveProfile.title, 'Cody Coda') : 'Jango-Jango');
+  const resolvedNextTitle =
+    nextTitle ??
+    (liveProfile ? resolveTitleName(liveProfile.next_title, 'Odogwu') : 'Design Sultan');
+  const resolvedStreakDays =
+    streakDays ?? liveProfile?.stats.streak_days ?? 7;
+  const resolvedTotalXp = totalXp ?? liveProfile?.stats.total_xp ?? 680;
+  const resolvedNextLevelXp =
+    nextLevelXp ?? liveProfile?.next_level_xp ?? (liveProfile ? liveProfile.current_level_xp + 100 : 1000);
+  const xpProgressPct =
+    liveProfile && totalXp === undefined
+      ? liveProfile.progress_percent
+      : Math.min(100, Math.round((resolvedTotalXp / Math.max(1, resolvedNextLevelXp)) * 100));
+
+  const resolvedBadges: readonly RewardBadgeItem[] =
+    badges ??
+    (liveProfile?.badges.all
+      ? liveProfile.badges.all.map((b) => ({
+          slug: b.slug,
+          name: b.name,
+          icon: (b.icon as TpIconName) || 'trophy',
+          earned: Boolean(b.is_earned),
+          color: b.color || '#7C3AED',
+        }))
+      : DEFAULT_REWARD_BADGES.slice(0, 6));
+
+  const resolvedBadgesEarnedCount =
+    badgesEarnedCount ??
+    liveProfile?.badges.earned_count ??
+    resolvedBadges.filter((b) => b.earned).length;
+  const resolvedBadgesTotalCount =
+    liveProfile?.badges.total_count ?? Math.max(resolvedBadges.length, 12);
+
+  const resolvedLadder: readonly TitleLadderStep[] =
+    titleLadder ??
+    (liveProfile?.title_ladder
+      ? liveProfile.title_ladder.slice(0, 4).map((step) => ({
+          slug: step.slug,
+          name: step.name,
+          minLevel: step.min_level,
+          status: step.is_current
+            ? 'current'
+            : step.unlocked
+              ? 'earned'
+              : 'locked',
+        }))
+      : DEFAULT_TITLE_LADDER);
 
   return (
     <View testID="kid-profile-screen" style={styles.root}>
@@ -88,7 +171,7 @@ export function KidProfileScreen({
               <View style={styles.titleGoldChip}>
                 <TpIcon name="crown" size={12} color="#0F172A" />
                 <Text style={[styles.titleGoldChipText, { fontFamily: tokens.fonts.black }]}>
-                  {title}
+                  {resolvedTitle}
                 </Text>
               </View>
               <Text
@@ -100,7 +183,7 @@ export function KidProfileScreen({
               <View style={styles.metaChipsRow}>
                 <View style={styles.metaGlassChip}>
                   <Text style={[styles.metaGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
-                    Level {level}
+                    Level {resolvedLevel}
                   </Text>
                 </View>
                 <View style={styles.metaGlassChip}>
@@ -119,7 +202,7 @@ export function KidProfileScreen({
             <View style={styles.statCard}>
               <TpIcon name="flame" size={20} color="#F97316" />
               <Text style={[styles.statNumber, { fontFamily: tokens.fonts.black }]}>
-                {streakDays}d
+                {resolvedStreakDays}d
               </Text>
               <Text style={[styles.statLabel, { fontFamily: tokens.fonts.bold }]}>
                 Streak
@@ -137,7 +220,7 @@ export function KidProfileScreen({
             <View style={styles.statCard}>
               <TpIcon name="xp" size={20} color="#6B2FD6" />
               <Text style={[styles.statNumber, { fontFamily: tokens.fonts.black }]}>
-                {totalXp}
+                {resolvedTotalXp}
               </Text>
               <Text style={[styles.statLabel, { fontFamily: tokens.fonts.bold }]}>
                 Total XP
@@ -146,7 +229,7 @@ export function KidProfileScreen({
             <View style={styles.statCard}>
               <TpIcon name="trophy" size={20} color="#D97706" />
               <Text style={[styles.statNumber, { fontFamily: tokens.fonts.black }]}>
-                {badgesEarnedCount}
+                {resolvedBadgesEarnedCount}
               </Text>
               <Text style={[styles.statLabel, { fontFamily: tokens.fonts.bold }]}>
                 Badges
@@ -161,11 +244,14 @@ export function KidProfileScreen({
                 Title ladder
               </Text>
               <Text style={[styles.ladderNextText, { fontFamily: tokens.fonts.extrabold }]}>
-                Next: Design Sultan
+                Next: {resolvedNextTitle}
               </Text>
             </View>
+            <View testID="kid-profile-xp-bar" style={styles.xpBarTrack}>
+              <View style={[styles.xpBarFill, { width: `${xpProgressPct}%` }]} />
+            </View>
             <View style={styles.ladderRow}>
-              {titleLadder.map((step) => {
+              {resolvedLadder.map((step) => {
                 const isEarned = step.status === 'earned';
                 const isCurrent = step.status === 'current';
                 return (
@@ -208,12 +294,12 @@ export function KidProfileScreen({
               Badges
             </Text>
             <Text style={[styles.ladderNextText, { fontFamily: tokens.fonts.extrabold }]}>
-              {badgesEarnedCount} of 12 earned
+              {resolvedBadgesEarnedCount} of {resolvedBadgesTotalCount} earned
             </Text>
           </View>
 
           <View testID="kid-profile-badges-grid" style={styles.badgesGrid}>
-            {badges.map((badge) => (
+            {resolvedBadges.map((badge) => (
               <View
                 key={badge.slug}
                 style={[
@@ -391,6 +477,17 @@ const styles = StyleSheet.create({
   ladderNextText: {
     fontSize: 11,
     color: '#6B2FD6',
+  },
+  xpBarTrack: {
+    height: 6,
+    borderRadius: 9999,
+    backgroundColor: '#EEF2FF',
+    overflow: 'hidden',
+  },
+  xpBarFill: {
+    height: '100%',
+    borderRadius: 9999,
+    backgroundColor: '#6B2FD6',
   },
   ladderRow: {
     flexDirection: 'row',

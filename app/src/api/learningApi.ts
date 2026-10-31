@@ -57,18 +57,170 @@ export interface PodJourneyMapDto extends PodSummaryDto {
   readonly worlds: readonly JourneyWorldDto[];
 }
 
+export type TitleValue =
+  | string
+  | {
+      readonly slug: string;
+      readonly name: string;
+      readonly min_level?: number;
+    }
+  | null
+  | undefined;
+
+export function resolveTitleName(value: TitleValue, fallback: string): string {
+  if (!value) {
+    return fallback;
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  return value.name || fallback;
+}
+
+export interface RewardStreakSnapshotDto {
+  readonly current_streak: number;
+  readonly best_streak: number;
+  readonly status: 'active' | 'grace' | 'streak_paused' | string;
+  readonly is_paused: boolean;
+  readonly last_active_date: string | null;
+  readonly grace_days_used: number;
+  readonly grace_days_allowed: number;
+  readonly timezone: string;
+  readonly message: string | null;
+}
+
+export interface RewardTitleLadderEntryDto {
+  readonly slug: string;
+  readonly name: string;
+  readonly min_level: number;
+  readonly unlocked: boolean;
+  readonly is_current: boolean;
+}
+
+export interface RewardBadgeDto {
+  readonly id?: string;
+  readonly slug: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly icon: string;
+  readonly color: string;
+  readonly condition_type?: string;
+  readonly condition_value?: number;
+  readonly is_earned?: boolean;
+  readonly earned_at?: string | null;
+}
+
+export type RewardPresentationTier = 'small' | 'level_up' | 'badge' | 'streak' | 'big';
+
+export interface RewardResultDto {
+  readonly ledger_entries: readonly {
+    readonly id: string;
+    readonly currency: 'xp' | 'coins' | 'gems' | string;
+    readonly amount: number;
+    readonly source_type: string;
+    readonly source_id: string;
+    readonly rule_version: number;
+    readonly idempotency_key: string;
+  }[];
+  readonly totals: {
+    readonly xp: number;
+    readonly coins: number;
+    readonly gems: number;
+  };
+  readonly level_change: {
+    readonly previous_level: number;
+    readonly current_level: number;
+    readonly leveled_up: boolean;
+  };
+  readonly new_badges: readonly RewardBadgeDto[];
+  readonly streak_change: {
+    readonly previous_streak: number;
+    readonly current_streak: number;
+    readonly best_streak: number;
+    readonly incremented: boolean;
+    readonly status: string;
+    readonly last_active_date: string | null;
+    readonly grace_days_used: number;
+    readonly message: string | null;
+  } | null;
+  readonly current_title: {
+    readonly slug: string;
+    readonly name: string;
+  } | null;
+  readonly next_title: {
+    readonly slug: string;
+    readonly name: string;
+    readonly min_level: number;
+  } | null;
+  readonly new_title: {
+    readonly slug: string;
+    readonly name: string;
+  } | null;
+  readonly presentation_tier: RewardPresentationTier;
+  readonly was_replayed: boolean;
+}
+
+export interface KidRewardsHudDto {
+  readonly xp: number;
+  readonly coins: number;
+  readonly gems: number;
+  readonly level: number;
+  readonly current_level_xp: number;
+  readonly next_level_xp: number | null;
+  readonly xp_in_level: number;
+  readonly xp_for_next_level: number;
+  readonly progress_percent: number;
+  readonly title: TitleValue;
+  readonly next_title: TitleValue;
+  readonly title_ladder: readonly RewardTitleLadderEntryDto[];
+  readonly streak: RewardStreakSnapshotDto;
+}
+
+export interface KidRewardsData {
+  readonly rewards: KidRewardsHudDto;
+}
+
+export interface KidProfileSummaryDto extends KidRewardsHudDto {
+  readonly stats: {
+    readonly streak_days: number;
+    readonly best_streak_days: number;
+    readonly total_xp: number;
+    readonly coins: number;
+    readonly gems: number;
+    readonly level: number;
+    readonly badges_earned_count: number;
+    readonly badges_total_count: number;
+  };
+  readonly badges: {
+    readonly earned_count: number;
+    readonly total_count: number;
+    readonly earned: readonly RewardBadgeDto[];
+    readonly locked: readonly RewardBadgeDto[];
+    readonly all: readonly RewardBadgeDto[];
+  };
+}
+
+export interface KidProfileFullData {
+  readonly child: KidProfileDto;
+  readonly profile: KidProfileSummaryDto;
+}
+
 export interface KidHomeData {
   readonly child: KidProfileDto;
   readonly gamification: {
     readonly xp: number;
     readonly next_level_xp: number;
+    readonly xp_in_level?: number;
+    readonly xp_for_next_level?: number;
+    readonly progress_percent?: number;
     readonly level: number;
-    readonly title: string | null;
-    readonly next_title: string | null;
+    readonly title: TitleValue;
+    readonly next_title: TitleValue;
     readonly coins: number;
     readonly gems: number;
     readonly stars: number;
     readonly streak_days: number;
+    readonly streak?: RewardStreakSnapshotDto;
     readonly missions: readonly unknown[];
   };
   readonly continue_lesson: JourneyLessonSummaryDto | null;
@@ -176,6 +328,7 @@ export interface UpdateLessonProgressData {
   readonly completion_mode: string;
   readonly newly_completed: boolean;
   readonly progress: LessonProgressDto;
+  readonly reward_result?: RewardResultDto | null;
 }
 
 export interface QuizOptionDto {
@@ -289,6 +442,7 @@ export interface QuizAttemptResultDto {
 
 export interface SubmitQuizAttemptData {
   readonly attempt: QuizAttemptResultDto;
+  readonly reward_result?: RewardResultDto | null;
 }
 
 export interface SignedAttachmentUrlData {
@@ -320,6 +474,16 @@ export function isOfflineError(error: unknown): boolean {
 
 export async function fetchKidHome(): Promise<ApiEnvelope<KidHomeData>> {
   const response = await apiClient.get<ApiEnvelope<KidHomeData>>('/kid/home');
+  return response.data;
+}
+
+export async function fetchKidRewards(): Promise<ApiEnvelope<KidRewardsData>> {
+  const response = await apiClient.get<ApiEnvelope<KidRewardsData>>('/kid/rewards');
+  return response.data;
+}
+
+export async function fetchKidProfile(): Promise<ApiEnvelope<KidProfileFullData>> {
+  const response = await apiClient.get<ApiEnvelope<KidProfileFullData>>('/kid/profile');
   return response.data;
 }
 

@@ -7,6 +7,7 @@ import {
   isOfflineError,
   KidHomeData,
   PodSummaryDto,
+  resolveTitleName,
 } from '../../api/learningApi';
 import {
   APPROVED_LESSON_LOOPS_ASSET,
@@ -19,7 +20,6 @@ import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { KidBottomNav, KidNavTab } from './components/KidBottomNav';
 import { LearningScreenState } from './components/LearningScreenState';
-import { getGamificationStub } from './gamificationStub';
 
 export interface KidHomeScreenProps {
   readonly initialData?: KidHomeData | null;
@@ -103,7 +103,6 @@ export function KidHomeScreen({
 }: KidHomeScreenProps = {}): React.JSX.Element {
   const { mode, tokens } = useTheme();
   const { kidProfile: child, token } = useAuth();
-  const stub = getGamificationStub();
 
   const shouldFetch = autoFetch ?? Boolean(token && initialData === undefined && !screenState);
 
@@ -161,24 +160,24 @@ export function KidHomeScreen({
   const displayName = activeChild.first_name || (isSenior ? 'Tunde' : 'Amara');
   const avatarSource = resolveApprovedAvatar(activeChild.avatar || 'av1.png');
 
-  const gamification = data.gamification ?? {
-    xp: stub.xp,
-    next_level_xp: stub.nextLevelXp,
-    level: stub.level,
-    title: stub.title,
-    next_title: stub.nextTitle,
-    coins: stub.coins,
-    gems: stub.gems,
-    stars: stub.stars,
-    streak_days: stub.streakDays,
-    missions: [],
-  };
+  const gamification = data.gamification ?? DEFAULT_DEMO_HOME.gamification;
+  const resolvedTitle = resolveTitleName(
+    gamification.title,
+    isSenior ? 'Code Dragon' : 'Jango-Jango',
+  );
+  const resolvedNextTitle = resolveTitleName(
+    gamification.next_title,
+    isSenior ? 'Design Jango' : 'Level 5',
+  );
 
   const pods: readonly PodSummaryDto[] = data.pods ?? [];
   const primaryPod: PodSummaryDto | undefined = pods[0];
   const continueLesson = data.continue_lesson ?? DEFAULT_DEMO_HOME.continue_lesson!;
   const nextLevelXp = Math.max(1, gamification.next_level_xp || 1000);
-  const xpProgressPct = Math.min(100, Math.round((gamification.xp / nextLevelXp) * 100));
+  const xpProgressPct =
+    typeof gamification.progress_percent === 'number'
+      ? Math.min(100, Math.max(0, gamification.progress_percent))
+      : Math.min(100, Math.round((gamification.xp / nextLevelXp) * 100));
   const xpToNext = Math.max(0, nextLevelXp - gamification.xp);
 
   const handleNavSelect = (tab: KidNavTab): void => {
@@ -232,7 +231,7 @@ export function KidHomeScreen({
                   RANK · LEVEL {gamification.level}
                 </Text>
                 <Text style={[styles.seniorRankTitle, { fontFamily: tokens.fonts.black }]}>
-                  {gamification.title ?? 'Code Dragon'}
+                  {resolvedTitle}
                 </Text>
               </View>
               <View testID="kid-hud-xp-chip" style={styles.seniorXpChip}>
@@ -247,7 +246,7 @@ export function KidHomeScreen({
             </View>
             <Text style={[styles.seniorProgressCaption, { fontFamily: tokens.fonts.bold }]}>
               {gamification.xp} / {nextLevelXp} XP to Level {gamification.level + 1} —{' '}
-              {gamification.next_title ?? 'Design Jango'}
+              {resolvedNextTitle}
             </Text>
           </View>
 
@@ -464,7 +463,7 @@ export function KidHomeScreen({
                   </Text>
                 </View>
                 <Text style={[styles.levelTitleText, { fontFamily: tokens.fonts.black }]}>
-                  {gamification.title ?? 'Jango-Jango'}
+                  {resolvedTitle}
                 </Text>
               </View>
               <View style={styles.levelProgressTrack}>

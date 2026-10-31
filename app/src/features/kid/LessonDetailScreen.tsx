@@ -60,8 +60,8 @@ export const DEFAULT_DEMO_LESSON: LessonDetailDto = {
   is_demo: true,
   rewards_preview: {
     xp: 50,
-    coins: 15,
-    gems: 1,
+    coins: 20,
+    gems: 0,
   },
   world: {
     id: '01J00000000000000000WORLD4',

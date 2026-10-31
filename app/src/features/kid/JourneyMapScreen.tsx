@@ -11,9 +11,12 @@ import {
 import { extractApiErrorMessage } from '../../api/client';
 import {
   fetchJourneyMap,
+  fetchKidRewards,
   isOfflineError,
   JourneyWorldDto,
+  KidRewardsHudDto,
   PodJourneyMapDto,
+  resolveTitleName,
 } from '../../api/learningApi';
 import {
   APPROVED_ADVENTURE_NGODO_ASSET,
@@ -27,13 +30,13 @@ import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { KidBottomNav, KidNavTab } from './components/KidBottomNav';
 import { LearningScreenState } from './components/LearningScreenState';
-import { getGamificationStub } from './gamificationStub';
 
 export type LearnHubSection = 'journey' | 'missions' | 'compete';
 
 export interface JourneyMapScreenProps {
   readonly podId?: string;
   readonly initialPod?: PodJourneyMapDto | null;
+  readonly initialRewards?: KidRewardsHudDto | null;
   readonly initialSection?: LearnHubSection;
   readonly initialShowMissionDetail?: boolean;
   readonly screenState?: 'loading' | 'empty' | 'error' | 'offline';
@@ -226,6 +229,7 @@ function resolveWorldIcon(world: JourneyWorldDto): TpIconName {
 export function JourneyMapScreen({
   podId,
   initialPod,
+  initialRewards,
   initialSection = 'journey',
   initialShowMissionDetail = false,
   screenState,
@@ -238,12 +242,14 @@ export function JourneyMapScreen({
 }: JourneyMapScreenProps = {}): React.JSX.Element {
   const { tokens } = useTheme();
   const { token } = useAuth();
-  const gamification = getGamificationStub();
 
   const shouldFetch = autoFetch ?? Boolean(token && initialPod === undefined && !screenState);
 
   const [pod, setPod] = useState<PodJourneyMapDto | null>(
     initialPod !== undefined ? initialPod : DEFAULT_DEMO_POD_MAP,
+  );
+  const [rewardsHud, setRewardsHud] = useState<KidRewardsHudDto | null>(
+    initialRewards ?? null,
   );
   const [enrolledPods, setEnrolledPods] = useState<readonly PodJourneyMapDto[]>(
     initialPod ? [initialPod] : [DEFAULT_DEMO_POD_MAP],
@@ -259,7 +265,13 @@ export function JourneyMapScreen({
     setStatus('loading');
     setErrorText(undefined);
     try {
-      const res = await fetchJourneyMap(targetPodId ?? podId);
+      const [res, rewardsRes] = await Promise.all([
+        fetchJourneyMap(targetPodId ?? podId),
+        fetchKidRewards().catch(() => null),
+      ]);
+      if (rewardsRes?.data?.rewards) {
+        setRewardsHud(rewardsRes.data.rewards);
+      }
       if (!res.data.pod || res.data.pod.worlds.length === 0) {
         setPod(null);
         setStatus('empty');
@@ -517,7 +529,7 @@ export function JourneyMapScreen({
             <View testID="journey-map-stars-stub" style={styles.starPillChip}>
               <TpIcon name="star" size={13} color="#F59E0B" fill="#F59E0B" />
               <Text style={[styles.starPillText, { fontFamily: tokens.fonts.extrabold }]}>
-                {gamification.stars || 24}
+                {rewardsHud ? rewardsHud.coins : 24}
               </Text>
             </View>
           </View>
@@ -621,7 +633,9 @@ export function JourneyMapScreen({
                 <View style={styles.levelBannerTop}>
                   <View>
                     <Text style={[styles.levelBannerEyebrow, { fontFamily: tokens.fonts.extrabold }]}>
-                      LEVEL 2 OF 5 · LOOP BUILDER
+                      {rewardsHud
+                        ? `LEVEL ${rewardsHud.level} · ${resolveTitleName(rewardsHud.title, 'CODY CODA').toUpperCase()}`
+                        : 'LEVEL 2 OF 5 · LOOP BUILDER'}
                     </Text>
                     <Text style={[styles.levelBannerTitle, { fontFamily: tokens.fonts.black }]}>
                       Unit 2 of 4 · Repeat &amp; Count
@@ -630,12 +644,19 @@ export function JourneyMapScreen({
                   <View style={styles.xpPillLight}>
                     <TpIcon name="xp" size={12} color="#6B2FD6" />
                     <Text style={[styles.xpPillLightText, { fontFamily: tokens.fonts.extrabold }]}>
-                      340 / 500
+                      {rewardsHud
+                        ? `${rewardsHud.xp} / ${rewardsHud.next_level_xp ?? rewardsHud.current_level_xp + 100}`
+                        : '340 / 500'}
                     </Text>
                   </View>
                 </View>
                 <View style={styles.levelBannerTrack}>
-                  <View style={[styles.levelBannerFill, { width: '68%' }]} />
+                  <View
+                    style={[
+                      styles.levelBannerFill,
+                      { width: `${rewardsHud ? rewardsHud.progress_percent : 68}%` },
+                    ]}
+                  />
                 </View>
               </View>
             </View>
