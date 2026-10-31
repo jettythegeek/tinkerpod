@@ -40,6 +40,8 @@ class DatabaseSeeder extends Seeder
 
         $superAdmin->syncRoles([RoleName::SuperAdmin->value]);
 
-        $this->call(DemoCurriculumSeeder::class);
+        if (app()->environment(['local', 'testing'])) {
+            $this->call(DemoCurriculumSeeder::class);
+        }
     }
 }

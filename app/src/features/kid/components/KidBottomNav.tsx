@@ -1,75 +1,91 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+import { TpIcon, TpIconName } from '../../../components/TpIcon';
 import { useTheme } from '../../../theme';
 
 export type KidNavTab = 'home' | 'learn' | 'build' | 'rewards' | 'me';
 
 export interface KidBottomNavProps {
-  readonly activeTab: KidNavTab;
-  readonly onNavigateHome: () => void;
-  readonly onNavigateLearn: () => void;
+  readonly activeTab: KidNavTab | Capitalize<KidNavTab>;
+  readonly onSelectTab?: (tab: KidNavTab) => void;
+  readonly onNavigateHome?: () => void;
+  readonly onNavigateLearn?: () => void;
+  readonly onNavigateBuild?: () => void;
+  readonly onNavigateRewards?: () => void;
+  readonly onNavigateMe?: () => void;
 }
 
-const NAV_ITEMS: readonly { readonly id: KidNavTab; readonly label: string }[] = [
-  { id: 'home', label: 'Home' },
-  { id: 'learn', label: 'Learn' },
-  { id: 'build', label: 'Build' },
-  { id: 'rewards', label: 'Rewards' },
-  { id: 'me', label: 'Me' },
+const NAV_ITEMS: Array<{ key: KidNavTab; label: string; icon: TpIconName }> = [
+  { key: 'home', label: 'Home', icon: 'house' },
+  { key: 'learn', label: 'Learn', icon: 'book-open' },
+  { key: 'build', label: 'Build', icon: 'hammer' },
+  { key: 'rewards', label: 'Rewards', icon: 'trophy' },
+  { key: 'me', label: 'Me', icon: 'smile' },
 ];
 
 export function KidBottomNav({
   activeTab,
+  onSelectTab,
   onNavigateHome,
   onNavigateLearn,
+  onNavigateBuild,
+  onNavigateRewards,
+  onNavigateMe,
 }: KidBottomNavProps): React.JSX.Element {
   const { tokens } = useTheme();
+  const normalizedActive = activeTab.toLowerCase() as KidNavTab;
+
+  const handlePress = (tab: KidNavTab): void => {
+    onSelectTab?.(tab);
+    switch (tab) {
+      case 'home':
+        onNavigateHome?.();
+        break;
+      case 'learn':
+        onNavigateLearn?.();
+        break;
+      case 'build':
+        onNavigateBuild?.();
+        break;
+      case 'rewards':
+        onNavigateRewards?.();
+        break;
+      case 'me':
+        onNavigateMe?.();
+        break;
+    }
+  };
 
   return (
-    <View
-      testID="kid-bottom-nav"
-      style={[
-        styles.bar,
-        {
-          backgroundColor: tokens.colors.surface,
-          borderTopColor: '#E2E8F0',
-        },
-      ]}
-    >
+    <View testID="kid-bottom-nav" style={styles.container}>
       {NAV_ITEMS.map((item) => {
-        const isActive = item.id === activeTab;
-        const onPress = () => {
-          if (item.id === 'home') {
-            onNavigateHome();
-          } else if (item.id === 'learn') {
-            onNavigateLearn();
-          }
-        };
-
+        const isActive = item.key === normalizedActive;
         return (
           <Pressable
-            key={item.id}
-            testID={`kid-bottom-nav-${item.id}`}
+            key={item.key}
+            testID={`kid-bottom-nav-${item.key}`}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
             accessibilityLabel={item.label}
-            onPress={onPress}
-            style={styles.tab}
+            onPress={() => handlePress(item.key)}
+            style={
+              isActive
+                ? [styles.activePill, { backgroundColor: tokens.colors.kidPurple }]
+                : styles.inactiveItem
+            }
           >
-            <View
-              style={[
-                styles.dot,
-                {
-                  backgroundColor: isActive ? tokens.colors.buttonTeal : '#CBD5E1',
-                },
-              ]}
+            <TpIcon
+              name={item.icon}
+              size={20}
+              color={isActive ? tokens.colors.surface : '#64748B'}
+              strokeWidth={2.4}
             />
             <Text
               style={[
-                styles.label,
+                isActive ? styles.activeLabel : styles.inactiveLabel,
                 {
-                  color: isActive ? tokens.colors.buttonTeal : '#64748B',
-                  fontFamily: tokens.fonts.extrabold,
+                  fontFamily: isActive ? tokens.fonts.extrabold : tokens.fonts.bold,
                 },
               ]}
             >
@@ -83,27 +99,40 @@ export function KidBottomNav({
 }
 
 const styles = StyleSheet.create({
-  bar: {
-    height: 64,
-    borderTopWidth: 1,
+  container: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingHorizontal: 8,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#EEF2FF',
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 14,
   },
-  tab: {
-    flex: 1,
+  activePill: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
+    borderRadius: 9999,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 6,
+  },
+  inactiveItem: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
     paddingVertical: 6,
+    gap: 3,
   },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  activeLabel: {
+    fontSize: 12,
+    color: '#FFFFFF',
   },
-  label: {
+  inactiveLabel: {
     fontSize: 11,
+    color: '#64748B',
   },
 });

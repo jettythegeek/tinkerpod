@@ -1,6 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
+
 import { extractApiErrorMessage } from '../../api/client';
 import {
   fetchLessonDetail,
@@ -9,8 +17,9 @@ import {
   LessonProgressDto,
   updateLessonProgress,
 } from '../../api/learningApi';
+import { APPROVED_LESSON_LOOPS_ASSET } from '../../assets/approvedAssets';
 import { TpButton, TpCard, TpErrorBanner } from '../../components/DesignSystem';
-import { PipIdleSvg } from '../../pip';
+import { TpIcon } from '../../components/TpIcon';
 import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { LearningScreenState } from './components/LearningScreenState';
@@ -30,7 +39,8 @@ export const DEFAULT_DEMO_LESSON: LessonDetailDto = {
   slug: 'repeat-and-count',
   lesson_number: 2,
   title: 'Repeat and Count',
-  summary: 'Teach Captain Jetty to repeat actions without typing the same code ten times.',
+  summary:
+    'Teach Captain Jetty to repeat actions without typing the same code ten times.',
   body: "In this lesson, Captain Jetty shows how Python's `for i in range(n):` loop repeats commands cleanly and accurately.",
   learning_objectives: [
     'Understand why loops save time',
@@ -38,8 +48,9 @@ export const DEFAULT_DEMO_LESSON: LessonDetailDto = {
     'Count from 1 to 10 with a loop',
     'Fix a loop that runs one too many times',
   ],
-  thumbnail_asset: 'design/assets/pip/pip-idle.svg',
-  intro_video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  thumbnail_asset: 'design/assets/lesson-loops.jpg',
+  intro_video_url:
+    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
   intro_video_duration_seconds: 80,
   duration_minutes: 8,
   difficulty: 'Beginner',
@@ -101,7 +112,7 @@ export function LessonDetailScreen({
   onBack,
   onStartQuiz,
 }: LessonDetailScreenProps = {}): React.JSX.Element {
-  const { tokens, reducedMotion, muted } = useTheme();
+  const { tokens, muted } = useTheme();
   const { token } = useAuth();
 
   const shouldFetch =
@@ -195,89 +206,94 @@ export function LessonDetailScreen({
   const primaryQuiz = activeLesson.quizzes[0] ?? null;
 
   return (
-    <View testID="lesson-detail-screen" style={[styles.root, { backgroundColor: tokens.colors.bg }]}>
+    <View testID="lesson-detail-screen" style={styles.root}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Hero Header (03-lesson-detail.png) */}
-        <View style={[styles.heroBox, { backgroundColor: tokens.colors.kidPurple }]}>
-          <View style={styles.heroTopBar}>
-            <Pressable
-              testID="lesson-detail-back-btn"
-              accessibilityRole="button"
-              accessibilityLabel="Back"
-              onPress={onBack}
-              style={styles.heroIconBtn}
-            >
-              <Text style={[styles.heroIconBtnText, { fontFamily: tokens.fonts.black }]}>←</Text>
-            </Pressable>
-            <Text style={[styles.heroBreadcrumb, { fontFamily: tokens.fonts.extrabold }]}>
-              {activeLesson.world?.title ?? 'Loops Valley'} · Lesson {activeLesson.lesson_number}
-            </Text>
-            <View style={styles.heroIconBtn}>
-              <Text style={[styles.heroIconBtnText, { fontFamily: tokens.fonts.black }]}>
-                {progress.is_completed ? '✓' : '★'}
-              </Text>
+        {/* Hero Image Header (03-lesson-detail.png with lesson-loops.jpg) */}
+        <ImageBackground
+          testID="lesson-detail-hero-image"
+          source={APPROVED_LESSON_LOOPS_ASSET}
+          style={styles.heroImageBg}
+        >
+          <View style={styles.heroDarkOverlay}>
+            <View style={styles.heroTopBar}>
+              <Pressable
+                testID="lesson-detail-back-btn"
+                accessibilityRole="button"
+                accessibilityLabel="Back"
+                onPress={onBack}
+                style={styles.heroBackBtn}
+              >
+                <TpIcon name="chevron-left" size={20} color="#FFFFFF" />
+              </Pressable>
+
+              <Pressable
+                testID="watch-intro-btn"
+                accessibilityRole="button"
+                accessibilityLabel={`Watch intro ${formatDurationMmSs(activeLesson.intro_video_duration_seconds)}`}
+                onPress={() => {
+                  setShowVideoPlayer(true);
+                  try {
+                    if (progress.resume_position_seconds > 0) {
+                      player.currentTime = progress.resume_position_seconds;
+                    }
+                    player.play();
+                  } catch {
+                    // Ignore player error in test environment
+                  }
+                }}
+                style={styles.watchIntroPill}
+              >
+                <TpIcon name="circle-play" size={14} color="#FFFFFF" />
+                <Text style={[styles.watchIntroText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Watch intro · {formatDurationMmSs(activeLesson.intro_video_duration_seconds)}
+                </Text>
+              </Pressable>
             </View>
           </View>
+        </ImageBackground>
 
-          <View style={styles.heroStage}>
-            <PipIdleSvg size={104} reducedMotion={reducedMotion} />
-            <Pressable
-              testID="watch-intro-btn"
-              accessibilityRole="button"
-              accessibilityLabel={`Watch intro ${formatDurationMmSs(activeLesson.intro_video_duration_seconds)}`}
-              onPress={() => {
-                setShowVideoPlayer(true);
-                try {
-                  if (progress.resume_position_seconds > 0) {
-                    player.currentTime = progress.resume_position_seconds;
-                  }
-                  player.play();
-                } catch {
-                  // Ignore player error in test environment
-                }
-              }}
-              style={styles.watchIntroPill}
-            >
-              <Text
-                style={[
-                  styles.watchIntroText,
-                  { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-                ]}
-              >
-                ▶ Watch intro · {formatDurationMmSs(activeLesson.intro_video_duration_seconds)}
-              </Text>
-            </Pressable>
+        {/* Overlapping Content Card matching 03-lesson-detail.png */}
+        <View style={styles.sheetContainer}>
+          <View style={styles.worldChip}>
+            <TpIcon name="repeat" size={13} color="#6B2FD6" />
+            <Text style={[styles.worldChipText, { fontFamily: tokens.fonts.extrabold }]}>
+              {(activeLesson.world?.title ?? 'LOOPS VALLEY').toUpperCase()} · LESSON{' '}
+              {activeLesson.lesson_number} OF 5
+            </Text>
           </View>
 
-          <Text style={[styles.heroTitle, { fontFamily: tokens.fonts.black }]}>
+          <Text style={[styles.lessonTitle, { fontFamily: tokens.fonts.black }]}>
             {activeLesson.title}
           </Text>
+
           {activeLesson.summary ? (
-            <Text style={[styles.heroSummary, { fontFamily: tokens.fonts.semibold }]}>
+            <Text style={[styles.lessonSummary, { fontFamily: tokens.fonts.bold }]}>
               {activeLesson.summary}
             </Text>
           ) : null}
 
-          <View style={styles.metaPillsRow}>
-            <View style={styles.metaPill}>
-              <Text style={[styles.metaPillText, { fontFamily: tokens.fonts.extrabold }]}>
-                ⏱ {activeLesson.duration_minutes} min
+          {/* Meta Chips with Lucide clock, signal, footprints */}
+          <View style={styles.metaRow}>
+            <View style={styles.metaChip}>
+              <TpIcon name="clock" size={13} color="#475569" />
+              <Text style={[styles.metaChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                {activeLesson.duration_minutes} min
               </Text>
             </View>
-            <View style={styles.metaPill}>
-              <Text style={[styles.metaPillText, { fontFamily: tokens.fonts.extrabold }]}>
-                ⚡ {activeLesson.difficulty}
+            <View style={styles.metaChip}>
+              <TpIcon name="signal" size={13} color="#475569" />
+              <Text style={[styles.metaChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                {activeLesson.difficulty}
               </Text>
             </View>
-            <View style={styles.metaPill}>
-              <Text style={[styles.metaPillText, { fontFamily: tokens.fonts.extrabold }]}>
-                ▤ {activeLesson.steps_count} steps
+            <View style={styles.metaChip}>
+              <TpIcon name="footprints" size={13} color="#475569" />
+              <Text style={[styles.metaChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                {activeLesson.steps_count} steps
               </Text>
             </View>
           </View>
-        </View>
 
-        <View style={styles.bodyPadding}>
           <TpErrorBanner message={actionError} testID="lesson-progress-error" />
 
           {/* Resume Progress Banner */}
@@ -295,7 +311,7 @@ export function LessonDetailScreen({
             </TpCard>
           ) : null}
 
-          {/* Expo Video Intro Player (M2.9) */}
+          {/* Expo Video Intro Player */}
           {showVideoPlayer ? (
             <TpCard style={styles.videoCard} testID="lesson-video-player-card">
               <Text
@@ -345,98 +361,58 @@ export function LessonDetailScreen({
             </TpCard>
           ) : null}
 
-          {/* What you'll learn Card */}
-          <TpCard style={styles.objectivesCard}>
-            <Text
-              style={[
-                styles.cardHeading,
-                { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-              ]}
-            >
-              What you’ll learn
+          {/* What You'll Learn Card */}
+          <View style={styles.objectivesCard}>
+            <Text style={[styles.cardHeading, { fontFamily: tokens.fonts.black }]}>
+              What you&apos;ll learn
             </Text>
             <View style={styles.objectivesList}>
               {activeLesson.learning_objectives.map((objective, index) => (
                 <View key={`${index}-${objective}`} style={styles.objectiveRow}>
-                  <View
-                    style={[
-                      styles.objectiveCheck,
-                      { backgroundColor: tokens.colors.success },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.objectiveCheckText,
-                        { fontFamily: tokens.fonts.black },
-                      ]}
-                    >
-                      ✓
-                    </Text>
+                  <View style={styles.objectiveCheck}>
+                    <TpIcon name="check" size={12} color="#FFFFFF" />
                   </View>
-                  <Text
-                    style={[
-                      styles.objectiveText,
-                      { color: tokens.colors.ink, fontFamily: tokens.fonts.bold },
-                    ]}
-                  >
+                  <Text style={[styles.objectiveText, { fontFamily: tokens.fonts.bold }]}>
                     {objective}
                   </Text>
                 </View>
               ))}
             </View>
-          </TpCard>
+          </View>
 
-          {/* Rewards Slot (M3 Stubbed Preview) */}
-          <TpCard style={styles.rewardsCard} testID="lesson-rewards-preview-stub">
-            <Text
-              style={[
-                styles.rewardsLabel,
-                { color: '#64748B', fontFamily: tokens.fonts.extrabold },
-              ]}
-            >
+          {/* Rewards Bar */}
+          <View style={styles.rewardsCard} testID="lesson-rewards-preview-stub">
+            <Text style={[styles.rewardsLabel, { fontFamily: tokens.fonts.black }]}>
               Rewards
             </Text>
             <View style={styles.rewardsChipsRow}>
-              <View style={[styles.rewardChip, { backgroundColor: '#F3E8FF' }]}>
-                <Text
-                  style={[
-                    styles.rewardChipText,
-                    { color: '#6D28D9', fontFamily: tokens.fonts.black },
-                  ]}
-                >
+              <View style={[styles.rewardChip, { backgroundColor: '#EDE9FE' }]}>
+                <TpIcon name="xp" size={12} color="#6B2FD6" />
+                <Text style={[styles.rewardChipText, { color: '#6B2FD6', fontFamily: tokens.fonts.extrabold }]}>
                   +{activeLesson.rewards_preview.xp} XP
                 </Text>
               </View>
               <View style={[styles.rewardChip, { backgroundColor: '#FEF3C7' }]}>
-                <Text
-                  style={[
-                    styles.rewardChipText,
-                    { color: '#B45309', fontFamily: tokens.fonts.black },
-                  ]}
-                >
+                <TpIcon name="coin" size={12} color="#92400E" />
+                <Text style={[styles.rewardChipText, { color: '#92400E', fontFamily: tokens.fonts.extrabold }]}>
                   +{activeLesson.rewards_preview.coins}
                 </Text>
               </View>
               {activeLesson.rewards_preview.gems > 0 ? (
-                <View style={[styles.rewardChip, { backgroundColor: '#E0F2FE' }]}>
-                  <Text
-                    style={[
-                      styles.rewardChipText,
-                      { color: '#0369A1', fontFamily: tokens.fonts.black },
-                    ]}
-                  >
+                <View style={[styles.rewardChip, { backgroundColor: '#CCFBF1' }]}>
+                  <TpIcon name="gem" size={12} color="#0F766E" />
+                  <Text style={[styles.rewardChipText, { color: '#0F766E', fontFamily: tokens.fonts.extrabold }]}>
                     +{activeLesson.rewards_preview.gems}
                   </Text>
                 </View>
               ) : null}
             </View>
-          </TpCard>
+          </View>
 
-          {/* Primary CTA: Start Lesson / Quiz */}
-          <TpButton
+          {/* Start Lesson Button with Lucide arrow-right */}
+          <Pressable
             testID="lesson-start-btn"
-            label="Start Lesson  ▶"
-            variant="teal"
+            accessibilityRole="button"
             onPress={() => {
               if (primaryQuiz && onStartQuiz) {
                 onStartQuiz(primaryQuiz.id, activeLesson.id);
@@ -448,7 +424,13 @@ export function LessonDetailScreen({
                 );
               }
             }}
-          />
+            style={styles.startLessonButton}
+          >
+            <Text style={[styles.startLessonText, { fontFamily: tokens.fonts.black }]}>
+              Start Lesson
+            </Text>
+            <TpIcon name="arrow-right" size={18} color="#FFFFFF" />
+          </Pressable>
 
           {activeLesson.completion_mode === 'manual' && !progress.is_completed ? (
             <TpButton
@@ -474,87 +456,95 @@ export function LessonDetailScreen({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: '#FAF8FF',
   },
   scrollContent: {
     paddingBottom: 28,
   },
-  heroBox: {
-    paddingHorizontal: 20,
+  heroImageBg: {
+    height: 196,
+  },
+  heroDarkOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(15,23,42,0.28)',
+    paddingHorizontal: 16,
     paddingTop: 14,
-    paddingBottom: 22,
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
-    gap: 10,
   },
   heroTopBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  heroIconBtn: {
+  heroBackBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(15,23,42,0.55)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  heroIconBtnText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-  },
-  heroBreadcrumb: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  heroStage: {
-    height: 128,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+  watchIntroPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    marginVertical: 4,
-  },
-  watchIntroPill: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    gap: 6,
+    backgroundColor: 'rgba(15,23,42,0.62)',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 9999,
   },
   watchIntroText: {
-    fontSize: 13,
-  },
-  heroTitle: {
-    fontSize: 24,
-    color: '#FFFFFF',
-  },
-  heroSummary: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  metaPillsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginTop: 4,
-  },
-  metaPill: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  metaPillText: {
     fontSize: 12,
     color: '#FFFFFF',
   },
-  bodyPadding: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    gap: 14,
+  sheetContainer: {
+    marginTop: -22,
+    backgroundColor: '#FAF8FF',
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+    paddingHorizontal: 18,
+    paddingTop: 18,
+    gap: 12,
+  },
+  worldChip: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#EDE9FE',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 9999,
+  },
+  worldChipText: {
+    fontSize: 11,
+    color: '#6B2FD6',
+  },
+  lessonTitle: {
+    fontSize: 22,
+    color: '#0F172A',
+  },
+  lessonSummary: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: '#64748B',
+  },
+  metaRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  metaChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+    borderRadius: 9999,
+  },
+  metaChipText: {
+    fontSize: 12,
+    color: '#475569',
   },
   resumeCard: {
     padding: 12,
@@ -582,14 +572,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   objectivesCard: {
-    padding: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: '#EEF2FF',
     gap: 10,
   },
   cardHeading: {
-    fontSize: 16,
+    fontSize: 15,
+    color: '#0F172A',
   },
   objectivesList: {
-    gap: 10,
+    gap: 8,
   },
   objectiveRow: {
     flexDirection: 'row',
@@ -599,38 +594,58 @@ const styles = StyleSheet.create({
   objectiveCheck: {
     width: 22,
     height: 22,
-    borderRadius: 11,
+    borderRadius: 7,
+    backgroundColor: '#10B981',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  objectiveCheckText: {
-    fontSize: 12,
-    color: '#FFFFFF',
-  },
   objectiveText: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 13,
+    color: '#0F172A',
   },
   rewardsCard: {
-    padding: 14,
+    backgroundColor: '#F5F3FF',
+    borderRadius: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#DDD6FE',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   rewardsLabel: {
-    fontSize: 13,
+    fontSize: 12,
+    color: '#4C1D95',
   },
   rewardsChipsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 6,
   },
   rewardChip: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 999,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 9999,
   },
   rewardChipText: {
-    fontSize: 12,
+    fontSize: 11,
+  },
+  startLessonButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: '#6B2FD6',
+    borderRadius: 16,
+    paddingVertical: 15,
+    marginTop: 4,
+  },
+  startLessonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
   },
 });

@@ -10,10 +10,11 @@ Every contributor and coding agent working in the TinkerPod repository must stri
 - **Fresh-Start Codebase**: Never copy code files, migrations, models, controllers, seeders, or components wholesale from the legacy project. Documents in `docs/reference/` are read-only context; `docs/DECISIONS.md` wins on any conflict.
 
 ## 2. Approved `design/` Assets Only
-- **`design/` is the Single Source of Truth**: Use **only** files from `design/` (`design/png/`, `design/html/`, `design/motion/`, `design/fx/`, `design/assets/`).
-- **Never Invent Art or Audio**: Never generate, draw, trace, download, or substitute custom images, icons, mascot poses, SVGs, Lottie files, or sound effects.
-- **Pip Mascot Rig (`Captain Jetty`)**: The mascot's official user-facing name is **Captain Jetty** (short form **"Captain"**). Any text or accessibility label that users can see must say **Captain Jetty** (or **Captain**), never **"Pip"**. Asset files (`design/motion/svg/pip-*.svg`, `design/assets/pip/*.svg`) and code identifiers stay `pip-*`; do not rename them. Build the mascot exclusively from `design/motion/svg/*.svg` and `design/assets/pip/*.svg`, driven by `design/motion/moods.json` (`idle`, `wave`, `happy`, `sad`, `laugh`, `clap`, `cheer`).
-- **FX & Celebrations**: Use only the five approved FX SVGs (`fx01-xp-coins` through `fx05-streak-mission`), audio files in `design/fx/audio/`, and timings in `design/fx/src/cues.json`.
+- **`design/` is the Single Source of Truth**: Use **only** files from `design/` (`design/png/`, `design/html/`, `design/motion/`, `design/fx/`, `design/assets/`, `design/talk/`, `design/preview/`).
+- **Never Invent Art or Audio**: Never generate, draw, trace, download, or substitute custom images, icons, mascot poses, SVGs, or sound effects.
+- **Icons**: The mobile app uses **Lucide** (`lucide-react-native`, mapped in `design/ICONS.md`) and the Filament admin/mentor panels use **Heroicons**. Never use any other icon set, and never use emoji or text symbols (`✓ ★ ← ▶ 🔒 ✕`) as icons.
+- **Pip Mascot Rig (`Captain Jetty`)**: The mascot's official user-facing name is **Captain Jetty** (short form **"Captain"**). Any text or accessibility label that users can see must say **Captain Jetty** (or **Captain**), never **"Pip"**. Asset files (`design/motion/svg/pip-*.svg`, `design/assets/pip/*.svg`) and code identifiers stay `pip-*`; do not rename them. Build the mascot exclusively from `design/motion/svg/*.svg` and `design/assets/pip/*.svg`, driven by `design/motion/moods.json`.
+- **FX & Celebrations (No Lottie)**: FX may use every FX in `design/` (`fx01` through `fx15`), audio files in `design/fx/audio/`, and timings in `design/fx/src/cues.json` (not only `fx01`–`fx05`). There is no Lottie: animations use the pack's baked `*-static.svg` plus Reanimated driven by `*.motion.json`, or a transparent `WebView` for one-shot full-screen celebrations (see `design/PACK-README.md`).
 - **Missing Asset Protocol**: If a required asset is missing from `design/`, **stop** that task, document the missing path in the handoff note under `docs/handoffs/`, and render a neutral grey placeholder box labelled with the missing filename.
 - **Theme Tokens Only**: Every colour, font (`Nunito`), spacing, and radius must come from the theme tokens module (`app/src/theme/`). Note that primary teal `#00BFAE` is used for fills and illustrations with dark text (`#0F172A`) only; buttons with white text must use button teal `#007A70`.
 
@@ -28,5 +29,5 @@ Every contributor and coding agent working in the TinkerPod repository must stri
 - **Scoped Tokens**: Child sessions use child-scoped Sanctum tokens (`child:*` abilities) that are strictly blocked from parent, billing, and admin endpoints.
 
 ## 5. Accessibility & Reduced Motion Support
-- **Honour User Preferences**: Every mascot animation, SVG transition, celebration effect (`fx01`–`fx05`), audio cue, and haptic pulse must respect user settings for **mute**, **reduced motion**, and **reduced effects** (as well as OS-level accessibility reduced-motion flags).
+- **Honour User Preferences**: Every mascot animation, SVG transition, celebration effect (every FX in `design/`), audio cue, and haptic pulse must respect user settings for **mute**, **reduced motion**, and **reduced effects** (as well as OS-level accessibility reduced-motion flags).
 - **Age-Band Theme Flag**: Support both `junior` (ages 5–11) and `senior` (ages 12–18) theme configurations across kid-facing screens.

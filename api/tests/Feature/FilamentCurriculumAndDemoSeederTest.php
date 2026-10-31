@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Domain\Learning\LearningAccess;
 use App\Enums\ContentStatus;
 use App\Enums\PermissionName;
 use App\Filament\Resources\CourseResource;
@@ -118,10 +119,13 @@ class FilamentCurriculumAndDemoSeederTest extends TestCase
         );
     }
 
-    public function test_demo_curriculum_seeder_seeds_coding_pod_loops_valley_repeat_and_count_and_range_quiz_marked_as_demo(): void
+    public function test_demo_curriculum_seeder_seeds_coding_pod_without_auto_enrolling_children_and_enroll_command_enrolls_child(): void
     {
         $parent = User::factory()->create();
-        $child = Child::factory()->for($parent, 'parent')->create(['first_name' => 'Tunde']);
+        $child = Child::factory()->for($parent, 'parent')->create([
+            'first_name' => 'Tunde',
+            'username' => 'tunde_codes',
+        ]);
 
         $this->seed(DemoCurriculumSeeder::class);
 
@@ -129,6 +133,9 @@ class FilamentCurriculumAndDemoSeederTest extends TestCase
         $this->assertTrue($pod->is_demo);
         $this->assertSame('Coding Pod', $pod->title);
         $this->assertCount(6, $pod->worlds);
+
+        // DemoCurriculumSeeder must NOT auto-enroll children
+        $this->assertSame(0, $child->enrollments()->count());
 
         $loopsValley = World::query()->where('pod_id', $pod->id)->where('slug', 'loops-valley')->firstOrFail();
         $this->assertTrue($loopsValley->is_demo);
@@ -146,11 +153,32 @@ class FilamentCurriculumAndDemoSeederTest extends TestCase
         $this->assertCount(4, $quiz->questions);
 
         $childToken = $child->createToken('demo-kid', ['child:*'])->plainTextToken;
+
+        // Before enrollment, child sees no pod content
+        $this->withToken($childToken)
+            ->getJson('/api/v1/kid/journey-map')
+            ->assertOk()
+            ->assertJsonPath('data.pod', null);
+
+        // Enroll by hand via artisan tinkerpod:enroll {username} {pod}
+        $this->artisan('tinkerpod:enroll', [
+            'username' => 'tunde_codes',
+            'pod' => 'coding-pod',
+        ])->assertExitCode(0);
+
+        $this->assertSame(1, $child->enrollments()->count());
+
         $this->withToken($childToken)
             ->getJson('/api/v1/kid/journey-map')
             ->assertOk()
             ->assertJsonPath('data.pod.title', 'Coding Pod')
             ->assertJsonPath('data.pod.is_demo', true)
             ->assertJsonCount(6, 'data.pod.worlds');
+    }
+
+    public function test_only_domain_learning_access_exists_and_duplicate_service_alias_is_removed(): void
+    {
+        $this->assertTrue(class_exists(LearningAccess::class));
+        $this->assertFileDoesNotExist(base_path('app/Services/LearningAccess.php'));
     }
 }

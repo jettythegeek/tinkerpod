@@ -1513,7 +1513,7 @@ paths:
     post:
       tags:
         - Kid Learning
-      summary: Check a single question answer and return kid-friendly feedback and explanation
+      summary: Check a question answer inside an open quiz attempt (first answer per question is saved and is the only one that scores)
       operationId: checkKidQuizAnswer
       security:
         - ChildBearerToken: []
@@ -1533,6 +1533,9 @@ paths:
               required:
                 - question_id
               properties:
+                attempt_id:
+                  type: string
+                  description: Optional open attempt public ULID (uses latest open attempt when omitted)
                 question_id:
                   type: string
                   description: Question public ULID
@@ -1544,11 +1547,11 @@ paths:
                   description: Option key (e.g. A, B, C, D)
       responses:
         "200":
-          description: Answer checked; returns `is_correct`, friendly feedback, and kid-facing explanation
+          description: Answer checked inside open attempt; first answer per question is saved for scoring while retries allow learning with 0 points
         "403":
           description: Forbidden
         "422":
-          description: Validation error or attempt cap reached
+          description: Validation error or no open attempt found
           content:
             application/json:
               schema:
@@ -1558,8 +1561,8 @@ paths:
     post:
       tags:
         - Kid Learning
-      summary: Submit and score a quiz attempt on the server (enforces attempt cap and idempotency)
-      operationId: submitKidQuizAttempt
+      summary: Start a quiz attempt (counts against max_attempts) or finish an open attempt from saved answers
+      operationId: startOrFinishKidQuizAttempt
       security:
         - ChildBearerToken: []
       parameters:
@@ -1570,38 +1573,75 @@ paths:
           schema:
             type: string
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
-              required:
-                - answers
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - start
+                    - finish
+                attempt_id:
+                  type: string
+                  description: When provided (or action=finish), finishes the open attempt and scores it on the server from saved first answers
+                idempotency_key:
+                  type: string
+                  maxLength: 120
+      responses:
+        "200":
+          description: Quiz attempt finished (or replayed idempotently) and scored on the server from saved answers
+        "201":
+          description: New open quiz attempt started (counted against max_attempts)
+        "403":
+          description: Forbidden
+        "422":
+          description: Attempt cap reached or unanswered questions when finishing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+
+  /kid/quizzes/{quiz}/attempts/{attempt}/finish:
+    post:
+      tags:
+        - Kid Learning
+      summary: Finish an open quiz attempt and score it on the server from the saved first answers
+      operationId: finishKidQuizAttempt
+      security:
+        - ChildBearerToken: []
+      parameters:
+        - name: quiz
+          in: path
+          required: true
+          description: Quiz public ULID
+          schema:
+            type: string
+        - name: attempt
+          in: path
+          required: true
+          description: QuizAttempt public ULID
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
               properties:
                 idempotency_key:
                   type: string
                   maxLength: 120
-                answers:
-                  type: array
-                  minItems: 1
-                  items:
-                    type: object
-                    required:
-                      - question_id
-                    properties:
-                      question_id:
-                        type: string
-                      option_id:
-                        type: string
-                      option_key:
-                        type: string
       responses:
         "200":
-          description: Quiz attempt scored on the server; marks quiz-gated lesson complete when passed
+          description: Quiz attempt scored on the server from saved answers; marks quiz-gated lesson complete when passed
         "403":
           description: Forbidden
         "422":
-          description: Attempt cap reached or invalid answer payload
+          description: Unanswered questions or no matching attempt
           content:
             application/json:
               schema:

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+
 import { extractApiErrorMessage } from '../../api/client';
 import {
   checkQuizAnswer,
@@ -10,11 +11,13 @@ import {
   QuizAttemptResultDto,
   QuizDetailDto,
   QuizOptionDto,
+  startQuizAttempt,
   submitQuizAttempt,
 } from '../../api/learningApi';
+import { APPROVED_MASCOT_THINKING_ASSET } from '../../assets/approvedAssets';
 import { TpButton, TpCard, TpErrorBanner } from '../../components/DesignSystem';
+import { TpIcon } from '../../components/TpIcon';
 import { Fx03CorrectWrong } from '../../fx/Fx03CorrectWrong';
-import { PipIdleSvg } from '../../pip';
 import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
 import { LearningScreenState } from './components/LearningScreenState';
@@ -42,6 +45,7 @@ export const DEFAULT_DEMO_QUIZ: QuizDetailDto = {
   remaining_attempts: 3,
   best_score_percent: 0,
   is_passed: false,
+  open_attempt_id: '01J000000000000000ATTEMPT1',
   is_demo: true,
   questions: [
     {
@@ -114,7 +118,7 @@ export function QuizScreen({
   onBack,
   onQuizPassed,
 }: QuizScreenProps = {}): React.JSX.Element {
-  const { tokens, reducedMotion } = useTheme();
+  const { tokens } = useTheme();
   const { token } = useAuth();
 
   const shouldFetch =
@@ -122,6 +126,9 @@ export function QuizScreen({
 
   const [quiz, setQuiz] = useState<QuizDetailDto | null>(
     initialQuiz !== undefined ? initialQuiz : DEFAULT_DEMO_QUIZ,
+  );
+  const [openAttemptId, setOpenAttemptId] = useState<string | null>(
+    initialQuiz?.open_attempt_id ?? DEFAULT_DEMO_QUIZ.open_attempt_id ?? null,
   );
   const [status, setStatus] = useState<'idle' | 'loading' | 'empty' | 'error' | 'offline'>(
     screenState ?? (shouldFetch ? 'loading' : 'idle'),
@@ -131,17 +138,48 @@ export function QuizScreen({
   const [questionIndex, setQuestionIndex] = useState<number>(initialQuestionIndex);
   const [selectedByQuestionId, setSelectedByQuestionId] = useState<Record<string, QuizOptionDto>>(
     () => {
-      // Pre-select option A on question 2 when showing default mockup state if no initialQuiz was passed
       const q2 = DEFAULT_DEMO_QUIZ.questions[1];
       const optA = q2?.options[0];
       return q2 && optA && initialQuiz === undefined ? { [q2.id]: optA } : {};
     },
   );
+  const [showHint, setShowHint] = useState<boolean>(true);
   const [checkedResult, setCheckedResult] = useState<CheckQuizAnswerData | null>(null);
   const [attemptResult, setAttemptResult] = useState<QuizAttemptResultDto | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const ensureAttemptStarted = useCallback(
+    async (targetQuiz: QuizDetailDto): Promise<string | null> => {
+      if (targetQuiz.open_attempt_id) {
+        setOpenAttemptId(targetQuiz.open_attempt_id);
+        return targetQuiz.open_attempt_id;
+      }
+      try {
+        const started = await startQuizAttempt(
+          targetQuiz.id,
+          `quiz-${targetQuiz.id}-start-${targetQuiz.attempts_used + 1}`,
+        );
+        const startedId = started.data.attempt.id;
+        setOpenAttemptId(startedId);
+        setQuiz((prev) =>
+          prev
+            ? {
+                ...prev,
+                attempts_used: started.data.attempt.attempts_used,
+                remaining_attempts: started.data.attempt.remaining_attempts,
+                open_attempt_id: startedId,
+              }
+            : prev,
+        );
+        return startedId;
+      } catch {
+        return null;
+      }
+    },
+    [],
+  );
 
   const loadQuiz = useCallback(async () => {
     setStatus('loading');
@@ -158,14 +196,18 @@ export function QuizScreen({
         setStatus('empty');
       } else {
         setQuiz(res.data.quiz);
+        setOpenAttemptId(res.data.quiz.open_attempt_id ?? null);
         setQuestionIndex(0);
         setStatus('idle');
+        if (!res.data.quiz.open_attempt_id && res.data.quiz.remaining_attempts > 0) {
+          void ensureAttemptStarted(res.data.quiz);
+        }
       }
     } catch (err) {
       setErrorText(extractApiErrorMessage(err, 'Could not load this quiz.'));
       setStatus(isOfflineError(err) ? 'offline' : 'error');
     }
-  }, [lessonId, quizId]);
+  }, [ensureAttemptStarted, lessonId, quizId]);
 
   useEffect(() => {
     if (screenState) {
@@ -220,11 +262,28 @@ export function QuizScreen({
     setIsChecking(true);
     setActionError(null);
     try {
-      const response = await checkQuizAnswer(activeQuiz.id, {
-        question_id: currentQuestion.id,
-        option_id: selectedOption.id,
-        option_key: selectedOption.option_key,
-      });
+      let attemptIdToUse = openAttemptId;
+      if (!attemptIdToUse && token) {
+        attemptIdToUse = await ensureAttemptStarted(activeQuiz);
+      }
+
+      const payload = attemptIdToUse
+        ? {
+            attempt_id: attemptIdToUse,
+            question_id: currentQuestion.id,
+            option_id: selectedOption.id,
+            option_key: selectedOption.option_key,
+          }
+        : {
+            question_id: currentQuestion.id,
+            option_id: selectedOption.id,
+            option_key: selectedOption.option_key,
+          };
+
+      const response = await checkQuizAnswer(activeQuiz.id, payload);
+      if (response.data.attempt_id) {
+        setOpenAttemptId(response.data.attempt_id);
+      }
       setCheckedResult(response.data);
     } catch (err) {
       setActionError(extractApiErrorMessage(err, 'Could not check your answer right now.'));
@@ -249,18 +308,10 @@ export function QuizScreen({
     setIsSubmitting(true);
     setActionError(null);
     try {
-      const answersPayload = activeQuiz.questions.map((q) => {
-        const chosen = selectedByQuestionId[q.id] ?? q.options[0];
-        return {
-          question_id: q.id,
-          option_id: chosen?.id,
-          option_key: chosen?.option_key,
-        };
-      });
-
       const res = await submitQuizAttempt(activeQuiz.id, {
-        idempotency_key: `quiz-${activeQuiz.id}-attempt-${activeQuiz.attempts_used + 1}`,
-        answers: answersPayload,
+        action: 'finish',
+        attempt_id: openAttemptId ?? undefined,
+        idempotency_key: `quiz-${activeQuiz.id}-finish-${activeQuiz.attempts_used || 1}`,
       });
       setAttemptResult(res.data.attempt);
       if (res.data.attempt.passed) {
@@ -273,7 +324,7 @@ export function QuizScreen({
     }
   };
 
-  const handleRetryFullQuiz = () => {
+  const handleRetryFullQuiz = async () => {
     if (attemptResult) {
       setQuiz((prev) =>
         prev
@@ -281,21 +332,26 @@ export function QuizScreen({
               ...prev,
               attempts_used: attemptResult.attempts_used,
               remaining_attempts: attemptResult.remaining_attempts,
+              open_attempt_id: null,
             }
           : prev,
       );
     }
+    setOpenAttemptId(null);
     setAttemptResult(null);
     setCheckedResult(null);
     setActionError(null);
     setSelectedByQuestionId({});
     setQuestionIndex(0);
+    if (quiz) {
+      await ensureAttemptStarted({ ...quiz, open_attempt_id: null });
+    }
   };
 
   return (
-    <View testID="quiz-screen" style={[styles.root, { backgroundColor: tokens.colors.bg }]}>
+    <View testID="quiz-screen" style={styles.root}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Top Bar */}
+        {/* Top Bar matching 04-quiz.png */}
         <View style={styles.topRow}>
           <Pressable
             testID="quiz-close-btn"
@@ -304,7 +360,7 @@ export function QuizScreen({
             onPress={onBack}
             style={styles.closeBtn}
           >
-            <Text style={[styles.closeBtnText, { fontFamily: tokens.fonts.black }]}>✕</Text>
+            <TpIcon name="x" size={18} color="#0F172A" />
           </Pressable>
           <View style={styles.progressTrack}>
             <View
@@ -312,15 +368,14 @@ export function QuizScreen({
                 styles.progressFill,
                 {
                   width: `${progressPct}%`,
-                  backgroundColor: tokens.colors.kidPurple,
                 },
               ]}
             />
           </View>
           <View style={styles.attemptsPill} testID="quiz-attempts-pill">
+            <TpIcon name="heart" size={13} color="#EF4444" fill="#EF4444" />
             <Text style={[styles.attemptsPillText, { fontFamily: tokens.fonts.extrabold }]}>
-              {attemptResult ? attemptResult.remaining_attempts : activeQuiz.remaining_attempts}{' '}
-              left
+              {attemptResult ? attemptResult.remaining_attempts : activeQuiz.remaining_attempts}
             </Text>
           </View>
         </View>
@@ -338,7 +393,9 @@ export function QuizScreen({
                 testID="quiz-retry-attempt-btn"
                 label="Try Again"
                 variant="teal"
-                onPress={handleRetryFullQuiz}
+                onPress={() => {
+                  void handleRetryFullQuiz();
+                }}
               />
             ) : null}
             {onBack ? (
@@ -353,33 +410,30 @@ export function QuizScreen({
         ) : (
           <>
             {/* Question Header */}
-            <Text
-              style={[
-                styles.questionOverline,
-                { color: tokens.colors.kidPurple, fontFamily: tokens.fonts.extrabold },
-              ]}
-            >
+            <Text style={[styles.questionOverline, { fontFamily: tokens.fonts.extrabold }]}>
               QUESTION {currentQuestion.question_number} OF {activeQuiz.questions.length}
             </Text>
             <Text
               testID="quiz-question-prompt"
-              style={[
-                styles.questionPrompt,
-                { color: tokens.colors.ink, fontFamily: tokens.fonts.black },
-              ]}
+              style={[styles.questionPrompt, { fontFamily: tokens.fonts.black }]}
             >
               {currentQuestion.prompt}
             </Text>
 
-            {/* Code Block */}
+            {/* Dark Code Window with Traffic Light Dots */}
             {currentQuestion.code_snippet ? (
               <View style={styles.codeBlock} testID="quiz-code-snippet">
+                <View style={styles.codeDotsRow}>
+                  <View style={[styles.codeDot, { backgroundColor: '#EF4444' }]} />
+                  <View style={[styles.codeDot, { backgroundColor: '#F59E0B' }]} />
+                  <View style={[styles.codeDot, { backgroundColor: '#10B981' }]} />
+                </View>
                 <Text style={styles.codeText}>{currentQuestion.code_snippet}</Text>
               </View>
             ) : null}
 
-            {/* Options */}
-            <View style={styles.optionsList}>
+            {/* 2x2 Options Grid matching 04-quiz.png */}
+            <View testID="quiz-options-grid" style={styles.optionsGrid}>
               {currentQuestion.options.map((opt) => {
                 const isSelected = selectedOption?.id === opt.id;
                 return (
@@ -393,8 +447,8 @@ export function QuizScreen({
                     style={[
                       styles.optionCard,
                       {
-                        backgroundColor: isSelected ? '#F5F0FF' : tokens.colors.surface,
-                        borderColor: isSelected ? tokens.colors.kidPurple : '#E2E8F0',
+                        backgroundColor: isSelected ? '#EDE9FE' : '#FFFFFF',
+                        borderColor: isSelected ? '#6B2FD6' : '#E2E8F0',
                       },
                     ]}
                   >
@@ -402,7 +456,7 @@ export function QuizScreen({
                       style={[
                         styles.optionLetterBadge,
                         {
-                          backgroundColor: isSelected ? tokens.colors.kidPurple : '#F1F5F9',
+                          backgroundColor: isSelected ? '#6B2FD6' : '#F1F5F9',
                         },
                       ]}
                     >
@@ -410,7 +464,7 @@ export function QuizScreen({
                         style={[
                           styles.optionLetterText,
                           {
-                            color: isSelected ? '#FFFFFF' : '#475569',
+                            color: isSelected ? '#FFFFFF' : '#64748B',
                             fontFamily: tokens.fonts.black,
                           },
                         ]}
@@ -421,7 +475,7 @@ export function QuizScreen({
                     <Text
                       style={[
                         styles.optionLabel,
-                        { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
+                        { fontFamily: tokens.fonts.black },
                       ]}
                     >
                       {opt.label}
@@ -449,48 +503,77 @@ export function QuizScreen({
               </View>
             ) : null}
 
-            {/* Captain Jetty Hint Box */}
-            {currentQuestion.hint ? (
+            {/* Captain Jetty Hint Bubble with mascot-thinking.png */}
+            {currentQuestion.hint && showHint ? (
               <View style={styles.hintCard} testID="quiz-hint-box">
-                <PipIdleSvg size={44} reducedMotion={reducedMotion} />
-                <Text
-                  style={[
-                    styles.hintText,
-                    { color: '#5B21B6', fontFamily: tokens.fonts.bold },
-                  ]}
-                >
-                  Captain Jetty Hint: {currentQuestion.hint}
-                </Text>
+                <Image
+                  testID="quiz-mascot-thinking"
+                  source={APPROVED_MASCOT_THINKING_ASSET}
+                  accessibilityLabel="Captain Jetty thinking"
+                  style={styles.mascotThinkingImage}
+                  resizeMode="contain"
+                />
+                <View style={styles.hintBubble}>
+                  <Text style={[styles.hintTitle, { fontFamily: tokens.fonts.black }]}>
+                    Need a hint?
+                  </Text>
+                  <Text style={[styles.hintText, { fontFamily: tokens.fonts.bold }]}>
+                    {currentQuestion.hint}
+                  </Text>
+                </View>
               </View>
             ) : null}
 
-            {/* Primary Action Button */}
-            {checkedResult?.is_correct ? (
-              <TpButton
-                testID="quiz-next-or-submit-btn"
-                label={
-                  clampedIndex + 1 < activeQuiz.questions.length
-                    ? 'Next Question'
-                    : 'Finish Quiz'
-                }
-                variant="teal"
-                loading={isSubmitting}
-                onPress={() => {
-                  void handleNextOrSubmit();
-                }}
-              />
-            ) : (
-              <TpButton
-                testID="quiz-check-answer-btn"
-                label="Check Answer"
-                variant="teal"
-                disabled={!selectedOption}
-                loading={isChecking}
-                onPress={() => {
-                  void handleCheckAnswer();
-                }}
-              />
-            )}
+            {/* Bottom Action Bar: Lightbulb Hint Button + Check Answer / Next Button */}
+            <View style={styles.bottomActionsRow}>
+              <Pressable
+                testID="quiz-hint-btn"
+                accessibilityRole="button"
+                accessibilityLabel="Toggle hint"
+                onPress={() => setShowHint((prev) => !prev)}
+                style={styles.hintToggleButton}
+              >
+                <TpIcon name="lightbulb" size={16} color="#6B2FD6" />
+                <Text style={[styles.hintToggleText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Hint
+                </Text>
+              </Pressable>
+
+              {checkedResult?.is_correct ? (
+                <Pressable
+                  testID="quiz-next-or-submit-btn"
+                  accessibilityRole="button"
+                  disabled={isSubmitting}
+                  onPress={() => {
+                    void handleNextOrSubmit();
+                  }}
+                  style={styles.checkAnswerCta}
+                >
+                  <Text style={[styles.checkAnswerCtaText, { fontFamily: tokens.fonts.black }]}>
+                    {clampedIndex + 1 < activeQuiz.questions.length
+                      ? 'Next Question'
+                      : 'Finish Quiz'}
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  testID="quiz-check-answer-btn"
+                  accessibilityRole="button"
+                  disabled={!selectedOption || isChecking}
+                  onPress={() => {
+                    void handleCheckAnswer();
+                  }}
+                  style={[
+                    styles.checkAnswerCta,
+                    !selectedOption ? styles.checkAnswerCtaDisabled : null,
+                  ]}
+                >
+                  <Text style={[styles.checkAnswerCtaText, { fontFamily: tokens.fonts.black }]}>
+                    Check answer
+                  </Text>
+                </Pressable>
+              )}
+            </View>
           </>
         )}
       </ScrollView>
@@ -501,117 +584,176 @@ export function QuizScreen({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: '#FAF8FF',
   },
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 18,
     paddingTop: 14,
     paddingBottom: 28,
-    gap: 14,
+    gap: 12,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
   closeBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F1F5F9',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  closeBtnText: {
-    fontSize: 16,
-    color: '#0F172A',
   },
   progressTrack: {
     flex: 1,
     height: 12,
     borderRadius: 999,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#EDE9FE',
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
     borderRadius: 999,
+    backgroundColor: '#6B2FD6',
   },
   attemptsPill: {
-    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FEE2E2',
     borderRadius: 999,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   attemptsPillText: {
     fontSize: 12,
-    color: '#0F172A',
+    color: '#991B1B',
   },
   questionOverline: {
     fontSize: 11,
+    color: '#6B2FD6',
     letterSpacing: 0.6,
-    marginTop: 4,
+    marginTop: 2,
   },
   questionPrompt: {
-    fontSize: 22,
-    lineHeight: 28,
+    fontSize: 20,
+    lineHeight: 26,
+    color: '#0F172A',
   },
   codeBlock: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#1E1B4B',
     borderRadius: 18,
     padding: 16,
+  },
+  codeDotsRow: {
+    flexDirection: 'row',
+    gap: 5,
+    marginBottom: 10,
+  },
+  codeDot: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
   },
   codeText: {
-    color: '#F8FAFC',
+    color: '#E2E8F0',
     fontFamily: 'monospace',
-    fontSize: 15,
-    lineHeight: 24,
+    fontSize: 14,
+    lineHeight: 22,
   },
-  optionsList: {
-    gap: 10,
+  optionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: 10,
   },
   optionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    padding: 16,
+    width: '48.5%',
     borderRadius: 18,
+    padding: 14,
     borderWidth: 2.5,
+    gap: 8,
   },
   optionLetterBadge: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   optionLetterText: {
-    fontSize: 15,
+    fontSize: 12,
   },
   optionLabel: {
-    flex: 1,
-    fontSize: 16,
+    fontSize: 17,
+    color: '#0F172A',
   },
   checkedSection: {
     gap: 10,
   },
   hintCard: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    backgroundColor: '#F5F0FF',
-    borderColor: '#DDD6FE',
-    borderWidth: 1.5,
+    alignItems: 'flex-end',
+    gap: 8,
+    marginTop: 4,
+  },
+  mascotThinkingImage: {
+    width: 68,
+    height: 68,
+  },
+  hintBubble: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
+    borderBottomLeftRadius: 4,
     padding: 12,
+    borderWidth: 1.5,
+    borderColor: '#EDE9FE',
+  },
+  hintTitle: {
+    fontSize: 11,
+    color: '#6B2FD6',
   },
   hintText: {
+    fontSize: 12,
+    lineHeight: 17,
+    color: '#0F172A',
+    marginTop: 2,
+  },
+  bottomActionsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 4,
+  },
+  hintToggleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#EDE9FE',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 16,
+  },
+  hintToggleText: {
+    fontSize: 14,
+    color: '#6B2FD6',
+  },
+  checkAnswerCta: {
     flex: 1,
-    fontSize: 13,
-    lineHeight: 18,
+    backgroundColor: '#FFB700',
+    borderRadius: 16,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkAnswerCtaDisabled: {
+    opacity: 0.55,
+  },
+  checkAnswerCtaText: {
+    fontSize: 16,
+    color: '#0F172A',
   },
   attemptSummaryCard: {
     gap: 12,

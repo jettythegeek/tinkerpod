@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\SmsSender;
-use App\Domain\Learning\LearningAccess as DomainLearningAccess;
-use App\Services\LearningAccess as ServiceLearningAccess;
+use App\Domain\Learning\LearningAccess;
 use App\Services\Sms\LogSmsSender;
 use App\Support\NigerianPhone;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -23,8 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LogSmsSender::class);
         $this->app->bind(SmsSender::class, LogSmsSender::class);
-        $this->app->singleton(DomainLearningAccess::class);
-        $this->app->alias(DomainLearningAccess::class, ServiceLearningAccess::class);
+        $this->app->singleton(LearningAccess::class);
     }
 
     /**

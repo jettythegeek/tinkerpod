@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+
 import { extractApiErrorMessage } from '../../api/client';
 import {
   fetchKidHome,
@@ -7,11 +8,16 @@ import {
   KidHomeData,
   PodSummaryDto,
 } from '../../api/learningApi';
-import { ApprovedAvatar, TpButton, TpCard } from '../../components/DesignSystem';
-import { PipIdleSvg } from '../../pip';
-import { AgeBandThemeMode, useTheme } from '../../theme';
+import {
+  APPROVED_LESSON_LOOPS_ASSET,
+  APPROVED_MASCOT_CHEERING_ASSET,
+  APPROVED_MASCOT_SLEEPY_ASSET,
+  resolveApprovedAvatar,
+} from '../../assets/approvedAssets';
+import { TpIcon } from '../../components/TpIcon';
+import { useTheme } from '../../theme';
 import { useAuth } from '../auth/AuthContext';
-import { KidBottomNav } from './components/KidBottomNav';
+import { KidBottomNav, KidNavTab } from './components/KidBottomNav';
 import { LearningScreenState } from './components/LearningScreenState';
 import { getGamificationStub } from './gamificationStub';
 
@@ -22,46 +28,69 @@ export interface KidHomeScreenProps {
   readonly autoFetch?: boolean;
   readonly onOpenJourneyMap?: (podId?: string) => void;
   readonly onOpenLesson?: (lessonId: string) => void;
+  readonly onSelectTab?: (tab: KidNavTab) => void;
 }
 
-const DEFAULT_PODS: readonly PodSummaryDto[] = [
-  {
-    id: '01J0000000000000000000POD1',
-    slug: 'coding-pod',
-    title: 'Coding',
-    icon: 'laptop-code',
-    is_demo: true,
-    cleared_worlds_count: 3,
-    total_worlds_count: 6,
+const DEFAULT_DEMO_HOME: KidHomeData = {
+  child: {
+    id: '01J000000000000000000CHILD',
+    public_id: '01J000000000000000000CHILD',
+    first_name: 'Amara',
+    username: 'amara_codes',
+    avatar: 'av1.png',
+    age_band: 'junior',
+    theme_flag: 'junior',
   },
-  {
-    id: '01J0000000000000000000POD2',
-    slug: 'design-pod',
-    title: 'Design',
-    icon: 'palette',
-    is_demo: true,
-    cleared_worlds_count: 1,
-    total_worlds_count: 5,
+  gamification: {
+    xp: 680,
+    next_level_xp: 1000,
+    level: 4,
+    title: 'Jango-Jango',
+    next_title: 'Level 5',
+    coins: 420,
+    gems: 18,
+    stars: 24,
+    streak_days: 7,
+    missions: [],
   },
-  {
-    id: '01J0000000000000000000POD3',
-    slug: 'ai-data-pod',
-    title: 'AI & Data',
-    icon: 'sparkles',
-    is_demo: true,
-    cleared_worlds_count: 0,
-    total_worlds_count: 6,
+  continue_lesson: {
+    id: '01J0000000000000000LESSON2',
+    slug: 'repeat-and-count',
+    lesson_number: 2,
+    position_in_world: 2,
+    total_in_world: 5,
+    title: 'Loops: Repeat & Count',
+    summary: 'Teach Captain Jetty to repeat actions without typing the same code ten times.',
+    thumbnail_asset: null,
+    duration_minutes: 8,
+    difficulty: 'Beginner',
+    steps_count: 5,
+    state: 'now',
+    is_completed: false,
+    watch_percent: 45,
+    resume_position_seconds: 32,
+    world_id: '01J00000000000000000WORLD4',
+    world_number: 2,
+    world_title: 'Loops Valley',
   },
-  {
-    id: '01J0000000000000000000POD4',
-    slug: 'robotics-pod',
-    title: 'Robotics',
-    icon: 'cpu',
-    is_demo: true,
-    cleared_worlds_count: 0,
-    total_worlds_count: 5,
+  continue_project: {
+    id: '01J0000000000000000PROJECT',
+    title: 'Space Dodger — Collision Loop',
+    language: 'python',
+    progress_percent: 78,
   },
-];
+  pods: [
+    {
+      id: '01J0000000000000000000POD1',
+      slug: 'coding-pod',
+      title: 'Coding Pod',
+      icon: 'code-xml',
+      is_demo: true,
+      cleared_worlds_count: 3,
+      total_worlds_count: 6,
+    },
+  ],
+};
 
 export function KidHomeScreen({
   initialData,
@@ -70,13 +99,17 @@ export function KidHomeScreen({
   autoFetch,
   onOpenJourneyMap,
   onOpenLesson,
+  onSelectTab,
 }: KidHomeScreenProps = {}): React.JSX.Element {
-  const { tokens, mode, reducedMotion } = useTheme();
-  const { kidProfile, token, signOut } = useAuth();
+  const { mode, tokens } = useTheme();
+  const { kidProfile: child, token } = useAuth();
+  const stub = getGamificationStub();
 
   const shouldFetch = autoFetch ?? Boolean(token && initialData === undefined && !screenState);
 
-  const [data, setData] = useState<KidHomeData | null>(initialData ?? null);
+  const [homeData, setHomeData] = useState<KidHomeData | null>(
+    initialData !== undefined ? initialData : DEFAULT_DEMO_HOME,
+  );
   const [status, setStatus] = useState<'idle' | 'loading' | 'empty' | 'error' | 'offline'>(
     screenState ?? (shouldFetch ? 'loading' : 'idle'),
   );
@@ -87,14 +120,15 @@ export function KidHomeScreen({
     setErrorText(undefined);
     try {
       const res = await fetchKidHome();
-      setData(res.data);
-      if (res.data.pods.length === 0 && !res.data.continue_lesson) {
+      if (!res.data || res.data.pods.length === 0) {
+        setHomeData(res.data ?? null);
         setStatus('empty');
       } else {
+        setHomeData(res.data);
         setStatus('idle');
       }
     } catch (err) {
-      setErrorText(extractApiErrorMessage(err, 'Could not load your home dashboard.'));
+      setErrorText(extractApiErrorMessage(err, 'Could not load your learning home.'));
       setStatus(isOfflineError(err) ? 'offline' : 'error');
     }
   }, []);
@@ -121,690 +155,1058 @@ export function KidHomeScreen({
     );
   }
 
-  const resolvedThemeFlag: AgeBandThemeMode =
-    data?.child?.theme_flag ?? kidProfile?.theme_flag ?? mode;
+  const data = homeData ?? DEFAULT_DEMO_HOME;
+  const activeChild = child ?? data.child;
+  const isSenior = mode === 'senior' || activeChild.theme_flag === 'senior';
+  const displayName = activeChild.first_name || (isSenior ? 'Tunde' : 'Amara');
+  const avatarSource = resolveApprovedAvatar(activeChild.avatar || 'av1.png');
 
-  const gamification = getGamificationStub();
-  const childName =
-    data?.child?.first_name ??
-    kidProfile?.first_name ??
-    (resolvedThemeFlag === 'senior' ? 'Tobi' : 'Amara');
-  const childAvatar =
-    data?.child?.avatar ??
-    kidProfile?.avatar ??
-    (resolvedThemeFlag === 'senior' ? 'av3.png' : 'av1.png');
-
-  const continueLesson = data?.continue_lesson ?? {
-    id: '01J0000000000000000LESSON2',
-    slug: 'repeat-and-count',
-    lesson_number: 2,
-    position_in_world: 2,
-    total_in_world: 5,
-    title: 'Repeat and Count',
-    summary: 'Teach Captain Jetty to repeat actions without typing the same code ten times.',
-    thumbnail_asset: null,
-    duration_minutes: 8,
-    difficulty: 'Beginner',
-    steps_count: 5,
-    state: 'now' as const,
-    is_completed: false,
-    watch_percent: 40,
-    resume_position_seconds: 32,
-    world_id: '01J00000000000000000WORLD4',
-    world_number: 4,
-    world_title: 'Loops Valley',
+  const gamification = data.gamification ?? {
+    xp: stub.xp,
+    next_level_xp: stub.nextLevelXp,
+    level: stub.level,
+    title: stub.title,
+    next_title: stub.nextTitle,
+    coins: stub.coins,
+    gems: stub.gems,
+    stars: stub.stars,
+    streak_days: stub.streakDays,
+    missions: [],
   };
 
-  const pods = data?.pods && data.pods.length > 0 ? data.pods : DEFAULT_PODS;
+  const pods: readonly PodSummaryDto[] = data.pods ?? [];
+  const primaryPod: PodSummaryDto | undefined = pods[0];
+  const continueLesson = data.continue_lesson ?? DEFAULT_DEMO_HOME.continue_lesson!;
+  const nextLevelXp = Math.max(1, gamification.next_level_xp || 1000);
+  const xpProgressPct = Math.min(100, Math.round((gamification.xp / nextLevelXp) * 100));
+  const xpToNext = Math.max(0, nextLevelXp - gamification.xp);
 
-  if (resolvedThemeFlag === 'senior') {
+  const handleNavSelect = (tab: KidNavTab): void => {
+    if (onSelectTab) {
+      onSelectTab(tab);
+      return;
+    }
+    if (tab === 'learn') {
+      onOpenJourneyMap?.(primaryPod?.id);
+    }
+  };
+
+  if (isSenior) {
     return (
-      <View
-        testID="kid-home-screen"
-        style={[styles.root, { backgroundColor: tokens.colors.bg }]}
-      >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+      <View testID="kid-home-screen" style={[styles.screen, styles.screenSenior]}>
+        <ScrollView contentContainerStyle={styles.seniorScrollContent}>
           {/* Senior Header (10-teen-home.png) */}
-          <View style={styles.headerRow} testID="kid-home-senior-header">
-            <ApprovedAvatar filename={childAvatar} size={44} />
-            <View style={styles.headerTextCol}>
-              <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
+          <View testID="kid-home-senior-header" style={styles.seniorHeaderRow}>
+            <View>
+              <Text style={[styles.seniorWelcomeMeta, { fontFamily: tokens.fonts.bold }]}>
                 Welcome back
               </Text>
               <Text
-                style={[
-                  styles.seniorName,
-                  { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-                ]}
+                testID="kid-home-greeting"
+                style={[styles.seniorGreetingName, { fontFamily: tokens.fonts.black }]}
               >
-                {childName}
+                {displayName}
               </Text>
             </View>
-            <View style={styles.statChip} testID="stub-coins-chip">
-              <Text style={[styles.statText, { fontFamily: tokens.fonts.extrabold }]}>
-                {gamification.coins} Coins
-              </Text>
-            </View>
-            <View style={styles.statChip} testID="stub-gems-chip">
-              <Text style={[styles.statText, { fontFamily: tokens.fonts.extrabold }]}>
-                {gamification.gems} Gems
-              </Text>
+            <View style={styles.seniorChipsRow}>
+              <View testID="kid-hud-coins-chip" style={styles.chipCoinLight}>
+                <TpIcon name="coin" size={14} color="#92400E" />
+                <Text style={[styles.chipCoinLightText, { fontFamily: tokens.fonts.extrabold }]}>
+                  {gamification.coins}
+                </Text>
+              </View>
+              <View testID="kid-hud-gems-chip" style={styles.chipGemLight}>
+                <TpIcon name="gem" size={14} color="#0F766E" />
+                <Text style={[styles.chipGemLightText, { fontFamily: tokens.fonts.extrabold }]}>
+                  {gamification.gems}
+                </Text>
+              </View>
             </View>
           </View>
 
-          {/* Senior XP Banner (M3 Stubbed) */}
-          <View
-            style={[styles.seniorXpBanner, { backgroundColor: tokens.colors.adminNavy }]}
-            testID="senior-xp-stub-banner"
-          >
-            <View style={styles.seniorXpTop}>
+          {/* Senior Rank & XP Banner */}
+          <View testID="senior-xp-stub-banner" style={styles.seniorXpBanner}>
+            <View style={styles.seniorXpHeader}>
               <View>
-                <Text style={[styles.seniorXpOverline, { fontFamily: tokens.fonts.extrabold }]}>
-                  Level {gamification.level} · {gamification.title}
+                <Text style={[styles.seniorRankEyebrow, { fontFamily: tokens.fonts.extrabold }]}>
+                  RANK · LEVEL {gamification.level}
                 </Text>
-                <Text style={[styles.seniorXpValue, { fontFamily: tokens.fonts.extrabold }]}>
-                  {gamification.xp}{' '}
-                  <Text style={styles.seniorXpMuted}>/ {gamification.nextLevelXp} XP</Text>
-                </Text>
-              </View>
-              <View style={styles.seniorNextBadge}>
-                <Text style={[styles.seniorNextBadgeText, { fontFamily: tokens.fonts.extrabold }]}>
-                  Next: {gamification.nextTitle}
+                <Text style={[styles.seniorRankTitle, { fontFamily: tokens.fonts.black }]}>
+                  {gamification.title ?? 'Code Dragon'}
                 </Text>
               </View>
+              <View testID="kid-hud-xp-chip" style={styles.seniorXpChip}>
+                <TpIcon name="xp" size={14} color={tokens.colors.kidPurple} />
+                <Text style={[styles.seniorXpChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                  {gamification.xp} XP
+                </Text>
+              </View>
             </View>
-            <View style={styles.seniorXpTrack}>
-              <View style={[styles.seniorXpFill, { width: '0%' }]} />
+            <View style={styles.seniorProgressTrack}>
+              <View style={[styles.seniorProgressFill, { width: `${xpProgressPct}%` }]} />
             </View>
-          </View>
-
-          {/* Encouraging Daily Check-In Card (Kid-safe wording, Captain Jetty) */}
-          <View style={styles.seniorStreakCard}>
-            <PipIdleSvg size={48} reducedMotion={reducedMotion} />
-            <View style={styles.headerTextCol}>
-              <Text
-                style={[
-                  styles.seniorStreakTitle,
-                  { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-                ]}
-              >
-                Ready for today’s coding session
-              </Text>
-              <Text style={[styles.seniorStreakSub, { fontFamily: tokens.fonts.semibold }]}>
-                Do one lesson today with Captain Jetty.
-              </Text>
-            </View>
-          </View>
-
-          {/* Continue Building Section */}
-          <View style={styles.sectionHeaderRow}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-              ]}
-            >
-              Continue building
+            <Text style={[styles.seniorProgressCaption, { fontFamily: tokens.fonts.bold }]}>
+              {gamification.xp} / {nextLevelXp} XP to Level {gamification.level + 1} —{' '}
+              {gamification.next_title ?? 'Design Jango'}
             </Text>
-            <Pressable
-              onPress={() => onOpenJourneyMap?.(pods[0]?.id)}
-              accessibilityRole="button"
-              accessibilityLabel="All projects"
-            >
+          </View>
+
+          {/* Streak Paused Card with mascot-sleepy.png and Kind Wording (Hard Rule 6) */}
+          <View testID="kid-home-streak-card" style={styles.seniorStreakCard}>
+            <Image
+              testID="kid-home-mascot-sleepy"
+              source={APPROVED_MASCOT_SLEEPY_ASSET}
+              accessibilityLabel="Captain Jetty resting"
+              style={styles.seniorSleepyMascot}
+              resizeMode="contain"
+            />
+            <View style={styles.seniorStreakTextWrap}>
+              <Text style={[styles.seniorStreakTitle, { fontFamily: tokens.fonts.black }]}>
+                Streak paused — no stress
+              </Text>
               <Text
-                style={[
-                  styles.sectionLink,
-                  { color: tokens.colors.buttonTeal, fontFamily: tokens.fonts.bold },
-                ]}
+                testID="kid-home-streak-kind-copy"
+                style={[styles.seniorStreakSub, { fontFamily: tokens.fonts.bold }]}
               >
-                All projects
+                Captain Jetty kept your spot warm! Do one lesson today to start a new streak.
+              </Text>
+            </View>
+            <Pressable
+              testID="kid-home-wake-jetty-button"
+              accessibilityRole="button"
+              onPress={() => onOpenLesson?.(continueLesson.id)}
+              style={styles.wakeJettyBtn}
+            >
+              <Text style={[styles.wakeJettyBtnText, { fontFamily: tokens.fonts.black }]}>
+                Wake Jetty
               </Text>
             </Pressable>
           </View>
 
-          <TpCard style={styles.seniorContinueCard}>
-            <View style={styles.seniorProjectRow}>
-              <View style={styles.seniorProjectIcon}>
-                <Text
-                  style={[
-                    styles.seniorProjectIconText,
-                    { color: tokens.colors.accents.blue, fontFamily: tokens.fonts.black },
-                  ]}
-                >
-                  {'</>'}
-                </Text>
+          {/* Continue Building Card */}
+          <Text style={[styles.sectionHeading, { fontFamily: tokens.fonts.black }]}>
+            Continue building
+          </Text>
+          <View testID="senior-continue-card" style={styles.seniorContinueCard}>
+            <View style={styles.seniorContinueRow}>
+              <View style={styles.seniorGameIconWrap}>
+                <TpIcon name="gamepad-2" size={26} color={tokens.colors.surface} />
               </View>
-              <View style={styles.headerTextCol}>
-                <Text
-                  style={[
-                    styles.seniorProjectTitle,
-                    { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-                  ]}
-                >
-                  {continueLesson.title}
+              <View style={styles.seniorContinueMetaWrap}>
+                <Text style={[styles.seniorContinueEyebrow, { fontFamily: tokens.fonts.extrabold }]}>
+                  PYTHON · MODULE 3
                 </Text>
-                <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
-                  {continueLesson.world_title} · Lesson {continueLesson.position_in_world} of{' '}
-                  {continueLesson.total_in_world} · Python
+                <Text style={[styles.seniorContinueTitle, { fontFamily: tokens.fonts.black }]}>
+                  {data.continue_project?.title ?? continueLesson.title}
                 </Text>
+                <View style={styles.seniorMiniTrack}>
+                  <View
+                    style={[
+                      styles.seniorMiniFill,
+                      {
+                        width: `${data.continue_project?.progress_percent ?? 78}%`,
+                      },
+                    ]}
+                  />
+                </View>
               </View>
             </View>
-
-            <View style={styles.progressTrack}>
-              <View
-                style={[
-                  styles.progressFillTeal,
-                  {
-                    width: `${Math.min(100, Math.max(8, continueLesson.watch_percent))}%`,
-                    backgroundColor: tokens.colors.teal,
-                  },
-                ]}
-              />
-            </View>
-
             <View style={styles.seniorContinueActions}>
-              <View style={styles.flexOne}>
-                <TpButton
-                  testID="kid-home-resume-lesson-btn"
-                  label="Resume"
-                  variant="teal"
-                  onPress={() => onOpenLesson?.(continueLesson.id)}
-                />
-              </View>
-              <View style={styles.flexOne}>
-                <TpButton
-                  testID="kid-home-open-map-btn"
-                  label="Journey Map"
-                  variant="ghost"
-                  onPress={() => onOpenJourneyMap?.(pods[0]?.id)}
-                />
-              </View>
+              <Pressable
+                testID="kid-home-continue-btn"
+                accessibilityRole="button"
+                onPress={() => onOpenLesson?.(continueLesson.id)}
+                style={styles.seniorResumeBtn}
+              >
+                <Text style={[styles.seniorResumeBtnText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Resume
+                </Text>
+              </Pressable>
+              <Pressable
+                testID="kid-home-open-map-btn"
+                accessibilityRole="button"
+                accessibilityLabel="Share or view map"
+                onPress={() => onOpenJourneyMap?.(primaryPod?.id)}
+                style={styles.seniorShareBtn}
+              >
+                <TpIcon name="share-2" size={16} color={tokens.colors.ink} />
+              </Pressable>
             </View>
-          </TpCard>
+          </View>
 
-          {/* Today's Missions Slot (M3 Stub) */}
+          {/* Today's Missions */}
           <View style={styles.sectionHeaderRow}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-              ]}
-            >
-              Today’s missions
+            <Text style={[styles.sectionHeading, { fontFamily: tokens.fonts.black }]}>
+              Today&apos;s missions
             </Text>
-            <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
-              0 of 3 · M3 preview
+            <Text style={[styles.sectionCountMeta, { fontFamily: tokens.fonts.extrabold }]}>
+              1 / 3
             </Text>
           </View>
-          <TpCard style={styles.missionsStubCard} testID="missions-stub-card">
-            <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
-              Daily missions and XP rewards unlock in Milestone M3.
-            </Text>
-          </TpCard>
-
-          <TpButton
-            testID="kid-sign-out-btn"
-            label="Switch Profile / Sign Out"
-            variant="ghost"
-            onPress={() => {
-              void signOut();
-            }}
-          />
+          <View style={styles.missionsCard}>
+            <View style={styles.missionRow}>
+              <View style={styles.missionCheckDone}>
+                <TpIcon name="check" size={12} color="#FFFFFF" />
+              </View>
+              <Text style={[styles.missionDoneText, { fontFamily: tokens.fonts.bold }]}>
+                Review 1 quiz card
+              </Text>
+              <Text style={[styles.missionDoneStatus, { fontFamily: tokens.fonts.extrabold }]}>
+                Done
+              </Text>
+            </View>
+            <View style={[styles.missionRow, styles.missionRowBorder]}>
+              <View style={styles.missionCheckOpen} />
+              <Text style={[styles.missionOpenText, { fontFamily: tokens.fonts.bold }]}>
+                Push 1 commit to Space Dodger
+              </Text>
+              <View style={styles.missionRewardChip}>
+                <TpIcon name="xp" size={12} color={tokens.colors.kidPurple} />
+                <Text style={[styles.missionRewardXpText, { fontFamily: tokens.fonts.extrabold }]}>
+                  +60
+                </Text>
+              </View>
+            </View>
+            <View style={[styles.missionRow, styles.missionRowBorder]}>
+              <View style={styles.missionCheckOpen} />
+              <Text style={[styles.missionOpenText, { fontFamily: tokens.fonts.bold }]}>
+                Win 1 quick match
+              </Text>
+              <View style={styles.missionRewardCoinChip}>
+                <TpIcon name="coin" size={12} color="#92400E" />
+                <Text style={[styles.missionRewardCoinText, { fontFamily: tokens.fonts.extrabold }]}>
+                  +30
+                </Text>
+              </View>
+            </View>
+          </View>
         </ScrollView>
 
         <KidBottomNav
           activeTab="home"
-          onNavigateHome={() => {}}
-          onNavigateLearn={() => onOpenJourneyMap?.(pods[0]?.id)}
+          onSelectTab={handleNavSelect}
+          onNavigateLearn={() => onOpenJourneyMap?.(primaryPod?.id)}
         />
       </View>
     );
   }
 
-  // Junior Theme (Ages 5–11, 01-kid-home.png)
   return (
-    <View
-      testID="kid-home-screen"
-      style={[styles.root, { backgroundColor: tokens.colors.bg }]}
-    >
+    <View testID="kid-home-screen" style={styles.screen}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Top Greeting Row */}
-        <View style={styles.headerRow} testID="kid-home-junior-header">
-          <ApprovedAvatar filename={childAvatar} size={46} />
-          <View style={styles.headerTextCol}>
-            <Text
-              style={[
-                styles.juniorGreeting,
-                { color: tokens.colors.ink, fontFamily: tokens.fonts.black },
-              ]}
-            >
-              Molo, {childName}!
-            </Text>
-            <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
-              Level {gamification.level} · {gamification.title}
-            </Text>
-          </View>
-          <View style={styles.statChip} testID="stub-streak-chip">
-            <Text style={[styles.statText, { fontFamily: tokens.fonts.extrabold }]}>
-              {gamification.streakDays}d
-            </Text>
-          </View>
-          <View style={styles.statChip} testID="stub-coins-chip">
-            <Text style={[styles.statText, { fontFamily: tokens.fonts.extrabold }]}>
-              {gamification.coins}
-            </Text>
-          </View>
-        </View>
-
-        {/* Captain Jetty Speech Bubble Card */}
-        <View style={styles.mascotSpeechCard}>
-          <PipIdleSvg size={70} reducedMotion={reducedMotion} />
-          <View style={styles.headerTextCol}>
-            <Text
-              style={[
-                styles.mascotSpeechTitle,
-                { color: '#005A52', fontFamily: tokens.fonts.black },
-              ]}
-            >
-              Ready for {continueLesson.world_title}?
-            </Text>
-            <Text
-              style={[
-                styles.mascotSpeechBody,
-                { color: tokens.colors.ink, fontFamily: tokens.fonts.bold },
-              ]}
-            >
-              Let’s keep exploring with Captain Jetty!
-            </Text>
-          </View>
-        </View>
-
-        {/* Continue Lesson Hero Card */}
-        <View
-          style={[styles.juniorHeroCard, { backgroundColor: tokens.colors.kidPurple }]}
-          testID="junior-continue-card"
-        >
-          <Text style={[styles.heroOverline, { fontFamily: tokens.fonts.extrabold }]}>
-            CONTINUE LESSON · WORLD {continueLesson.world_number} · LESSON{' '}
-            {continueLesson.position_in_world} OF {continueLesson.total_in_world}
-          </Text>
-          <Text style={[styles.heroTitle, { fontFamily: tokens.fonts.black }]}>
-            {continueLesson.title}
-          </Text>
-          <View style={styles.heroProgressRow}>
-            <View style={styles.heroProgressTrack}>
-              <View
-                style={[
-                  styles.heroProgressFill,
-                  {
-                    width: `${Math.min(100, Math.max(8, continueLesson.watch_percent))}%`,
-                    backgroundColor: tokens.colors.accents.amber,
-                  },
-                ]}
-              />
+        {/* Junior Purple Header matching 01-kid-home.png */}
+        <View testID="kid-home-junior-header" style={styles.heroHeader}>
+          <View style={styles.heroTopRow}>
+            <View style={styles.heroIdentityRow}>
+              <View style={styles.avatarRing}>
+                {avatarSource ? (
+                  <Image
+                    testID="kid-home-avatar"
+                    source={avatarSource}
+                    accessibilityLabel={`${displayName} avatar`}
+                    style={styles.avatarImage}
+                  />
+                ) : null}
+              </View>
+              <View>
+                <Text style={[styles.goodMorningText, { fontFamily: tokens.fonts.bold }]}>
+                  Good morning
+                </Text>
+                <Text
+                  testID="kid-home-greeting"
+                  style={[styles.greetingTitle, { fontFamily: tokens.fonts.black }]}
+                >
+                  Hi, {displayName}!
+                </Text>
+              </View>
             </View>
-            <Text style={[styles.heroProgressPct, { fontFamily: tokens.fonts.extrabold }]}>
-              {continueLesson.watch_percent}%
+
+            <Pressable
+              testID="kid-home-bell-button"
+              accessibilityRole="button"
+              accessibilityLabel="Notifications"
+              style={styles.bellButton}
+            >
+              <TpIcon name="bell" size={20} color="#FFFFFF" />
+              <View style={styles.bellBadgeDot} />
+            </Pressable>
+          </View>
+
+          {/* Streak, Coin & Gem Chips */}
+          <View style={styles.hudChipsRow}>
+            <View testID="kid-hud-streak-chip" style={styles.hudGlassChip}>
+              <TpIcon name="flame" size={14} color="#FDE68A" />
+              <Text style={[styles.hudGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                {gamification.streak_days} days
+              </Text>
+            </View>
+            <View testID="kid-hud-coins-chip" style={styles.hudGlassChip}>
+              <TpIcon name="coin" size={14} color="#FDE68A" />
+              <Text style={[styles.hudGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                {gamification.coins}
+              </Text>
+            </View>
+            <View testID="kid-hud-gems-chip" style={styles.hudGlassChip}>
+              <TpIcon name="gem" size={14} color="#99F6E4" />
+              <Text style={[styles.hudGlassChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                {gamification.gems}
+              </Text>
+            </View>
+          </View>
+
+          {/* Level Card with mascot-cheering.png */}
+          <View testID="kid-home-level-card" style={styles.levelCard}>
+            <View style={styles.levelCardLeft}>
+              <View style={styles.levelPillRow}>
+                <View style={styles.levelPill}>
+                  <Text style={[styles.levelPillText, { fontFamily: tokens.fonts.black }]}>
+                    Level {gamification.level}
+                  </Text>
+                </View>
+                <Text style={[styles.levelTitleText, { fontFamily: tokens.fonts.black }]}>
+                  {gamification.title ?? 'Jango-Jango'}
+                </Text>
+              </View>
+              <View style={styles.levelProgressTrack}>
+                <View style={[styles.levelProgressFill, { width: `${xpProgressPct}%` }]} />
+              </View>
+              <View style={styles.levelStatsRow}>
+                <Text
+                  testID="kid-hud-xp-chip"
+                  style={[styles.levelStatsBold, { fontFamily: tokens.fonts.extrabold }]}
+                >
+                  {gamification.xp} / {nextLevelXp} XP
+                </Text>
+                <Text style={[styles.levelStatsMuted, { fontFamily: tokens.fonts.bold }]}>
+                  {xpToNext} XP to Level {gamification.level + 1}
+                </Text>
+              </View>
+            </View>
+
+            <Image
+              testID="kid-home-mascot-cheering"
+              source={APPROVED_MASCOT_CHEERING_ASSET}
+              accessibilityLabel="Captain Jetty cheering"
+              style={styles.mascotCheeringImage}
+              resizeMode="contain"
+            />
+          </View>
+        </View>
+
+        <View style={styles.bodyPadding}>
+          {/* Continue Where You Left Off Card with lesson-loops.jpg */}
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionHeading, { fontFamily: tokens.fonts.black }]}>
+              Continue where you left off
+            </Text>
+            <Pressable
+              testID="kid-home-open-map-btn"
+              accessibilityRole="button"
+              onPress={() => onOpenJourneyMap?.(primaryPod?.id)}
+            >
+              <Text style={[styles.seeMapLink, { fontFamily: tokens.fonts.extrabold }]}>
+                See map
+              </Text>
+            </Pressable>
+          </View>
+
+          <View testID="junior-continue-card" style={styles.continueCard}>
+            <Image
+              testID="kid-home-continue-thumb"
+              source={APPROVED_LESSON_LOOPS_ASSET}
+              accessibilityLabel={continueLesson.title}
+              style={styles.continueThumb}
+              resizeMode="cover"
+            />
+            <View style={styles.continueBody}>
+              <Text style={[styles.continueEyebrow, { fontFamily: tokens.fonts.extrabold }]}>
+                {(primaryPod?.title ?? 'CODING POD').toUpperCase()} · WORLD{' '}
+                {continueLesson.world_number}
+              </Text>
+              <Text style={[styles.continueTitle, { fontFamily: tokens.fonts.black }]}>
+                {continueLesson.title}
+              </Text>
+              <View style={styles.continueProgressRow}>
+                <View style={styles.continueProgressTrack}>
+                  <View
+                    style={[
+                      styles.continueProgressFill,
+                      {
+                        width: `${
+                          continueLesson.is_completed
+                            ? 100
+                            : Math.max(30, continueLesson.watch_percent)
+                        }%`,
+                      },
+                    ]}
+                  />
+                </View>
+                <Text style={[styles.continueStepText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Lesson {continueLesson.position_in_world} of {continueLesson.total_in_world}
+                </Text>
+              </View>
+            </View>
+            <Pressable
+              testID="kid-home-continue-btn"
+              accessibilityRole="button"
+              accessibilityLabel={`Continue ${continueLesson.title}`}
+              onPress={() => onOpenLesson?.(continueLesson.id)}
+              style={styles.continuePlayCircle}
+            >
+              <TpIcon name="play" size={18} color="#FFFFFF" fill="#FFFFFF" />
+            </Pressable>
+          </View>
+
+          {/* Daily Missions */}
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionHeading, { fontFamily: tokens.fonts.black }]}>
+              Daily Missions
+            </Text>
+            <Text style={[styles.sectionCountPurple, { fontFamily: tokens.fonts.extrabold }]}>
+              1 of 3 done
             </Text>
           </View>
-          <TpButton
-            testID="kid-home-lets-go-btn"
-            label="Let's go!"
-            variant="yellow"
-            onPress={() => onOpenLesson?.(continueLesson.id)}
-          />
-        </View>
 
-        {/* Your Pods Grid */}
-        <View style={styles.sectionHeaderRow}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-            ]}
-          >
-            Your Pods
-          </Text>
-          <Pressable
-            testID="kid-home-see-map-link"
-            accessibilityRole="button"
-            accessibilityLabel="See map"
-            onPress={() => onOpenJourneyMap?.(pods[0]?.id)}
-          >
-            <Text
-              style={[
-                styles.sectionLink,
-                { color: tokens.colors.buttonTeal, fontFamily: tokens.fonts.extrabold },
-              ]}
-            >
-              See map →
-            </Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.podsGrid}>
-          {pods.map((pod) => (
-            <Pressable
-              key={pod.id}
-              testID={`pod-card-${pod.slug}`}
-              accessibilityRole="button"
-              accessibilityLabel={`${pod.title} Pod`}
-              onPress={() => onOpenJourneyMap?.(pod.id)}
-              style={[
-                styles.podTile,
-                {
-                  backgroundColor: tokens.colors.surface,
-                  borderRadius: tokens.radii.junior.md,
-                },
-              ]}
-            >
-              <View style={styles.podIconBadge}>
-                <Text
-                  style={[
-                    styles.podIconText,
-                    { color: tokens.colors.buttonTeal, fontFamily: tokens.fonts.black },
-                  ]}
-                >
-                  {pod.title.slice(0, 2).toUpperCase()}
+          <View style={styles.missionsCard}>
+            <View style={styles.missionRow}>
+              <View style={styles.missionCheckDone}>
+                <TpIcon name="check" size={14} color="#FFFFFF" />
+              </View>
+              <View style={styles.missionTextCol}>
+                <Text style={[styles.missionDoneText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Log in today
+                </Text>
+                <Text style={[styles.missionClaimedSub, { fontFamily: tokens.fonts.bold }]}>
+                  Claimed +20 XP
                 </Text>
               </View>
-              <View style={styles.headerTextCol}>
-                <Text
-                  style={[
-                    styles.podTileTitle,
-                    { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-                  ]}
-                >
-                  {pod.title}
-                </Text>
-                <Text style={[styles.podTileSub, { fontFamily: tokens.fonts.bold }]}>
-                  {pod.cleared_worlds_count > 0
-                    ? `${pod.cleared_worlds_count} of ${pod.total_worlds_count} worlds`
-                    : 'Start'}
+              <View style={styles.missionDoneChip}>
+                <Text style={[styles.missionDoneChipText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Done
                 </Text>
               </View>
-            </Pressable>
-          ))}
-        </View>
+            </View>
 
-        {/* Today's Missions Slot (M3 Stub) */}
-        <View style={styles.sectionHeaderRow}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              { color: tokens.colors.ink, fontFamily: tokens.fonts.extrabold },
-            ]}
-          >
-            Today’s Missions
-          </Text>
-          <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
-            0 of 3 done
-          </Text>
-        </View>
-        <TpCard style={styles.missionsStubCard} testID="missions-stub-card">
-          <Text style={[styles.caption, { fontFamily: tokens.fonts.bold }]}>
-            Missions and XP rewards arrive in Milestone M3.
-          </Text>
-        </TpCard>
+            <View style={[styles.missionRow, styles.missionRowBorder]}>
+              <View style={styles.missionIconGold}>
+                <TpIcon name="xp" size={16} color="#92400E" />
+              </View>
+              <View style={styles.missionTextCol}>
+                <Text style={[styles.missionOpenText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Finish 1 lesson
+                </Text>
+                <View style={styles.missionMiniTrack}>
+                  <View style={[styles.missionMiniFill, { width: '60%' }]} />
+                </View>
+              </View>
+              <View style={styles.missionRewardCoinChip}>
+                <TpIcon name="coin" size={12} color="#92400E" />
+                <Text style={[styles.missionRewardCoinText, { fontFamily: tokens.fonts.extrabold }]}>
+                  +25
+                </Text>
+              </View>
+            </View>
 
-        <TpButton
-          testID="kid-sign-out-btn"
-          label="Switch Profile / Sign Out"
-          variant="ghost"
-          onPress={() => {
-            void signOut();
-          }}
-        />
+            <View style={[styles.missionRow, styles.missionRowBorder]}>
+              <View style={styles.missionIconTeal}>
+                <TpIcon name="gem" size={16} color="#0F766E" />
+              </View>
+              <View style={styles.missionTextCol}>
+                <Text style={[styles.missionOpenText, { fontFamily: tokens.fonts.extrabold }]}>
+                  Score 100% on a quiz
+                </Text>
+                <Text style={[styles.missionClaimedSub, { fontFamily: tokens.fonts.bold }]}>
+                  Bonus gem reward
+                </Text>
+              </View>
+              <View style={styles.missionRewardGemChip}>
+                <TpIcon name="gem" size={12} color="#0F766E" />
+                <Text style={[styles.missionRewardGemText, { fontFamily: tokens.fonts.extrabold }]}>
+                  +2
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
       </ScrollView>
 
       <KidBottomNav
         activeTab="home"
-        onNavigateHome={() => {}}
-        onNavigateLearn={() => onOpenJourneyMap?.(pods[0]?.id)}
+        onSelectTab={handleNavSelect}
+        onNavigateLearn={() => onOpenJourneyMap?.(primaryPod?.id)}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
+  screen: {
     flex: 1,
+    backgroundColor: '#FAF8FF',
+  },
+  screenSenior: {
+    backgroundColor: '#F1F5F9',
   },
   scrollContent: {
+    paddingBottom: 24,
+  },
+  seniorScrollContent: {
+    padding: 16,
+    paddingBottom: 24,
+  },
+  heroHeader: {
+    backgroundColor: '#6B2FD6',
     paddingHorizontal: 18,
     paddingTop: 14,
-    paddingBottom: 28,
-    gap: 14,
+    paddingBottom: 18,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
   },
-  headerRow: {
+  heroTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  heroIdentityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+  },
+  avatarRing: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    padding: 2,
+    backgroundColor: '#FFB700',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarImage: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+  },
+  goodMorningText: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.75)',
+  },
+  greetingTitle: {
+    fontSize: 20,
+    color: '#FFFFFF',
+  },
+  bellButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  bellBadgeDot: {
+    position: 'absolute',
+    top: 7,
+    right: 8,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#F97316',
+    borderWidth: 1.5,
+    borderColor: '#6B2FD6',
+  },
+  hudChipsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 12,
+  },
+  hudGlassChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    borderRadius: 9999,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+  },
+  hudGlassChipText: {
+    fontSize: 12,
+    color: '#FFFFFF',
+  },
+  levelCard: {
+    marginTop: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
-  headerTextCol: {
+  levelCardLeft: {
     flex: 1,
   },
-  juniorGreeting: {
-    fontSize: 18,
-    lineHeight: 22,
+  levelPillRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
-  seniorName: {
-    fontSize: 20,
-    lineHeight: 24,
+  levelPill: {
+    backgroundColor: '#EDE9FE',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 9999,
   },
-  caption: {
-    fontSize: 12,
-    color: '#64748B',
+  levelPillText: {
+    fontSize: 11,
+    color: '#6B2FD6',
   },
-  statChip: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  statText: {
-    fontSize: 12,
+  levelTitleText: {
+    fontSize: 13,
     color: '#0F172A',
   },
-  mascotSpeechCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: '#E6FBF8',
-    borderColor: '#99F6E4',
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: 12,
-  },
-  mascotSpeechTitle: {
-    fontSize: 14,
-  },
-  mascotSpeechBody: {
-    fontSize: 13,
-    marginTop: 2,
-  },
-  juniorHeroCard: {
-    borderRadius: 22,
-    padding: 18,
-    gap: 10,
-  },
-  heroOverline: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.88)',
-    letterSpacing: 0.6,
-  },
-  heroTitle: {
-    fontSize: 21,
-    color: '#FFFFFF',
-  },
-  heroProgressRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  heroProgressTrack: {
-    flex: 1,
+  levelProgressTrack: {
     height: 10,
-    borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderRadius: 9999,
+    backgroundColor: '#EEF2FF',
+    marginTop: 7,
     overflow: 'hidden',
   },
-  heroProgressFill: {
+  levelProgressFill: {
     height: '100%',
-    borderRadius: 999,
+    borderRadius: 9999,
+    backgroundColor: '#7C3AED',
   },
-  heroProgressPct: {
-    fontSize: 13,
-    color: '#FFFFFF',
+  levelStatsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  levelStatsBold: {
+    fontSize: 10,
+    color: '#64748B',
+  },
+  levelStatsMuted: {
+    fontSize: 10,
+    color: '#64748B',
+  },
+  mascotCheeringImage: {
+    width: 68,
+    height: 68,
+  },
+  bodyPadding: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
   },
   sectionHeaderRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginTop: 4,
+    marginBottom: 8,
+    marginTop: 6,
   },
-  sectionTitle: {
-    fontSize: 17,
+  sectionHeading: {
+    fontSize: 15,
+    color: '#0F172A',
   },
-  sectionLink: {
-    fontSize: 13,
+  seeMapLink: {
+    fontSize: 12,
+    color: '#6B2FD6',
   },
-  podsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
+  sectionCountPurple: {
+    fontSize: 11,
+    color: '#6B2FD6',
   },
-  podTile: {
-    width: '48%',
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+  sectionCountMeta: {
+    fontSize: 12,
+    color: '#64748B',
+  },
+  continueCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
     padding: 12,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-  },
-  podIconBadge: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: '#E0FAF7',
+    borderWidth: 1,
+    borderColor: '#EEF2FF',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 12,
+    marginBottom: 12,
   },
-  podIconText: {
-    fontSize: 13,
+  continueThumb: {
+    width: 72,
+    height: 72,
+    borderRadius: 14,
   },
-  podTileTitle: {
-    fontSize: 14,
+  continueBody: {
+    flex: 1,
   },
-  podTileSub: {
+  continueEyebrow: {
+    fontSize: 10,
+    color: '#6B2FD6',
+    letterSpacing: 0.4,
+  },
+  continueTitle: {
+    fontSize: 15,
+    color: '#0F172A',
+    marginTop: 1,
+  },
+  continueProgressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 6,
+  },
+  continueProgressTrack: {
+    flex: 1,
+    height: 8,
+    borderRadius: 9999,
+    backgroundColor: '#EEF2FF',
+    overflow: 'hidden',
+  },
+  continueProgressFill: {
+    height: '100%',
+    borderRadius: 9999,
+    backgroundColor: '#FFB700',
+  },
+  continueStepText: {
     fontSize: 11,
     color: '#64748B',
   },
-  missionsStubCard: {
-    padding: 14,
-  },
-  seniorXpBanner: {
-    borderRadius: 20,
-    padding: 18,
-    gap: 12,
-  },
-  seniorXpTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  seniorXpOverline: {
-    fontSize: 11,
-    color: '#5EEAD4',
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-  },
-  seniorXpValue: {
-    fontSize: 22,
-    color: '#FFFFFF',
-    marginTop: 4,
-  },
-  seniorXpMuted: {
-    fontSize: 15,
-    color: 'rgba(255,255,255,0.65)',
-  },
-  seniorNextBadge: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  seniorNextBadgeText: {
-    fontSize: 12,
-    color: '#FFFFFF',
-  },
-  seniorXpTrack: {
-    height: 8,
-    borderRadius: 9,
-    backgroundColor: 'rgba(255,255,255,0.14)',
-    overflow: 'hidden',
-  },
-  seniorXpFill: {
-    height: '100%',
-    backgroundColor: '#00BFAE',
-  },
-  seniorStreakCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: '#FFF6DB',
-    borderRadius: 16,
-    padding: 12,
-  },
-  seniorStreakTitle: {
-    fontSize: 15,
-  },
-  seniorStreakSub: {
-    fontSize: 13,
-    color: '#8A5A00',
-  },
-  seniorContinueCard: {
-    padding: 14,
-    gap: 12,
-  },
-  seniorProjectRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  seniorProjectIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 12,
-    backgroundColor: '#EAF1FF',
+  continuePlayCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#6B2FD6',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  seniorProjectIconText: {
-    fontSize: 15,
+  missionsCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#EEF2FF',
+    marginBottom: 12,
   },
-  seniorProjectTitle: {
-    fontSize: 16,
+  missionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 4,
   },
-  progressTrack: {
+  missionRowBorder: {
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
+  },
+  missionCheckDone: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: '#10B981',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  missionCheckOpen: {
+    width: 22,
+    height: 22,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#CBD5E1',
+  },
+  missionIconGold: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: '#FEF3C7',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  missionIconTeal: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: '#CCFBF1',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  missionTextCol: {
+    flex: 1,
+  },
+  missionDoneText: {
+    fontSize: 13,
+    color: '#64748B',
+    textDecorationLine: 'line-through',
+    flex: 1,
+  },
+  missionOpenText: {
+    fontSize: 13,
+    color: '#0F172A',
+    flex: 1,
+  },
+  missionClaimedSub: {
+    fontSize: 10,
+    color: '#64748B',
+  },
+  missionMiniTrack: {
     height: 6,
-    borderRadius: 999,
-    backgroundColor: '#E2E8F0',
+    borderRadius: 9999,
+    backgroundColor: '#EEF2FF',
+    marginTop: 4,
     overflow: 'hidden',
   },
-  progressFillTeal: {
+  missionMiniFill: {
     height: '100%',
-    borderRadius: 999,
+    backgroundColor: '#FFB700',
+  },
+  missionDoneChip: {
+    backgroundColor: '#D1FAE5',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 9999,
+  },
+  missionDoneChipText: {
+    fontSize: 11,
+    color: '#065F46',
+  },
+  missionDoneStatus: {
+    fontSize: 11,
+    color: '#10B981',
+  },
+  missionRewardChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#EDE9FE',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 9999,
+  },
+  missionRewardXpText: {
+    fontSize: 11,
+    color: '#6B2FD6',
+  },
+  missionRewardCoinChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 9999,
+  },
+  missionRewardCoinText: {
+    fontSize: 11,
+    color: '#92400E',
+  },
+  missionRewardGemChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#CCFBF1',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 9999,
+  },
+  missionRewardGemText: {
+    fontSize: 11,
+    color: '#0F766E',
+  },
+  seniorHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  seniorWelcomeMeta: {
+    fontSize: 11,
+    color: '#64748B',
+  },
+  seniorGreetingName: {
+    fontSize: 20,
+    color: '#0F172A',
+  },
+  seniorChipsRow: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  chipCoinLight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 9999,
+  },
+  chipCoinLightText: {
+    fontSize: 12,
+    color: '#92400E',
+  },
+  chipGemLight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#CCFBF1',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 9999,
+  },
+  chipGemLightText: {
+    fontSize: 12,
+    color: '#0F766E',
+  },
+  seniorXpBanner: {
+    backgroundColor: '#1E1B4B',
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 10,
+  },
+  seniorXpHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  seniorRankEyebrow: {
+    fontSize: 10,
+    color: '#A5B4FC',
+    letterSpacing: 0.6,
+  },
+  seniorRankTitle: {
+    fontSize: 18,
+    color: '#FFFFFF',
+  },
+  seniorXpChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#EDE9FE',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 9999,
+  },
+  seniorXpChipText: {
+    fontSize: 12,
+    color: '#6B2FD6',
+  },
+  seniorProgressTrack: {
+    height: 8,
+    borderRadius: 9999,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    marginTop: 10,
+    overflow: 'hidden',
+  },
+  seniorProgressFill: {
+    height: '100%',
+    backgroundColor: '#00BFAE',
+  },
+  seniorProgressCaption: {
+    fontSize: 11,
+    color: '#A5B4FC',
+    marginTop: 4,
+  },
+  seniorStreakCard: {
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1.5,
+    borderColor: '#FDE68A',
+    borderRadius: 16,
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
+  },
+  seniorSleepyMascot: {
+    width: 48,
+    height: 48,
+  },
+  seniorStreakTextWrap: {
+    flex: 1,
+  },
+  seniorStreakTitle: {
+    fontSize: 12,
+    color: '#78350F',
+  },
+  seniorStreakSub: {
+    fontSize: 11,
+    color: '#92400E',
+    marginTop: 2,
+  },
+  wakeJettyBtn: {
+    backgroundColor: '#FFB700',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  wakeJettyBtnText: {
+    fontSize: 11,
+    color: '#0F172A',
+  },
+  seniorContinueCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    marginBottom: 12,
+    marginTop: 6,
+  },
+  seniorContinueRow: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  seniorGameIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: '#6B2FD6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  seniorContinueMetaWrap: {
+    flex: 1,
+  },
+  seniorContinueEyebrow: {
+    fontSize: 10,
+    color: '#6B2FD6',
+  },
+  seniorContinueTitle: {
+    fontSize: 14,
+    color: '#0F172A',
+  },
+  seniorMiniTrack: {
+    height: 6,
+    borderRadius: 9999,
+    backgroundColor: '#E2E8F0',
+    marginTop: 6,
+    overflow: 'hidden',
+  },
+  seniorMiniFill: {
+    height: '100%',
+    backgroundColor: '#6B2FD6',
   },
   seniorContinueActions: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 8,
+    marginTop: 10,
   },
-  flexOne: {
+  seniorResumeBtn: {
     flex: 1,
+    backgroundColor: '#6B2FD6',
+    borderRadius: 12,
+    paddingVertical: 9,
+    alignItems: 'center',
+  },
+  seniorResumeBtnText: {
+    fontSize: 12,
+    color: '#FFFFFF',
+  },
+  seniorShareBtn: {
+    backgroundColor: '#F1F5F9',
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

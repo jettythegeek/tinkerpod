@@ -6,9 +6,7 @@ namespace Database\Seeders;
 
 use App\Enums\ContentStatus;
 use App\Enums\LessonCompletionMode;
-use App\Models\Child;
 use App\Models\Course;
-use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\Module;
 use App\Models\Pod;
@@ -398,14 +396,6 @@ class DemoCurriculumSeeder extends Seeder
                     ]
                 );
             }
-        }
-
-        // Enroll any existing child profiles in the demo Coding Pod
-        foreach (Child::query()->cursor() as $child) {
-            Enrollment::query()->firstOrCreate(
-                ['child_id' => $child->id, 'pod_id' => $pod->id],
-                ['status' => 'active', 'enrolled_at' => $now]
-            );
         }
     }
 }

@@ -285,19 +285,22 @@ class KidCatalogueController extends Controller
         $attemptsUsed = 0;
         $bestScorePercent = 0;
         $isPassed = false;
+        $openAttemptId = null;
 
         if (class_exists('App\\Models\\QuizAttempt')) {
             $attemptStats = DB::table('quiz_attempts')
                 ->where('child_id', $child->id)
                 ->where('quiz_id', $quiz->id)
-                ->whereNotNull('submitted_at')
-                ->selectRaw('COUNT(*) as attempts_count, COALESCE(MAX(score_percent), 0) as max_score, COALESCE(MAX(passed), 0) as has_passed')
+                ->selectRaw('COUNT(*) as attempts_count, COALESCE(MAX(CASE WHEN submitted_at IS NOT NULL THEN score_percent ELSE 0 END), 0) as max_score, COALESCE(MAX(CASE WHEN submitted_at IS NOT NULL THEN passed ELSE 0 END), 0) as has_passed, MAX(CASE WHEN submitted_at IS NULL THEN public_id ELSE NULL END) as open_attempt_public_id')
                 ->first();
 
             if ($attemptStats !== null) {
                 $attemptsUsed = (int) ($attemptStats->attempts_count ?? 0);
                 $bestScorePercent = (int) ($attemptStats->max_score ?? 0);
                 $isPassed = ((int) ($attemptStats->has_passed ?? 0)) === 1;
+                $openAttemptId = $attemptStats->open_attempt_public_id !== null
+                    ? (string) $attemptStats->open_attempt_public_id
+                    : null;
             }
         }
 
@@ -332,6 +335,7 @@ class KidCatalogueController extends Controller
                     'remaining_attempts' => max(0, $quiz->max_attempts - $attemptsUsed),
                     'best_score_percent' => $bestScorePercent,
                     'is_passed' => $isPassed,
+                    'open_attempt_id' => $openAttemptId,
                     'is_demo' => $quiz->is_demo,
                     'questions' => $questionsPayload,
                 ],

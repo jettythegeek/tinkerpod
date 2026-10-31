@@ -206,6 +206,7 @@ export interface QuizDetailDto {
   readonly remaining_attempts: number;
   readonly best_score_percent: number;
   readonly is_passed: boolean;
+  readonly open_attempt_id?: string | null;
   readonly is_demo: boolean;
   readonly questions: readonly QuizQuestionDto[];
 }
@@ -214,29 +215,45 @@ export interface QuizDetailData {
   readonly quiz: QuizDetailDto;
 }
 
+export interface StartQuizAttemptData {
+  readonly attempt: {
+    readonly id: string;
+    readonly quiz_id: string;
+    readonly attempt_number: number;
+    readonly status: 'open' | 'submitted';
+    readonly attempts_used: number;
+    readonly max_attempts: number;
+    readonly remaining_attempts: number;
+    readonly total_points: number;
+    readonly replayed: boolean;
+  };
+}
+
 export interface CheckQuizAnswerPayload {
+  readonly attempt_id?: string;
   readonly question_id: string;
   readonly option_id?: string;
   readonly option_key?: string;
 }
 
 export interface CheckQuizAnswerData {
+  readonly attempt_id?: string;
   readonly quiz_id: string;
   readonly question_id: string;
   readonly option_id: string;
   readonly option_key: string;
   readonly is_correct: boolean;
+  readonly is_first_answer?: boolean;
+  readonly is_retry?: boolean;
   readonly points_awarded: number;
+  readonly recorded_points?: number;
   readonly feedback: string;
   readonly explanation: string;
 }
 
 export interface SubmitQuizAttemptPayload {
-  readonly answers: readonly {
-    readonly question_id: string;
-    readonly option_id?: string;
-    readonly option_key?: string;
-  }[];
+  readonly action?: 'start' | 'finish';
+  readonly attempt_id?: string;
   readonly idempotency_key?: string;
 }
 
@@ -340,6 +357,17 @@ export async function fetchLessonQuiz(lessonId: string): Promise<ApiEnvelope<Qui
   return response.data;
 }
 
+export async function startQuizAttempt(
+  quizId: string,
+  idempotencyKey?: string,
+): Promise<ApiEnvelope<StartQuizAttemptData>> {
+  const response = await apiClient.post<ApiEnvelope<StartQuizAttemptData>>(
+    `/kid/quizzes/${quizId}/attempts`,
+    idempotencyKey ? { idempotency_key: idempotencyKey } : {},
+  );
+  return response.data;
+}
+
 export async function checkQuizAnswer(
   quizId: string,
   payload: CheckQuizAnswerPayload,
@@ -351,13 +379,28 @@ export async function checkQuizAnswer(
   return response.data;
 }
 
+export async function finishQuizAttempt(
+  quizId: string,
+  attemptId: string,
+  idempotencyKey?: string,
+): Promise<ApiEnvelope<SubmitQuizAttemptData>> {
+  const response = await apiClient.post<ApiEnvelope<SubmitQuizAttemptData>>(
+    `/kid/quizzes/${quizId}/attempts/${attemptId}/finish`,
+    idempotencyKey ? { idempotency_key: idempotencyKey } : {},
+  );
+  return response.data;
+}
+
 export async function submitQuizAttempt(
   quizId: string,
   payload: SubmitQuizAttemptPayload,
 ): Promise<ApiEnvelope<SubmitQuizAttemptData>> {
   const response = await apiClient.post<ApiEnvelope<SubmitQuizAttemptData>>(
     `/kid/quizzes/${quizId}/attempts`,
-    payload,
+    {
+      action: 'finish',
+      ...payload,
+    },
   );
   return response.data;
 }

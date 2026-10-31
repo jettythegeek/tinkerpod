@@ -10,10 +10,14 @@ import { ParentRegisterScreen } from '../features/auth/screens/ParentRegisterScr
 import { PinPadScreen } from '../features/auth/screens/PinPadScreen';
 import { ProfilePickerScreen } from '../features/auth/screens/ProfilePickerScreen';
 import { WelcomeScreen } from '../features/auth/screens/WelcomeScreen';
+import { BuildScreen } from '../features/kid/BuildScreen';
+import { KidNavTab } from '../features/kid/components/KidBottomNav';
 import { JourneyMapScreen } from '../features/kid/JourneyMapScreen';
 import { KidHomeScreen } from '../features/kid/KidHomeScreen';
+import { KidProfileScreen } from '../features/kid/KidProfileScreen';
 import { LessonDetailScreen } from '../features/kid/LessonDetailScreen';
 import { QuizScreen } from '../features/kid/QuizScreen';
+import { RewardsScreen } from '../features/kid/RewardsScreen';
 import { ParentHomeScreen } from '../features/parent/ParentHomeScreen';
 import { useTheme } from '../theme';
 
@@ -34,6 +38,9 @@ export type ParentStackParamList = {
 export type KidStackParamList = {
   readonly KidHome: undefined;
   readonly JourneyMap: { readonly podId?: string } | undefined;
+  readonly Build: undefined;
+  readonly Rewards: undefined;
+  readonly KidProfile: undefined;
   readonly LessonDetail: { readonly lessonId: string };
   readonly Quiz: { readonly quizId?: string; readonly lessonId?: string };
 };
@@ -45,6 +52,29 @@ export type RootStackParamList = AuthStackParamList &
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const ParentStack = createNativeStackNavigator<ParentStackParamList>();
 const KidStack = createNativeStackNavigator<KidStackParamList>();
+
+function navigateKidTab(
+  navigation: { navigate: (route: keyof KidStackParamList) => void },
+  tab: KidNavTab,
+): void {
+  switch (tab) {
+    case 'home':
+      navigation.navigate('KidHome');
+      break;
+    case 'learn':
+      navigation.navigate('JourneyMap');
+      break;
+    case 'build':
+      navigation.navigate('Build');
+      break;
+    case 'rewards':
+      navigation.navigate('Rewards');
+      break;
+    case 'me':
+      navigation.navigate('KidProfile');
+      break;
+  }
+}
 
 export function RootNavigator(): React.JSX.Element {
   const { tokens } = useTheme();
@@ -90,13 +120,14 @@ export function RootNavigator(): React.JSX.Element {
                 onOpenLesson={(lessonId) =>
                   navigation.navigate('LessonDetail', { lessonId })
                 }
+                onSelectTab={(tab) => navigateKidTab(navigation, tab)}
               />
             )}
           </KidStack.Screen>
 
           <KidStack.Screen
             name="JourneyMap"
-            options={{ title: 'Journey Map' }}
+            options={{ title: 'Learn' }}
           >
             {({ navigation, route }) => (
               <JourneyMapScreen
@@ -106,6 +137,42 @@ export function RootNavigator(): React.JSX.Element {
                 onOpenLesson={(lessonId) =>
                   navigation.navigate('LessonDetail', { lessonId })
                 }
+                onSelectTab={(tab) => navigateKidTab(navigation, tab)}
+              />
+            )}
+          </KidStack.Screen>
+
+          <KidStack.Screen
+            name="Build"
+            options={{ title: 'My Build' }}
+          >
+            {({ navigation }) => (
+              <BuildScreen
+                onGoToLearn={() => navigation.navigate('JourneyMap')}
+                onSelectTab={(tab) => navigateKidTab(navigation, tab)}
+              />
+            )}
+          </KidStack.Screen>
+
+          <KidStack.Screen
+            name="Rewards"
+            options={{ title: 'Rewards' }}
+          >
+            {({ navigation }) => (
+              <RewardsScreen
+                onWakeJetty={() => navigation.navigate('JourneyMap')}
+                onSelectTab={(tab) => navigateKidTab(navigation, tab)}
+              />
+            )}
+          </KidStack.Screen>
+
+          <KidStack.Screen
+            name="KidProfile"
+            options={{ title: 'My Profile' }}
+          >
+            {({ navigation }) => (
+              <KidProfileScreen
+                onSelectTab={(tab) => navigateKidTab(navigation, tab)}
               />
             )}
           </KidStack.Screen>

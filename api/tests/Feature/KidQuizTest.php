@@ -26,7 +26,7 @@ class KidQuizTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_quiz_hides_answers_checks_with_explanations_scores_on_server_and_enforces_attempt_cap_and_idempotency(): void
+    public function test_quiz_prevents_answer_farming_scores_first_answers_only_and_enforces_attempt_cap_and_idempotency(): void
     {
         $parent = User::factory()->create();
         $child = Child::factory()->for($parent, 'parent')->create(['first_name' => 'Zainab']);
@@ -117,42 +117,89 @@ class KidQuizTest extends TestCase
         $this->assertStringNotContainsString('is_correct', $rawQuiz);
         $this->assertStringNotContainsString('stops before 3', $rawQuiz);
 
-        // 2. Check a wrong answer: friendly wording ("Not quite. Try again!", never "Wrong!") + explanation
+        // 2. Calling check before starting an attempt is rejected with 422 (anti-farming)
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'question_id' => $q1->public_id,
+                'option_id' => $q1OptB->public_id,
+            ])
+            ->assertStatus(422);
+
+        // 3. Start Attempt 1 -> counts against max_attempts immediately
+        $startAttempt1 = $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
+                'idempotency_key' => 'start-attempt-1',
+            ]);
+
+        $startAttempt1->assertStatus(201)
+            ->assertJsonPath('data.attempt.attempt_number', 1)
+            ->assertJsonPath('data.attempt.status', 'open')
+            ->assertJsonPath('data.attempt.attempts_used', 1)
+            ->assertJsonPath('data.attempt.remaining_attempts', 1);
+
+        $attempt1Id = (string) $startAttempt1->json('data.attempt.id');
+
+        // Replaying startAttempt1 with same idempotency_key returns existing open attempt without using another attempt
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
+                'idempotency_key' => 'start-attempt-1',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.attempt.id', $attempt1Id)
+            ->assertJsonPath('data.attempt.replayed', true)
+            ->assertJsonPath('data.attempt.attempts_used', 1);
+
+        // 4. Inside Attempt 1: answer Q1 WRONG first, then retry Q1 RIGHT.
+        // The first answer (wrong, 0 pts) is saved; retry lets the kid learn (is_correct=true) but earns 0 points!
         $wrongCheck = $this->withToken($tokenOne)
             ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'attempt_id' => $attempt1Id,
                 'question_id' => $q1->public_id,
                 'option_id' => $q1OptB->public_id,
             ]);
 
         $wrongCheck->assertOk()
             ->assertJsonPath('data.is_correct', false)
+            ->assertJsonPath('data.is_first_answer', true)
+            ->assertJsonPath('data.points_awarded', 0)
             ->assertJsonPath('data.feedback', 'Not quite. Try again!')
             ->assertJsonPath('data.explanation', 'range(3) counts 0, 1, 2 and stops before 3.');
 
         $this->assertStringNotContainsString('Wrong!', (string) $wrongCheck->getContent());
 
-        // 3. Check a right answer: returns is_correct = true + explanation
-        $rightCheck = $this->withToken($tokenOne)
+        // Retry Q1 with the right option -> is_correct=true for learning, but is_first_answer=false and points_awarded=0!
+        $retryCheck = $this->withToken($tokenOne)
             ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'attempt_id' => $attempt1Id,
                 'question_id' => $q1->public_id,
                 'option_id' => $q1OptA->public_id,
             ]);
 
-        $rightCheck->assertOk()
+        $retryCheck->assertOk()
             ->assertJsonPath('data.is_correct', true)
+            ->assertJsonPath('data.is_first_answer', false)
+            ->assertJsonPath('data.is_retry', true)
+            ->assertJsonPath('data.points_awarded', 0)
+            ->assertJsonPath('data.recorded_points', 0)
             ->assertJsonPath('data.explanation', 'range(3) counts 0, 1, 2 and stops before 3.');
 
-        // 4. Attempt 1: 50% (< 75% pass mark) -> fails, lesson stays incomplete
-        $attempt1 = $this->withToken($tokenOne)
-            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
-                'idempotency_key' => 'attempt-1-key',
-                'answers' => [
-                    ['question_id' => $q1->public_id, 'option_id' => $q1OptA->public_id],
-                    ['question_id' => $q2->public_id, 'option_id' => $q2OptA->public_id],
-                ],
-            ]);
+        // Answer Q2 right on first try -> earns 10 points
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'attempt_id' => $attempt1Id,
+                'question_id' => $q2->public_id,
+                'option_id' => $q2OptB->public_id,
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.is_correct', true)
+            ->assertJsonPath('data.is_first_answer', true)
+            ->assertJsonPath('data.points_awarded', 10);
 
-        $attempt1->assertOk()
+        // 5. Finish Attempt 1: server scores strictly from saved first answers -> 50% (Q1=0, Q2=10), not 100%!
+        $finish1 = $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts/{$attempt1Id}/finish");
+
+        $finish1->assertOk()
             ->assertJsonPath('data.attempt.attempt_number', 1)
             ->assertJsonPath('data.attempt.score_percent', 50)
             ->assertJsonPath('data.attempt.passed', false)
@@ -160,17 +207,52 @@ class KidQuizTest extends TestCase
             ->assertJsonPath('data.attempt.lesson_completed', false)
             ->assertJsonPath('data.attempt.feedback', 'Not quite. Try again!');
 
-        // 5. Attempt 2: 100% (>= 75% pass mark) -> passes and completes the quiz-gated lesson
-        $attempt2 = $this->withToken($tokenOne)
+        // Calling check on a finished attempt is rejected with 422
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'attempt_id' => $attempt1Id,
+                'question_id' => $q1->public_id,
+                'option_id' => $q1OptA->public_id,
+            ])
+            ->assertStatus(422);
+
+        // 6. Start Attempt 2 -> uses second attempt (attempts_used = 2, remaining = 0)
+        $startAttempt2 = $this->withToken($tokenOne)
             ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
-                'idempotency_key' => 'attempt-2-key',
-                'answers' => [
-                    ['question_id' => $q1->public_id, 'option_id' => $q1OptA->public_id],
-                    ['question_id' => $q2->public_id, 'option_id' => $q2OptB->public_id],
-                ],
+                'idempotency_key' => 'start-attempt-2',
             ]);
 
-        $attempt2->assertOk()
+        $startAttempt2->assertStatus(201)
+            ->assertJsonPath('data.attempt.attempt_number', 2)
+            ->assertJsonPath('data.attempt.remaining_attempts', 0);
+
+        $attempt2Id = (string) $startAttempt2->json('data.attempt.id');
+
+        // Answer both Q1 and Q2 right on first try in Attempt 2
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'attempt_id' => $attempt2Id,
+                'question_id' => $q1->public_id,
+                'option_id' => $q1OptA->public_id,
+            ])
+            ->assertOk();
+
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
+                'attempt_id' => $attempt2Id,
+                'question_id' => $q2->public_id,
+                'option_id' => $q2OptB->public_id,
+            ])
+            ->assertOk();
+
+        // Finish Attempt 2 -> 100%, passes and completes the quiz-gated lesson
+        $finish2 = $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
+                'attempt_id' => $attempt2Id,
+                'idempotency_key' => 'finish-attempt-2',
+            ]);
+
+        $finish2->assertOk()
             ->assertJsonPath('data.attempt.attempt_number', 2)
             ->assertJsonPath('data.attempt.score_percent', 100)
             ->assertJsonPath('data.attempt.passed', true)
@@ -178,17 +260,10 @@ class KidQuizTest extends TestCase
             ->assertJsonPath('data.attempt.replayed', false)
             ->assertJsonPath('data.attempt.lesson_completed', true);
 
-        // 6. Replaying Attempt 2 with the same idempotency_key never double-counts
-        $replayAttempt2 = $this->withToken($tokenOne)
-            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
-                'idempotency_key' => 'attempt-2-key',
-                'answers' => [
-                    ['question_id' => $q1->public_id, 'option_id' => $q1OptA->public_id],
-                    ['question_id' => $q2->public_id, 'option_id' => $q2OptB->public_id],
-                ],
-            ]);
-
-        $replayAttempt2->assertOk()
+        // Replaying finish Attempt 2 is idempotent
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts/{$attempt2Id}/finish")
+            ->assertOk()
             ->assertJsonPath('data.attempt.attempt_number', 2)
             ->assertJsonPath('data.attempt.replayed', true)
             ->assertJsonPath('data.attempt.score_percent', 100);
@@ -201,24 +276,13 @@ class KidQuizTest extends TestCase
                 ->count()
         );
 
-        // 7. Attempt 3 (exceeding max_attempts = 2) is rejected with 422
+        // 7. Starting Attempt 3 (exceeding max_attempts = 2) is rejected with 422
         $this->withToken($tokenOne)
             ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
-                'idempotency_key' => 'attempt-3-key',
-                'answers' => [
-                    ['question_id' => $q1->public_id, 'option_id' => $q1OptA->public_id],
-                    ['question_id' => $q2->public_id, 'option_id' => $q2OptB->public_id],
-                ],
+                'idempotency_key' => 'start-attempt-3',
             ])
             ->assertStatus(422)
             ->assertJsonPath('data.remaining_attempts', 0);
-
-        $this->withToken($tokenOne)
-            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/check", [
-                'question_id' => $q1->public_id,
-                'option_id' => $q1OptA->public_id,
-            ])
-            ->assertStatus(422);
 
         // 8. Second device token reads back the completed lesson and quiz status
         $this->withToken($tokenTwo)
@@ -244,12 +308,20 @@ class KidQuizTest extends TestCase
             ->assertForbidden();
 
         $this->withToken($otherToken)
-            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts", [
-                'answers' => [
-                    ['question_id' => $q1->public_id, 'option_id' => $q1OptA->public_id],
-                    ['question_id' => $q2->public_id, 'option_id' => $q2OptB->public_id],
-                ],
-            ])
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/attempts")
             ->assertForbidden();
+
+        // 10. Removed duplicate routes return 404/405
+        $this->withToken($tokenOne)
+            ->postJson("/api/v1/kid/quizzes/{$quiz->public_id}/submit")
+            ->assertNotFound();
+
+        $this->withToken($tokenOne)
+            ->patchJson('/api/v1/kid/profile/username', ['username' => 'zainab_new'])
+            ->assertNotFound();
+
+        $this->withToken($tokenOne)
+            ->getJson('/api/v1/kid/attachments/01jb9x7k6m8n2p4q6r8s0t2v4w/signed-url')
+            ->assertStatus(405);
     }
 }

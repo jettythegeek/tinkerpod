@@ -76,7 +76,6 @@ Route::prefix('v1')->group(function (): void {
         Route::middleware(['auth:sanctum', 'child.token'])->group(function (): void {
             Route::get('/me', [KidProfileController::class, 'me'])->name('api.v1.kid.me');
             Route::match(['put', 'patch'], '/username', [KidProfileController::class, 'updateUsername'])->name('api.v1.kid.username');
-            Route::match(['put', 'patch'], '/profile/username', [KidProfileController::class, 'updateUsername']);
 
             Route::get('/home', [KidCatalogueController::class, 'home'])->name('api.v1.kid.home');
             Route::get('/journey-map', [KidCatalogueController::class, 'journeyMap'])->name('api.v1.kid.journey-map');
@@ -86,12 +85,12 @@ Route::prefix('v1')->group(function (): void {
             Route::get('/lessons/{lesson}/quiz', [KidCatalogueController::class, 'lessonQuiz'])->name('api.v1.kid.lessons.quiz');
             Route::get('/quizzes/{quiz}', [KidCatalogueController::class, 'quizDetail'])->name('api.v1.kid.quizzes.show');
             Route::post('/quizzes/{quiz}/check', [KidQuizController::class, 'check'])->name('api.v1.kid.quizzes.check');
-            Route::post('/quizzes/{quiz}/attempts', [KidQuizController::class, 'submit'])->name('api.v1.kid.quizzes.attempts');
-            Route::post('/quizzes/{quiz}/submit', [KidQuizController::class, 'submit'])->name('api.v1.kid.quizzes.submit');
+            Route::post('/quizzes/{quiz}/attempts', [KidQuizController::class, 'attempts'])->name('api.v1.kid.quizzes.attempts');
+            Route::post('/quizzes/{quiz}/attempts/{attempt}/finish', [KidQuizController::class, 'finishAttempt'])->name('api.v1.kid.quizzes.attempts.finish');
 
             Route::post('/lessons/{lesson}/attachments/{attachment}/signed-url', [KidLessonAttachmentController::class, 'signedUrlForLessonAttachment'])
                 ->name('api.v1.kid.lessons.attachments.signed-url');
-            Route::match(['get', 'post'], '/attachments/{attachment}/signed-url', [KidLessonAttachmentController::class, 'signedUrl'])
+            Route::post('/attachments/{attachment}/signed-url', [KidLessonAttachmentController::class, 'signedUrl'])
                 ->name('api.v1.kid.attachments.signed-url');
         });
 
