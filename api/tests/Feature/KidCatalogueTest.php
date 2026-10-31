@@ -205,7 +205,7 @@ class KidCatalogueTest extends TestCase
             ->assertJsonPath('data.pods.0.cleared_worlds_count', 1)
             ->assertJsonPath('data.pods.0.total_worlds_count', 3);
 
-        $this->assertLessThanOrEqual(8, $homeQueries, "Expected <= 8 queries on /kid/home, got {$homeQueries}");
+        $this->assertLessThanOrEqual(12, $homeQueries, "Expected <= 12 queries on /kid/home, got {$homeQueries}");
 
         // 2. Journey Map + lock/done/now states + query count assertion
         DB::flushQueryLog();

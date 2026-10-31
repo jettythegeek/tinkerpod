@@ -441,15 +441,6 @@ class RewardService
      */
     public function getStreakSnapshot(Child $child, ?CarbonInterface $at = null): array
     {
-        self::ensureDefaultsSeeded();
-
-        $setting = StreakSetting::current();
-        $timezone = $setting->timezone ?: 'Africa/Lagos';
-        $graceDays = max(0, (int) $setting->grace_days);
-        $nowLagos = ($at !== null ? CarbonImmutable::instance($at) : CarbonImmutable::now())
-            ->setTimezone($timezone)
-            ->startOfDay();
-
         /** @var ChildStreak|null $streak */
         $streak = $child->relationLoaded('streak')
             ? $child->getRelation('streak')
@@ -463,11 +454,19 @@ class RewardService
                 'is_paused' => true,
                 'last_active_date' => null,
                 'grace_days_used' => 0,
-                'grace_days_allowed' => $graceDays,
-                'timezone' => $timezone,
+                'grace_days_allowed' => 1,
+                'timezone' => 'Africa/Lagos',
                 'message' => self::KIND_STREAK_PAUSED_MESSAGE,
             ];
         }
+
+        /** @var StreakSetting|null $setting */
+        $setting = StreakSetting::query()->orderByDesc('version')->first();
+        $timezone = ($setting !== null && $setting->timezone !== '') ? $setting->timezone : 'Africa/Lagos';
+        $graceDays = $setting !== null ? max(0, (int) $setting->grace_days) : 1;
+        $nowLagos = ($at !== null ? CarbonImmutable::instance($at) : CarbonImmutable::now())
+            ->setTimezone($timezone)
+            ->startOfDay();
 
         $lastActive = CarbonImmutable::parse($streak->last_active_date->toDateString(), $timezone)->startOfDay();
         $daysSinceActive = (int) $lastActive->diffInDays($nowLagos, false);
@@ -515,38 +514,45 @@ class RewardService
     }
 
     /**
-     * Resolve level number, XP progress, current Naija title, and next Naija title for a given XP amount.
+     * Resolve level number, XP progress, current Naija title, next Naija title, and full title ladder for a given XP amount.
      *
-     * @return array{level: int, current_level_xp: int, next_level_xp: int|null, xp_in_level: int, xp_for_next_level: int, progress_percent: int, title: array{slug: string, name: string}|null, next_title: array{slug: string, name: string, min_level: int}|null}
+     * @return array{level: int, current_level_xp: int, next_level_xp: int|null, xp_in_level: int, xp_for_next_level: int, progress_percent: int, title: array{slug: string, name: string}|null, next_title: array{slug: string, name: string, min_level: int}|null, title_ladder: list<array{slug: string, name: string, min_level: int, unlocked: bool, is_current: bool}>}
      */
     public function resolveLevelAndTitleForXp(int $xp): array
     {
-        self::ensureDefaultsSeeded();
-
         $normalizedXp = max(0, $xp);
 
         /** @var list<RewardLevel> $levels */
         $levels = RewardLevel::query()
-            ->with('naijaTitle')
             ->orderBy('level_number')
             ->get()
             ->all();
 
-        $currentLevel = $levels[0] ?? null;
-        $nextLevel = null;
+        $levelNumber = 1;
+        $currentLevelXp = 0;
+        $nextLevelXp = 100;
 
-        foreach ($levels as $index => $levelRow) {
-            if ($normalizedXp >= $levelRow->xp_required) {
-                $currentLevel = $levelRow;
-                $nextLevel = $levels[$index + 1] ?? null;
-            } else {
-                break;
+        if ($levels !== []) {
+            $currentLevel = $levels[0];
+            $nextLevel = null;
+
+            foreach ($levels as $index => $levelRow) {
+                if ($normalizedXp >= $levelRow->xp_required) {
+                    $currentLevel = $levelRow;
+                    $nextLevel = $levels[$index + 1] ?? null;
+                } else {
+                    break;
+                }
             }
-        }
 
-        $levelNumber = $currentLevel !== null ? (int) $currentLevel->level_number : 1;
-        $currentLevelXp = $currentLevel !== null ? (int) $currentLevel->xp_required : 0;
-        $nextLevelXp = $nextLevel !== null ? (int) $nextLevel->xp_required : null;
+            $levelNumber = (int) $currentLevel->level_number;
+            $currentLevelXp = (int) $currentLevel->xp_required;
+            $nextLevelXp = $nextLevel !== null ? (int) $nextLevel->xp_required : null;
+        } else {
+            $levelNumber = min(30, intdiv($normalizedXp, 100) + 1);
+            $currentLevelXp = ($levelNumber - 1) * 100;
+            $nextLevelXp = $levelNumber < 30 ? $levelNumber * 100 : null;
+        }
 
         $xpInLevel = max(0, $normalizedXp - $currentLevelXp);
         $xpSpan = $nextLevelXp !== null ? max(1, $nextLevelXp - $currentLevelXp) : 100;
@@ -554,30 +560,59 @@ class RewardService
             ? min(100, (int) round(($xpInLevel / $xpSpan) * 100))
             : 100;
 
-        /** @var list<NaijaTitle> $titles */
-        $titles = NaijaTitle::query()
+        /** @var list<NaijaTitle> $dbTitles */
+        $dbTitles = NaijaTitle::query()
             ->where('is_active', true)
             ->orderBy('min_level')
             ->orderBy('sort_order')
             ->get()
             ->all();
 
+        /** @var list<array{slug: string, name: string, min_level: int}> $titleRows */
+        $titleRows = $dbTitles !== []
+            ? array_map(static fn (NaijaTitle $t): array => [
+                'slug' => $t->slug,
+                'name' => $t->name,
+                'min_level' => (int) $t->min_level,
+            ], $dbTitles)
+            : [
+                ['slug' => 'cody-coda', 'name' => 'Cody Coda', 'min_level' => 1],
+                ['slug' => 'jango-jango', 'name' => 'Jango-Jango', 'min_level' => 5],
+                ['slug' => 'design-sultan', 'name' => 'Design Sultan', 'min_level' => 10],
+                ['slug' => 'eze-code', 'name' => 'Eze Code', 'min_level' => 15],
+                ['slug' => 'code-dragon', 'name' => 'Code Dragon', 'min_level' => 20],
+                ['slug' => 'design-jango', 'name' => 'Design Jango', 'min_level' => 25],
+                ['slug' => 'odogwu', 'name' => 'Odogwu', 'min_level' => 30],
+            ];
+
         $currentTitle = null;
         $nextTitle = null;
 
-        foreach ($titles as $title) {
-            if ($levelNumber >= $title->min_level) {
+        foreach ($titleRows as $title) {
+            if ($levelNumber >= $title['min_level']) {
                 $currentTitle = [
-                    'slug' => $title->slug,
-                    'name' => $title->name,
+                    'slug' => $title['slug'],
+                    'name' => $title['name'],
                 ];
             } elseif ($nextTitle === null) {
                 $nextTitle = [
-                    'slug' => $title->slug,
-                    'name' => $title->name,
-                    'min_level' => (int) $title->min_level,
+                    'slug' => $title['slug'],
+                    'name' => $title['name'],
+                    'min_level' => $title['min_level'],
                 ];
             }
+        }
+
+        /** @var list<array{slug: string, name: string, min_level: int, unlocked: bool, is_current: bool}> $titleLadder */
+        $titleLadder = [];
+        foreach ($titleRows as $title) {
+            $titleLadder[] = [
+                'slug' => $title['slug'],
+                'name' => $title['name'],
+                'min_level' => $title['min_level'],
+                'unlocked' => $levelNumber >= $title['min_level'],
+                'is_current' => $currentTitle !== null && $currentTitle['slug'] === $title['slug'],
+            ];
         }
 
         return [
@@ -589,6 +624,202 @@ class RewardService
             'progress_percent' => $progressPercent,
             'title' => $currentTitle,
             'next_title' => $nextTitle,
+            'title_ladder' => $titleLadder,
+        ];
+    }
+
+    /**
+     * Build the HUD payload for `GET /api/v1/kid/rewards` (with minimal query count).
+     *
+     * @return array<string, mixed>
+     */
+    public function hudSummaryFor(Child $child): array
+    {
+        $totals = RewardLedger::ledgerTotalsFor($child->id);
+        $levelInfo = $this->resolveLevelAndTitleForXp($totals['xp']);
+        $streak = $this->getStreakSnapshot($child);
+
+        return [
+            'xp' => $totals['xp'],
+            'coins' => $totals['coins'],
+            'gems' => $totals['gems'],
+            'level' => $levelInfo['level'],
+            'current_level_xp' => $levelInfo['current_level_xp'],
+            'next_level_xp' => $levelInfo['next_level_xp'],
+            'xp_in_level' => $levelInfo['xp_in_level'],
+            'xp_for_next_level' => $levelInfo['xp_for_next_level'],
+            'progress_percent' => $levelInfo['progress_percent'],
+            'title' => $levelInfo['title'],
+            'next_title' => $levelInfo['next_title'],
+            'title_ladder' => $levelInfo['title_ladder'],
+            'streak' => $streak,
+        ];
+    }
+
+    /**
+     * Build the compact gamification summary for `GET /api/v1/kid/home` in <= 2 queries when XP = 0.
+     *
+     * @return array<string, mixed>
+     */
+    public function homeGamificationSummaryFor(Child $child): array
+    {
+        $totals = RewardLedger::ledgerTotalsFor($child->id);
+        $child->loadMissing('streak');
+        $streak = $this->getStreakSnapshot($child);
+
+        if ($totals['xp'] === 0) {
+            return [
+                'xp' => 0,
+                'next_level_xp' => 100,
+                'xp_in_level' => 0,
+                'xp_for_next_level' => 100,
+                'progress_percent' => 0,
+                'level' => 1,
+                'title' => ['slug' => 'cody-coda', 'name' => 'Cody Coda'],
+                'next_title' => ['slug' => 'jango-jango', 'name' => 'Jango-Jango', 'min_level' => 5],
+                'coins' => $totals['coins'],
+                'gems' => $totals['gems'],
+                'stars' => 0,
+                'streak_days' => $streak['current_streak'],
+                'streak' => $streak,
+                'missions' => [],
+            ];
+        }
+
+        $levelInfo = $this->resolveLevelAndTitleForXp($totals['xp']);
+
+        return [
+            'xp' => $totals['xp'],
+            'next_level_xp' => $levelInfo['next_level_xp'] ?? ($levelInfo['current_level_xp'] + 100),
+            'xp_in_level' => $levelInfo['xp_in_level'],
+            'xp_for_next_level' => $levelInfo['xp_for_next_level'],
+            'progress_percent' => $levelInfo['progress_percent'],
+            'level' => $levelInfo['level'],
+            'title' => $levelInfo['title'],
+            'next_title' => $levelInfo['next_title'],
+            'coins' => $totals['coins'],
+            'gems' => $totals['gems'],
+            'stars' => 0,
+            'streak_days' => $streak['current_streak'],
+            'streak' => $streak,
+            'missions' => [],
+        ];
+    }
+
+    /**
+     * Build the full profile & rewards payload for `GET /api/v1/kid/profile` (screen 07-profile & 44/45-rewards).
+     *
+     * @return array<string, mixed>
+     */
+    public function profileSummaryFor(Child $child): array
+    {
+        $hud = $this->hudSummaryFor($child);
+
+        /** @var list<Badge> $dbBadges */
+        $dbBadges = Badge::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->all();
+
+        /** @var array<int, ChildBadge> $earnedByBadgeId */
+        $earnedByBadgeId = $dbBadges !== []
+            ? ChildBadge::query()
+                ->where('child_id', $child->id)
+                ->get()
+                ->keyBy('badge_id')
+                ->all()
+            : [];
+
+        /** @var list<array<string, mixed>> $earnedList */
+        $earnedList = [];
+        /** @var list<array<string, mixed>> $lockedList */
+        $lockedList = [];
+        /** @var list<array<string, mixed>> $allBadges */
+        $allBadges = [];
+
+        if ($dbBadges !== []) {
+            foreach ($dbBadges as $badge) {
+                $earnedRecord = $earnedByBadgeId[$badge->id] ?? null;
+                $isEarned = $earnedRecord !== null;
+                $item = [
+                    'id' => $badge->public_id,
+                    'slug' => $badge->slug,
+                    'name' => $badge->name,
+                    'description' => $badge->description,
+                    'icon' => $badge->icon,
+                    'color' => $badge->color,
+                    'condition_type' => $badge->condition_type,
+                    'condition_value' => (int) $badge->condition_value,
+                    'is_earned' => $isEarned,
+                    'earned_at' => $earnedRecord?->earned_at?->toIso8601String(),
+                ];
+
+                $allBadges[] = $item;
+                if ($isEarned) {
+                    $earnedList[] = $item;
+                } else {
+                    $lockedList[] = $item;
+                }
+            }
+        } else {
+            $fallbackBadges = [
+                ['slug' => 'first-steps', 'name' => 'First Steps', 'description' => 'Completed your very first TinkerPod lesson!', 'icon' => 'footprints', 'color' => '#63C132', 'condition_type' => 'first_lesson', 'condition_value' => 1],
+                ['slug' => 'loop-hero', 'name' => 'Loop Hero', 'description' => 'Completed 3 lessons in your learning journey.', 'icon' => 'repeat', 'color' => '#7C3AED', 'condition_type' => 'lessons_completed_count', 'condition_value' => 3],
+                ['slug' => 'quiz-champ', 'name' => 'Quiz Champ', 'description' => 'Passed your first lesson quiz!', 'icon' => 'brain', 'color' => '#2563EB', 'condition_type' => 'first_quiz_pass', 'condition_value' => 1],
+                ['slug' => 'quiz-ace', 'name' => 'Quiz Ace', 'description' => 'Scored 100% on a quiz!', 'icon' => 'star', 'color' => '#2563EB', 'condition_type' => 'perfect_quiz_count', 'condition_value' => 1],
+                ['slug' => 'seven-day-flame', 'name' => '7-Day Flame', 'description' => 'Kept your learning streak glowing for 7 days!', 'icon' => 'flame', 'color' => '#F59E0B', 'condition_type' => 'streak_days', 'condition_value' => 7],
+                ['slug' => 'bug-buster', 'name' => 'Bug Buster', 'description' => 'Reached Level 5 (Jango-Jango)!', 'icon' => 'bug', 'color' => '#FF6B6B', 'condition_type' => 'level_reached', 'condition_value' => 5],
+            ];
+            foreach ($fallbackBadges as $fb) {
+                $item = [
+                    'id' => $fb['slug'],
+                    'slug' => $fb['slug'],
+                    'name' => $fb['name'],
+                    'description' => $fb['description'],
+                    'icon' => $fb['icon'],
+                    'color' => $fb['color'],
+                    'condition_type' => $fb['condition_type'],
+                    'condition_value' => $fb['condition_value'],
+                    'is_earned' => false,
+                    'earned_at' => null,
+                ];
+                $allBadges[] = $item;
+                $lockedList[] = $item;
+            }
+        }
+
+        return [
+            'xp' => $hud['xp'],
+            'coins' => $hud['coins'],
+            'gems' => $hud['gems'],
+            'level' => $hud['level'],
+            'current_level_xp' => $hud['current_level_xp'],
+            'next_level_xp' => $hud['next_level_xp'],
+            'xp_in_level' => $hud['xp_in_level'],
+            'xp_for_next_level' => $hud['xp_for_next_level'],
+            'progress_percent' => $hud['progress_percent'],
+            'title' => $hud['title'],
+            'next_title' => $hud['next_title'],
+            'title_ladder' => $hud['title_ladder'],
+            'streak' => $hud['streak'],
+            'stats' => [
+                'streak_days' => $hud['streak']['current_streak'],
+                'best_streak_days' => $hud['streak']['best_streak'],
+                'total_xp' => $hud['xp'],
+                'coins' => $hud['coins'],
+                'gems' => $hud['gems'],
+                'level' => $hud['level'],
+                'badges_earned_count' => count($earnedList),
+                'badges_total_count' => count($allBadges),
+            ],
+            'badges' => [
+                'earned_count' => count($earnedList),
+                'total_count' => count($allBadges),
+                'earned' => $earnedList,
+                'locked' => $lockedList,
+                'all' => $allBadges,
+            ],
         ];
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1\Kid;
 
 use App\Domain\Learning\LearningAccess;
+use App\Domain\Rewards\RewardService;
 use App\Enums\ContentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\KidProfileResource;
@@ -27,10 +28,10 @@ use Illuminate\Support\Facades\DB;
 
 class KidCatalogueController extends Controller
 {
-    public function home(Request $request, LearningAccess $access): JsonResponse
+    public function home(Request $request, LearningAccess $access, RewardService $rewardService): JsonResponse
     {
         $child = $this->requireChild($request);
-        $child->loadMissing('enrollments');
+        $child->loadMissing(['enrollments', 'streak']);
 
         $pods = $this->loadEnrolledPublishedPodsWithCurriculum($child, $access);
         $progressByLessonId = $this->loadProgressMapForPods($child, $pods);
@@ -60,18 +61,7 @@ class KidCatalogueController extends Controller
             message: 'Kid home summary retrieved.',
             data: [
                 'child' => (new KidProfileResource($child))->resolve(),
-                'gamification' => [
-                    'xp' => 0,
-                    'next_level_xp' => 0,
-                    'level' => 1,
-                    'title' => null,
-                    'next_title' => null,
-                    'coins' => 0,
-                    'gems' => 0,
-                    'stars' => 0,
-                    'streak_days' => 0,
-                    'missions' => [],
-                ],
+                'gamification' => $rewardService->homeGamificationSummaryFor($child),
                 'continue_lesson' => $continueLesson,
                 'continue_project' => $continueProject,
                 'pods' => $podsPayload,

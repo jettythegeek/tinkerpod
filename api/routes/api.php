@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Kid\KidLessonAttachmentController;
 use App\Http\Controllers\Api\V1\Kid\KidLessonProgressController;
 use App\Http\Controllers\Api\V1\Kid\KidProfileController;
 use App\Http\Controllers\Api\V1\Kid\KidQuizController;
+use App\Http\Controllers\Api\V1\Kid\KidRewardsController;
 use App\Http\Controllers\Api\V1\Parent\ParentChildController;
 use App\Support\ApiResponse;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,8 @@ Route::prefix('v1')->group(function (): void {
 
         Route::middleware(['auth:sanctum', 'child.token'])->group(function (): void {
             Route::get('/me', [KidProfileController::class, 'me'])->name('api.v1.kid.me');
+            Route::get('/rewards', [KidRewardsController::class, 'rewards'])->name('api.v1.kid.rewards');
+            Route::get('/profile', [KidRewardsController::class, 'profile'])->name('api.v1.kid.profile');
             Route::match(['put', 'patch'], '/username', [KidProfileController::class, 'updateUsername'])->name('api.v1.kid.username');
 
             Route::get('/home', [KidCatalogueController::class, 'home'])->name('api.v1.kid.home');
