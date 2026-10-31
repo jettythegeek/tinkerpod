@@ -1,0 +1,42 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:320px;overflow:hidden"><img src="../assets/journey-map-bg.jpg" style="position:absolute;left:-195px;top:-10px;width:780px;max-width:none"></div>
+  <div style="position:absolute;inset:0 0 auto 0;height:320px;background:linear-gradient(rgba(91,33,182,.55),rgba(91,33,182,.05) 40%,rgba(255,183,0,.0) 60%,rgba(91,33,182,.45))"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0" class="flex justify-between items-center">
+   <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;color:#0F172A"><i data-lucide="chevron-left"></i></div>
+   <span class="st nodot" style="background:#FFB700;color:#0F172A;height:30px;font-size:13px"><i data-lucide="flag" style="width:14px"></i>Mission unlocked</span>
+  </div>
+  <div style="position:absolute;top:282px;left:0;right:0;bottom:0;background:#F8FAFC;border-radius:30px 30px 0 0;padding:16px 18px 0">
+   <div class="flex items-center gap-2"><span class="st p" style="height:24px">From Level 2</span><span class="st nodot s" style="height:24px">3 chapters · 25 min</span><span class="st nodot b" style="height:24px">Coding</span></div>
+   <div style="font-size:27px;font-weight:900;line-height:1.1;margin-top:8px">Golden Gate of Codazanga</div>
+   <!-- story -->
+   <div class="flex items-end gap-1 mt-2">
+    <img src="../assets/pip/pip-surprised.png" style="width:70px;flex:none;margin-bottom:-2px">
+    <div style="flex:1;background:#fff;border-radius:22px 22px 22px 6px;padding:10px 13px;font-weight:700;font-size:13.5px;line-height:1.42;box-shadow:0 10px 24px -12px rgba(76,29,149,.35),0 0 0 1px #EEE8FB"><b style="color:var(--purple)">Captain Jetty:</b> The Golden Gate is jammed! The old Codazanga engineers hid a secret sequence. Crack it before sunset and the city is ours to explore.</div>
+   </div>
+   <div class="over mt-3" style="color:#64748B">Your quest</div>
+   <div class="mt-1.5" id="ch"></div>
+   <div class="flex items-center gap-2 mt-3" style="background:linear-gradient(90deg,#FFF6DB,#F3EEFF);border-radius:18px;padding:8px 10px">
+    <span class="over" style="color:#64748B;font-size:10px;width:52px;line-height:1.3">Rewards</span>
+    <span class="stat" style="height:30px;font-size:13px"><span data-ic="xp" data-s="22"></span>+300</span>
+    <span class="stat" style="height:30px;font-size:13px"><span data-ic="coin" data-s="22"></span>+120</span>
+    <span class="stat" style="height:30px;font-size:13px"><span data-ic="gem" data-s="20"></span>+5</span>
+    <div style="position:relative;width:30px;height:34px;margin-left:auto;flex:none" title="Gatekeeper badge"><div class="badge-hex" style="position:absolute;inset:0;width:30px;height:34px;background:#C98F00"></div><div class="badge-hex" style="position:absolute;left:2px;top:2px;width:26px;height:30px;background:linear-gradient(160deg,#FFB700,#C98F00)"><i data-lucide="key-round" style="width:14px;height:14px"></i></div></div>
+   </div>
+  </div>
+  <div style="position:absolute;left:16px;right:16px;bottom:96px;text-align:center;font-size:12px;font-weight:800;color:var(--muted)">Plus the <b style="color:#8A5A00">Gatekeeper</b> badge · play offline once downloaded</div>
+  <div style="position:absolute;left:16px;right:16px;bottom:30px"><div class="btn" style="height:56px"><i data-lucide="sparkles" style="width:20px"></i>Start the mission</div></div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const C=[['Find the three clues','Sequences · look around the ruins','search',1],['Crack the secret code','Loops · repeat the pattern','key-round',0],['Open the Golden Gate','Boss chapter · beat the timer','door-open',0]];
+document.getElementById('ch').innerHTML=C.map(([n,d,ic,st],i)=>`<div class="flex items-center gap-3" style="position:relative;padding:3px 0">
+${i<C.length-1?`<i style="position:absolute;left:19px;top:42px;width:3px;height:10px;border-radius:3px;background:#E2E8F0"></i>`:''}
+<div style="width:40px;height:40px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;${st?'background:#7C3AED;color:#fff;box-shadow:0 4px 0 #5B21B6':'background:#F1F5F9;color:#94A3B8'}"><i data-lucide="${ic}" style="width:20px"></i></div>
+<div class="flex-1"><div style="font-weight:900;font-size:14.5px;${st?'':'color:#475569'}">${i+1}. ${n}</div><div class="cap" style="font-size:12px">${d}</div></div>
+${st?'<span class="st p nodot" style="height:24px">First</span>':'<span data-ic="lock" data-s="18"></span>'}</div>`).join('');
+</script>

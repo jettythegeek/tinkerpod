@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Streak flame, idle loop">
+<title>Streak flame, idle loop</title>
+
+<defs>
+ <linearGradient id="f10-fo" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF6B6B"></stop><stop offset=".55" stop-color="#FF8A1F"></stop><stop offset="1" stop-color="#FFB700"></stop></linearGradient>
+ <linearGradient id="f10-fm" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF8A1F"></stop><stop offset="1" stop-color="#FFD54A"></stop></linearGradient>
+ <radialGradient id="f10-halo"><stop offset="0" stop-color="#FFE7A3" stop-opacity=".8"></stop><stop offset="1" stop-color="#FFE7A3" stop-opacity="0"></stop></radialGradient></defs>
+<g transform="matrix(1.55 0 0 1.55 -165 36.5)">
+ <g id="f10-halo" opacity="0.75"><ellipse cx="300" cy="170" rx="130" ry="120" fill="url(#f10-halo)"></ellipse></g>
+ <g id="f10-flick">
+  <path d="M300 62 C334 104 380 132 376 186 C373 228 340 252 300 252 C260 252 226 228 224 188 C222 152 244 132 258 108 C264 134 274 146 286 150 C284 118 288 90 300 62Z" fill="url(#f10-fo)"></path>
+  <g id="f10-mid"><path d="M302 116 C322 142 346 160 344 194 C342 224 324 240 300 240 C276 240 258 224 258 198 C258 176 270 162 280 148 C284 166 292 174 300 176 C296 156 296 136 302 116Z" fill="url(#f10-fm)"></path></g>
+  <g id="f10-core"><path d="M300 166 C314 184 324 196 322 212 C320 228 312 236 300 236 C288 236 280 228 279 214 C278 198 290 186 300 166Z" fill="#FFF1B8"></path></g>
+ </g>
+ <g id="f10-embers"><circle id="f10-e0" cx="266" cy="120" r="6.5" fill="#FFB700"></circle><circle id="f10-e3" cx="338" cy="120" r="5.0" fill="#FFB700" opacity="0.33" transform="translate(0 -73)"></circle><circle id="f10-e4" cx="256" cy="120" r="5.5" fill="#FFB700" opacity="0.67" transform="translate(0 -37)"></circle></g>
+</g>
+</svg>

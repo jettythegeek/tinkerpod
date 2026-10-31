@@ -1,0 +1,188 @@
+{
+ "source": "fx11-loading-spinner.svg",
+ "note": "CSS keyframe animation exported from Chrome. transform_origin is in px of the reference box (transform_box). Offsets 0..1.",
+ "animations": [
+  {
+   "target": "f11-arc",
+   "name": "f11-k0",
+   "duration_ms": 1200,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "140.883px 140.883px",
+   "transform_box": "fill-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "linear",
+     "transform": "rotate(0deg)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "transform": "rotate(360deg)"
+    }
+   ]
+  },
+  {
+   "target": "f11-arc2",
+   "name": "f11-k1",
+   "duration_ms": 1200,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "0px 0px",
+   "transform_box": "view-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "strokeDasharray": "16px, 84px",
+     "transform": "rotate(0deg)"
+    },
+    {
+     "offset": 0.5,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "strokeDasharray": "52px, 48px",
+     "transform": "rotate(80deg)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "strokeDasharray": "16px, 84px",
+     "transform": "rotate(360deg)"
+    }
+   ]
+  },
+  {
+   "target": "f11-gear",
+   "name": "f11-k2",
+   "duration_ms": 1200,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "29.4px 29.4px",
+   "transform_box": "fill-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "linear",
+     "transform": "rotate(0deg)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "transform": "rotate(-90deg)"
+    }
+   ]
+  },
+  {
+   "target": "f11-dot0",
+   "name": "f11-k3",
+   "duration_ms": 1200,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "9px 9px",
+   "transform_box": "fill-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(0.6)"
+    },
+    {
+     "offset": 0.16667,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(1.15)"
+    },
+    {
+     "offset": 0.5,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(0.6)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "transform": "scale(0.6)"
+    }
+   ]
+  },
+  {
+   "target": "f11-dot1",
+   "name": "f11-k4",
+   "duration_ms": 1200,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "9px 9px",
+   "transform_box": "fill-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(0.6)"
+    },
+    {
+     "offset": 0.33332999999999996,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(1.15)"
+    },
+    {
+     "offset": 0.66667,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(0.6)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "transform": "scale(0.6)"
+    }
+   ]
+  },
+  {
+   "target": "f11-dot2",
+   "name": "f11-k5",
+   "duration_ms": 1200,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "9px 9px",
+   "transform_box": "fill-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(0.6)"
+    },
+    {
+     "offset": 0.5,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(1.15)"
+    },
+    {
+     "offset": 0.83333,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "scale(0.6)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "transform": "scale(0.6)"
+    }
+   ]
+  }
+ ]
+}

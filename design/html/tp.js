@@ -47,3 +47,18 @@ ucl:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#101B4D"/><ci
 cup:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#00A396"/><circle cx="32" cy="32" r="30" fill="url(#cg)" opacity=".0"/><path d="M20 14h24v10c0 7-5 13-12 13s-12-6-12-13z" fill="#FFC21A"/><path d="M20 17h-6v3a7 7 0 0 0 7 7M44 17h6v3a7 7 0 0 1-7 7" fill="none" stroke="#FFE08A" stroke-width="3"/><rect x="29" y="37" width="6" height="7" fill="#E89A00"/><rect x="22" y="44" width="20" height="7" rx="2.5" fill="#B45309"/><path d="M25 18v6" stroke="#FFF3C4" stroke-width="3" stroke-linecap="round"/></svg>`,
 wc:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#2563EB"/><circle cx="32" cy="32" r="21" fill="#60A5FA"/><path d="M18 26c6 2 8-4 13-2s3 8 9 7 6-5 6-5M14 38c6-1 9 4 15 2s9-6 15-4" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/><ellipse cx="32" cy="32" rx="9" ry="21" fill="none" stroke="#DBEAFE" stroke-width="1.6"/><path d="M11 32h42" stroke="#DBEAFE" stroke-width="1.6"/><circle cx="48" cy="14" r="9" fill="#FFB700"/><path d="M48 9l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#fff"/></svg>`};
 function tpEmb(){document.querySelectorAll('[data-emb]').forEach(e=>{e.innerHTML=EMB[e.dataset.emb];e.style.width=(e.dataset.s||56)+'px';e.style.display='inline-block';e.style.flex='none';e.querySelector('svg').style.width='100%';e.querySelector('svg').style.height='auto'})}
+/* ---- v2 additions (Learn/Compete set, screens 33+). Additive only: older screens keep data-nav. ---- */
+// Founder decision Oct 2026: kid bottom nav = Home, Learn, Build, Rewards, Me
+function kidnav(active){const it=[['home','house','Home'],['learn','book-open','Learn'],['build','hammer','Build'],['rewards','trophy','Rewards'],['me','smile','Me']];
+ return `<nav class="nav">${it.map(([k,i,l])=>`<a class="${k===active?'on':''}"><i data-lucide="${i}"></i><span>${l}</span></a>`).join('')}</nav><div class="homebar"></div>`}
+// Pods are tracks. Colour + Lucide icon per pod.
+const PODS={coding:['Coding','code-xml','#7C3AED','#F3EEFF'],ai:['AI','brain-circuit','#2563EB','#EAF1FF'],design:['Design','palette','#FF6B6B','#FFEDED'],robotics:['Robotics','bot','#007A70','#E6F9F7'],founder:['Founder','rocket','#B45309','#FFF6DB']};
+// Pod switcher chip, only rendered when a kid has 2+ pods. data-podchip="coding,design"
+function podchip(list){const p=list.split(',');const a=PODS[p[0]];
+ return `<span class="podchip"><span class="pi" style="background:${a[2]}"><i data-lucide="${a[1]}"></i></span><b>${a[0]} Pod</b>${p.slice(1).map(k=>`<span class="pi sm" style="background:${PODS[k][2]}"><i data-lucide="${PODS[k][1]}"></i></span>`).join('')}<i data-lucide="chevrons-up-down" class="cv"></i></span>`}
+function podicon(k,s){const a=PODS[k];s=s||40;return `<span style="width:${s}px;height:${s}px;border-radius:${Math.round(s*.32)}px;background:${a[3]};color:${a[2]};display:inline-flex;align-items:center;justify-content:center;flex:none"><i data-lucide="${a[1]}" style="width:${Math.round(s*.5)}px;height:${Math.round(s*.5)}px"></i></span>`}
+(function(){const o=tpInit;tpInit=function(){
+ document.querySelectorAll('[data-kidnav]').forEach(e=>e.outerHTML=kidnav(e.dataset.kidnav));
+ document.querySelectorAll('[data-podchip]').forEach(e=>e.outerHTML=podchip(e.dataset.podchip));
+ document.querySelectorAll('[data-podicon]').forEach(e=>{const [k,s]=e.dataset.podicon.split(':');e.outerHTML=podicon(k,+s||40)});
+ o();}})();

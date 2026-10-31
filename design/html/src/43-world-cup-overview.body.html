@@ -1,0 +1,59 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:300px;background:radial-gradient(120% 100% at 50% 0%,#3B82F6 0%,#1D3FB8 55%,#101B4D 100%);border-radius:0 0 32px 32px;overflow:hidden">
+   <svg style="position:absolute;inset:0;opacity:.18" width="390" height="300"><circle cx="40" cy="120" r="3" fill="#fff"/><circle cx="350" cy="210" r="4" fill="#fff"/><path d="M330 70l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/><circle cx="300" cy="190" r="80" fill="none" stroke="#fff" stroke-width="2"/></svg>
+  </div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0;color:#fff">
+   <div class="flex items-center justify-between">
+    <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center"><i data-lucide="chevron-left"></i></div>
+    <span class="st nodot" style="background:rgba(255,255,255,.16);color:#fff;height:28px">Group stage · Week 2</span>
+   </div>
+   <div class="flex items-center gap-2 mt-2">
+    <div class="flex-1">
+     <div class="over" style="color:#FFD25E">Nationwide · every pod</div>
+     <div style="font-size:28px;font-weight:900;line-height:1.05;margin-top:3px">TinkerPod World Cup</div>
+     <div style="font-size:13px;font-weight:700;opacity:.88;margin-top:4px;line-height:1.35">Five pods. One trophy. Kids from every state play for their pod.</div>
+    </div>
+    <img src="../assets/pip/pip-cheer-t.svg" style="height:118px;margin:-10px -12px -6px 0;flex:none">
+   </div>
+   <!-- stages -->
+   <div class="flex items-center gap-1.5 mt-3" style="font-size:12px;font-weight:900">
+    <span class="flex items-center gap-1" style="background:rgba(255,255,255,.16);border-radius:99px;padding:5px 10px"><i data-lucide="check" style="width:13px;color:#63C132;stroke-width:3.2"></i>Qualifiers</span><i data-lucide="chevron-right" style="width:14px;opacity:.6"></i>
+    <span style="background:#fff;color:#1D3FB8;border-radius:99px;padding:5px 10px">Group stage</span><i data-lucide="chevron-right" style="width:14px;opacity:.6"></i>
+    <span style="background:rgba(255,255,255,.16);border-radius:99px;padding:5px 10px">Final · Lagos</span>
+   </div>
+  </div>
+  <div style="position:relative;padding:30px 14px 0">
+   <div class="card" style="padding:10px 10px 6px;border-radius:22px">
+    <div class="flex justify-between items-center" style="padding:0 4px 6px"><span class="h3">Pod table</span><span class="cap" style="font-size:12px">Top 2 reach the final</span></div>
+    <div id="tbl"></div>
+   </div>
+   <div class="card flex items-center gap-3 mt-3" style="padding:10px 12px;border-radius:20px">
+    <span data-emb="wc" data-s="40"></span>
+    <div class="flex-1 min-w-0"><div class="over" style="color:#2563EB">Next match · Sat 5 PM</div><div style="font-weight:900;font-size:15px">Coding Pod vs Design Pod</div><div class="cap" style="font-size:12px">You're in the squad · 5 a side</div></div>
+    <div class="btn sm" style="height:38px;padding:0 12px;background:#2563EB;box-shadow:0 3px 0 #1D4ED8;font-size:13px">Squad</div>
+   </div>
+   <div class="flex justify-between items-center mt-4" style="padding:0 4px"><span class="h3">Road to the World Cup</span></div>
+   <div class="card flex items-center justify-between mt-2" style="padding:12px 14px;border-radius:20px">
+    <div class="text-center"><span data-emb="league" data-s="40"></span><div style="font-size:12px;font-weight:900;margin-top:4px">Weekly League</div><div class="cap" style="font-size:11px">Earn XP</div></div>
+    <i data-lucide="chevron-right" style="color:#CBD5E1"></i>
+    <div class="text-center"><span data-emb="cup" data-s="40"></span><div style="font-size:12px;font-weight:900;margin-top:4px">Pod Cup</div><div class="cap" style="font-size:11px">Top 16 play</div></div>
+    <i data-lucide="chevron-right" style="color:#CBD5E1"></i>
+    <div class="text-center"><span data-emb="wc" data-s="40"></span><div style="font-size:12px;font-weight:900;margin-top:4px">World Cup</div><div class="cap" style="font-size:11px">Cup stars join</div></div>
+   </div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const P=[['coding',3,7,1],['ai',3,6,0],['design',3,4,0],['robotics',3,3,0],['founder',3,1,0]];
+const N={coding:['Coding','code-xml','#7C3AED','#F3EEFF'],ai:['AI','brain-circuit','#2563EB','#EAF1FF'],design:['Design','palette','#FF6B6B','#FFEDED'],robotics:['Robotics','bot','#007A70','#E6F9F7'],founder:['Founder','rocket','#B45309','#FFF6DB']};
+let h=`<div style="display:grid;grid-template-columns:22px 1fr 40px 40px;padding:0 8px;font-size:10.5px;font-weight:900;color:#94A3B8;height:18px;align-items:center"><span>#</span><span>Pod</span><span style="text-align:center">P</span><span style="text-align:right">Pts</span></div>`;
+P.forEach(([k,p,pts,me],i)=>{const n=N[k];h+=`<div style="display:grid;grid-template-columns:22px 1fr 40px 40px;align-items:center;height:35px;padding:0 8px;border-radius:13px;font-weight:800;font-size:14px;position:relative;${me?'background:#F3EEFF;box-shadow:inset 0 0 0 2px #7C3AED':i%2?'background:#F8FAFC':''}">
+<i style="position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:3px;background:${i<2?'#2563EB':'transparent'}"></i>
+<span style="font-weight:900;color:#64748B">${i+1}</span><span class="flex items-center gap-2"><span style="width:28px;height:28px;border-radius:9px;background:${n[3]};color:${n[2]};display:flex;align-items:center;justify-content:center;flex:none"><i data-lucide="${n[1]}" style="width:16px;height:16px"></i></span>${n[0]} Pod${me?' <span class="st p nodot" style="height:20px;font-size:10.5px;background:#7C3AED;color:#fff">YOUR POD</span>':''}</span><span style="text-align:center;color:#64748B">${p}</span><span style="text-align:right;font-weight:900">${pts}</span></div>`});
+document.getElementById('tbl').innerHTML=h;
+</script>

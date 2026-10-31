@@ -1,0 +1,41 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:248px;background:radial-gradient(100% 120% at 80% 0%,#3B2A99 0%,#101B4D 70%);border-radius:0 0 32px 32px"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0;color:#fff">
+   <div class="flex items-center gap-3">
+    <div style="width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center"><i data-lucide="chevron-left"></i></div>
+    <div class="flex-1"><div style="font-size:21px;font-weight:900;line-height:1.1">Coding League</div><div style="font-size:12px;font-weight:700;opacity:.8">Silver Division · Mr. Femi's group · Week 6</div></div>
+    <span data-emb="league" data-s="40"></span>
+   </div>
+   <div class="flex items-center gap-2 mt-3" style="background:rgba(255,255,255,.1);border-radius:16px;padding:7px 10px">
+    <i data-lucide="timer" style="width:18px;flex:none;color:#FFD25E"></i><span style="font-size:13px;font-weight:800;flex:1;white-space:nowrap">Ends Sun · 11:59 PM WAT</span>
+    <div class="flex gap-1" style="font-weight:900;font-size:12.5px"><span style="background:#fff;color:#101B4D;border-radius:8px;padding:2px 7px">2d</span><span style="background:#fff;color:#101B4D;border-radius:8px;padding:2px 7px">06h</span><span style="background:#fff;color:#101B4D;border-radius:8px;padding:2px 7px">41m</span></div>
+   </div>
+   <div class="flex gap-2 mt-2.5">
+    <div style="flex:1;border-radius:16px;background:rgba(255,255,255,.1);padding:6px 11px"><div style="font-size:11px;font-weight:800;opacity:.75">Your rank</div><div style="font-size:19px;font-weight:900">4th <span style="font-size:12px;color:#63C132">▲3</span></div></div>
+    <div style="flex:1;border-radius:16px;background:rgba(255,255,255,.1);padding:6px 11px"><div style="font-size:11px;font-weight:800;opacity:.75">XP this week</div><div style="font-size:19px;font-weight:900">1,240</div></div>
+    <div style="flex:1.25;border-radius:16px;background:#63C132;color:#0F172A;padding:6px 11px"><div style="font-size:11px;font-weight:800;opacity:.8">If it ended now</div><div style="font-size:14.5px;font-weight:900;line-height:1.15">Up to Gold <i data-lucide="arrow-up" style="width:14px;display:inline;vertical-align:-2px"></i></div></div>
+   </div>
+  </div>
+  <div class="card" style="position:relative;margin:14px 12px 0;padding:5px 6px 4px;border-radius:24px"><div id="tbl"></div></div>
+  <div class="flex items-center justify-center gap-1.5 mt-2" style="font-size:11.5px;font-weight:800;color:var(--muted);position:relative"><i data-lucide="shield-check" style="width:14px;color:#007A70"></i>Everyone plays with a secret alias. Only mentors see names.</div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const A=[['Suya Spark','flame','#FF6B6B'],['Jollof Ninja','zap','#7C3AED'],['Agege Bolt','rocket','#2563EB'],['Danfo Dash','bus','#7C3AED'],['Zobo Comet','star','#C026D3'],['Okada Racer','bike','#007A70'],['Eko Eagle','bird','#2563EB'],['Puff-Puff Pixel','sparkles','#B45309'],['Ankara Arrow','feather','#FF6B6B'],['Kola Knight','shield','#475569'],['Moi-Moi Maker','cog','#007A70'],['Chin-Chin Coder','code-xml','#7C3AED'],['Plantain Pilot','plane','#B45309'],['Akara Astro','orbit','#2563EB'],['Garri Gecko','turtle','#2F7D16'],['Ofada Owl','moon','#475569'],['Egusi Echo','music','#C026D3'],['Boli Byte','cpu','#007A70'],['Kunu Kite','wind','#2563EB'],['Lagoon Lynx','cat','#B45309']];
+const xp=[1610,1485,1302,1240,1190,1120,1065,990,940,905,860,812,770,701,655,590,520,470,410,350];
+const cols='grid-template-columns:24px 1fr 56px';
+let h=`<div style="display:grid;${cols};align-items:center;height:20px;padding:0 8px;font-size:10.5px;font-weight:900;color:#94A3B8"><span>#</span><span>Alias</span><span style="text-align:right">XP</span></div>`;
+const zl=(t,c,bg,ic)=>`<div class="flex items-center gap-1.5" style="height:18px;margin:2px 0;padding:0 8px;font-size:10px;font-weight:900;letter-spacing:.07em;color:${c}"><i data-lucide="${ic}" style="width:12px;height:12px"></i>${t}<i style="flex:1;height:1.5px;background:${bg};border-radius:2px;margin-left:4px"></i></div>`;
+h+=zl('PROMOTION ZONE · TOP 4 GO UP TO GOLD','#2F7D16','#CDEBBE','arrow-up');
+A.forEach(([n,ic,c],i)=>{const me=i===3;const zone=i<4?'#63C132':i>15?'#FF6B6B':'transparent';
+ if(i===16)h+=zl('RELEGATION ZONE · BOTTOM 4 MOVE TO BRONZE','#C93A3A','#FFD3D3','arrow-down');
+ h+=`<div style="display:grid;${cols};align-items:center;height:22.5px;padding:0 8px;border-radius:11px;font-size:12.5px;font-weight:800;${me?'background:#7C3AED;color:#fff;box-shadow:0 4px 10px -4px rgba(124,58,237,.7)':i<4?'background:#F2FAEC':i>15?'background:#FFF5F5':i%2?'background:#F8FAFC':''};position:relative">
+<i style="position:absolute;left:0;top:4px;bottom:4px;width:3px;border-radius:3px;background:${zone}"></i>
+<span style="font-weight:900;${me?'':'color:#64748B'}">${i+1}</span><span class="flex items-center gap-2" style="min-width:0"><span style="width:18px;height:18px;border-radius:99px;flex:none;background:${me?'#fff':c};color:${me?'#7C3AED':'#fff'};display:flex;align-items:center;justify-content:center"><i data-lucide="${ic}" style="width:11px;height:11px;stroke-width:2.6"></i></span><span style="white-space:nowrap">${n}${me?' · You':''}</span></span><span style="text-align:right;font-weight:900">${xp[i].toLocaleString()}</span></div>`});
+document.getElementById('tbl').innerHTML=h;
+</script>

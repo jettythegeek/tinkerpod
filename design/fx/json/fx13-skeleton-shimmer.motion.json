@@ -1,0 +1,35 @@
+{
+ "source": "fx13-skeleton-shimmer.svg",
+ "note": "CSS keyframe animation exported from Chrome. transform_origin is in px of the reference box (transform_box). Offsets 0..1.",
+ "animations": [
+  {
+   "target": "f13-band",
+   "name": "f13-k0",
+   "duration_ms": 1400,
+   "delay_ms": 0,
+   "iterations": "infinite",
+   "direction": "normal",
+   "fill": "both",
+   "easing": "linear",
+   "transform_origin": "0px 0px",
+   "transform_box": "view-box",
+   "keyframes": [
+    {
+     "offset": 0,
+     "easing": "cubic-bezier(0.45, 0, 0.55, 1)",
+     "transform": "translateX(-520px)"
+    },
+    {
+     "offset": 0.85714,
+     "easing": "steps(1)",
+     "transform": "translateX(520px)"
+    },
+    {
+     "offset": 1,
+     "easing": "linear",
+     "transform": "translateX(520px)"
+    }
+   ]
+  }
+ ]
+}

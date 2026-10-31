@@ -125,3 +125,15 @@ body{margin:0;font-family:'Nunito',system-ui,sans-serif;color:var(--ink);backgro
 .tog.off{background:#CBD5E1}.tog.off:after{right:auto;left:2px}
 .mini-av{width:28px;height:28px;border-radius:99px;flex:none;object-fit:cover}
 .placeholder-note{font-size:11px;font-weight:800;color:#8A5A00;background:#FFF6DB;border-radius:6px;padding:2px 6px}
+/* ---------- v2 additions (screens 33+) ---------- */
+.podchip{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 10px 0 4px;border-radius:999px;background:#fff;color:#0F172A;font-size:13.5px;box-shadow:0 4px 12px -4px rgba(30,0,80,.35);white-space:nowrap}
+.podchip b{font-weight:900}
+.podchip .pi{width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.podchip .pi svg{width:16px;height:16px}
+.podchip .pi.sm{width:22px;height:22px;margin-left:2px;box-shadow:0 0 0 2px #fff}
+.podchip .pi.sm svg{width:12px;height:12px}
+.podchip .cv{width:16px;height:16px;color:#64748B}
+.seg3{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.seg3 span{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:999px;font-weight:800;font-size:14px;color:#fff}
+.seg3 span svg{width:16px;height:16px}
+.seg3 span.on{background:#fff;color:#5B21B6;font-weight:900;box-shadow:0 3px 0 rgba(30,0,80,.25)}

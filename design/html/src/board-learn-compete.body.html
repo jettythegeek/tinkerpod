@@ -1,0 +1,26 @@
+<div class="capture theme-junior" style="width:2200px;padding:60px 52px 64px;background:#E9EEF5">
+ <div class="flex items-center justify-between">
+  <div class="flex items-center gap-6"><img src="../assets/logo.png" style="height:72px"><div style="width:2px;height:56px;background:#CBD5E1"></div><div><div style="font-size:40px;font-weight:900;line-height:1">Pods, Learn, Compete, Rewards & Build · v2</div><div style="font-weight:700;color:#475569;margin-top:6px;font-size:18px">Screens 33–48 · 390 × 844 · same design system as Key screens v1 · new kid nav · Captain Jetty · sample data</div></div></div>
+  <div class="flex gap-3 items-center" id="pods"></div>
+ </div>
+ <div class="rowh"><b>Learn · Journey</b><span>Pod › Journey › Level › Unit › Lessons (each ends with a quiz) + one assignment per unit, reviewed by a mentor, saved to Build</span></div>
+ <div class="flex gap-6" id="r1"></div>
+ <div class="rowh"><b>Assignment card states</b><span>Locked → unlocked → submitted → reviewed</span></div>
+ <div id="r2"></div>
+ <div class="rowh"><b>Missions & Compete</b><span>Missions unlock when a level is finished · League (weekly, ~20 per mentor group) · Pod Cup (knockout) · World Cup (nationwide, all pods)</span></div>
+ <div class="flex gap-6" id="r3"></div>
+ <div class="rowh"><b>Rewards, Build & Parent</b><span>XP, coins, gems, Naija titles, Lagos-day streaks (paused = sleepy Jetty, never sad) · portfolio · pod picker for a new child</span></div>
+ <div class="flex gap-6" id="r4"></div>
+</div>
+<style>
+.rowh{display:flex;align-items:baseline;gap:14px;margin:52px 0 20px}.rowh b{font-size:28px;font-weight:900;white-space:nowrap}.rowh span{font-size:17px;font-weight:700;color:#475569}
+figure{margin:0;text-align:center}figure img{display:block}figcaption{font-weight:900;font-size:17px;margin-top:6px;color:#0F172A}
+</style>
+<script>
+const ph=(f,c,w)=>`<figure><img src="../png/${f}.png" style="width:${w||400}px"><figcaption>${c}</figcaption></figure>`;
+document.getElementById('r1').innerHTML=ph('33-learn-journey','33 · Learn · Journey map')+ph('34-unit-detail','34 · Unit detail')+ph('36-assignment-submit','36 · Assignment · make & submit')+ph('37-assignment-reviewed','37 · Assignment · mentor reviewed')+ph('38-learn-missions','38 · Learn · Missions');
+document.getElementById('r2').innerHTML=ph('35-assignment-card-states','35 · Assignment card · 4 states',2096);
+document.getElementById('r3').innerHTML=ph('39-mission-codazanga','39 · Mission · Golden Gate of Codazanga')+ph('40-compete-coming-soon','40 · Compete · coming soon')+ph('41-league-division','41 · League · Silver division')+ph('42-cup-bracket','42 · Pod Cup · bracket')+ph('43-world-cup-overview','43 · World Cup · overview');
+document.getElementById('r4').innerHTML=ph('44-rewards','44 · Rewards')+ph('45-rewards-streak-paused','45 · Rewards · streak paused')+ph('46-build-portfolio','46 · Build · portfolio')+ph('47-build-empty','47 · Build · empty')+ph('48-parent-add-child-pods','48 · Parent · choose a pod');
+document.getElementById('pods').innerHTML=Object.keys(PODS).map(k=>`<span class="chip" style="height:48px;font-size:15px;gap:8px;padding:0 14px 0 8px"><span data-podicon="${k}:34"></span>${PODS[k][0]}</span>`).join('');
+</script>

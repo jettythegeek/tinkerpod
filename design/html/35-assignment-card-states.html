@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture theme-junior" style="width:1820px;padding:52px 56px 56px;background:radial-gradient(80% 100% at 50% 0%,#F3EEFF,#E9EEF5 70%)">
+ <div class="flex items-end justify-between">
+  <div><div class="over" style="color:#7C3AED;font-size:13px">Component · end-of-unit assignment card</div><div style="font-size:40px;font-weight:900;line-height:1.05;margin-top:6px">Assignment card states</div><div style="font-weight:700;color:#334155;margin-top:8px;font-size:17px;max-width:900px">One assignment closes every unit. The kid makes something, submits it, a mentor reviews it, and the work is saved to the Build tab. The card sits under the lesson list on Unit detail (34).</div></div>
+  <img src="../assets/logo.png" style="height:64px">
+ </div>
+ <div class="flex items-start gap-6 mt-10" id="cards"></div>
+</div>
+<style>.stl{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;margin-bottom:12px}.stl b{width:30px;height:30px;border-radius:99px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+.rule{font-size:14.5px;font-weight:700;color:#475569;margin-top:14px;line-height:1.45}</style>
+<script>
+const head=(ic,icbg,iccol,title,sub,right)=>`<div class="flex items-center gap-3"><div style="width:48px;height:48px;border-radius:16px;background:${icbg};color:${iccol};display:flex;align-items:center;justify-content:center;flex:none"><i data-lucide="${ic}"></i></div><div class="flex-1 min-w-0"><div style="font-weight:900;font-size:15.5px">${title}</div><div class="cap" style="font-size:12px">${sub}</div></div>${right}</div>`;
+const C=[
+['Locked','Lessons or quizzes still open. Shows what unlocks it and the XP on offer.',
+`<div class="card" style="padding:12px;border-radius:22px;background:linear-gradient(135deg,#fff 55%,#FFF6DB);box-shadow:0 0 0 2px #FFE6A3 inset">${head('hammer','#F1F5F9','#94A3B8','Build: Jollof Timer App','Make it · Mr. Femi reviews · saved to Build','<span data-ic="lock" data-s="22"></span>')}
+<div class="flex items-center gap-2 mt-2.5" style="background:#fff;border-radius:12px;padding:6px 10px;font-size:12px;font-weight:800;color:#64748B"><i data-lucide="info" style="width:15px;height:15px;color:#B45309"></i><span class="flex-1">Unlocks after all 4 lessons + quizzes</span><span class="flex items-center gap-1" style="color:#0F172A;font-weight:900"><span data-ic="xp" data-s="15"></span>+150</span></div></div>`],
+['Unlocked','All lessons and quizzes done. Yellow call to action, Captain Jetty cheers.',
+`<div class="card" style="padding:12px;border-radius:22px;background:linear-gradient(135deg,#fff 50%,#FFF6DB);box-shadow:0 0 0 2.5px #FFB700 inset,0 10px 22px -12px rgba(201,143,0,.7);position:relative;overflow:visible">
+<img src="../assets/pip/pip-celebrate.png" style="position:absolute;right:-6px;top:-58px;height:76px">
+${head('hammer','#FFB700','#0F172A','Build: Jollof Timer App','Ready to make · about 20 min','')}
+<div class="flex items-center gap-2 mt-3"><div class="btn sm yellow flex-1" style="height:40px"><i data-lucide="sparkles" style="width:16px"></i>Start assignment</div><span class="chip" style="height:32px;box-shadow:none;background:var(--purple-soft);color:var(--purple)"><span data-ic="xp" data-s="15"></span>+150</span></div></div>`],
+['Submitted','Waiting for the mentor. Kid can keep learning; the next unit is not blocked.',
+`<div class="card" style="padding:12px;border-radius:22px;box-shadow:0 0 0 2px #BFD4FF inset">${head('send','#EAF1FF','#2563EB','Build: Jollof Timer App','Sent Thu · review in 1–2 days','<span class="st b" style="height:24px">Sent</span>')}
+<div class="flex items-center gap-2 mt-2.5" style="background:#F8FAFC;border-radius:12px;padding:7px 10px;font-size:12px;font-weight:800;color:#64748B"><i data-lucide="hourglass" style="width:15px;height:15px;color:#2563EB"></i><span class="flex-1">Waiting for review · Unit 4 is open</span><span style="color:#7C3AED;font-weight:900">View</span></div></div>`],
+['Reviewed','Mentor stars and a note. XP is paid and the project is saved to Build.',
+`<div class="card" style="padding:12px;border-radius:22px;box-shadow:0 0 0 2px #CDEBBE inset;background:linear-gradient(135deg,#fff 55%,#EAF7E2)">${head('badge-check','#63C132','#fff','Build: Jollof Timer App','Reviewed by Mr. Femi · saved to Build','<div class="flex"><span data-ic="star" data-s="17"></span><span data-ic="star" data-s="17"></span><span data-ic="star" data-s="17"></span></div>')}
+<div class="flex items-center gap-2 mt-2.5" style="background:#fff;border-radius:12px;padding:7px 10px;font-size:12px;font-weight:800;color:#334155"><img src="../assets/av5.png" style="width:20px;height:20px;border-radius:99px"><span class="flex-1" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">“Great countdown! Try a sound at 0.”</span><span class="flex items-center gap-1" style="color:#2F7D16;font-weight:900"><span data-ic="xp" data-s="15"></span>+150</span></div></div>`]];
+document.getElementById('cards').innerHTML=C.map(([n,r,h],i)=>`<div style="width:358px;flex:none"><div class="stl"><b>${i+1}</b>${n}</div><div style="padding-top:50px">${h}</div><div class="rule">${r}</div></div>`).join('<i data-lucide="arrow-right" style="width:28px;color:#94A3B8;margin-top:120px;flex:none"></i>');
+</script>
+<script>tpInit()</script></body></html>

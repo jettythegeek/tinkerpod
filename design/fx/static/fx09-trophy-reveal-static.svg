@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Trophy reveal">
+<title>Trophy reveal</title>
+
+<defs>
+ <radialGradient id="f9-glowg"><stop offset="0" stop-color="#FFE7A3" stop-opacity=".95"></stop><stop offset=".6" stop-color="#FFF3C4" stop-opacity=".45"></stop><stop offset="1" stop-color="#FFF3C4" stop-opacity="0"></stop></radialGradient>
+ <linearGradient id="f9-rayg" x1="0" x2="1"><stop offset="0" stop-color="#FFD54A" stop-opacity=".55"></stop><stop offset="1" stop-color="#FFD54A" stop-opacity="0"></stop></linearGradient>
+ <linearGradient id="f9-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE07A"></stop><stop offset=".6" stop-color="#FFC21A"></stop><stop offset="1" stop-color="#F2A900"></stop></linearGradient>
+ <clipPath id="f9-clip"><path d="M222 148 H378 C378 230 346 266 300 270 C254 266 222 230 222 148Z"></path></clipPath></defs>
+<g transform="translate(300 240)"><g id="f9-glow"><circle r="210" fill="url(#f9-glowg)"></circle></g></g>
+<g transform="translate(300 220)"><g id="f9-rays" opacity="0.85" transform="matrix(0.5995 0.8003 -0.8003 0.5995 0 0)"><polygon points="0,0 238,-29 238,29" fill="url(#f9-rayg)"></polygon><polygon points="0,0 221,94 192,144" fill="url(#f9-rayg)"></polygon><polygon points="0,0 144,192 94,221" fill="url(#f9-rayg)"></polygon><polygon points="0,0 29,238 -29,238" fill="url(#f9-rayg)"></polygon><polygon points="0,0 -94,221 -144,192" fill="url(#f9-rayg)"></polygon><polygon points="0,0 -192,144 -221,94" fill="url(#f9-rayg)"></polygon><polygon points="0,0 -238,29 -238,-29" fill="url(#f9-rayg)"></polygon><polygon points="0,0 -221,-94 -192,-144" fill="url(#f9-rayg)"></polygon><polygon points="0,0 -144,-192 -94,-221" fill="url(#f9-rayg)"></polygon><polygon points="0,0 -29,-238 29,-238" fill="url(#f9-rayg)"></polygon><polygon points="0,0 94,-221 144,-192" fill="url(#f9-rayg)"></polygon><polygon points="0,0 192,-144 221,-94" fill="url(#f9-rayg)"></polygon></g></g>
+
+<g transform="translate(300 260)"><g id="f9-tro"><g id="f9-sq"><path d="M-62 -96 C-112 -96 -118 -36 -66 -20" fill="none" stroke="#E09A00" stroke-width="16" stroke-linecap="round"></path>
+ <path d="M62 -96 C112 -96 118 -36 66 -20" fill="none" stroke="#E09A00" stroke-width="16" stroke-linecap="round"></path>
+ <path d="M-78 -112 H78 C78 -30 46 6 0 10 C-46 6 -78 -30 -78 -112Z" fill="url(#f9-gold)"></path>
+ <path d="M-78 -112 H78 V-100 H-78Z" fill="#FFE58F"></path>
+ <path d="M-14 8 H14 L18 52 H-18Z" fill="#E09A00"></path>
+ <rect x="-62" y="50" width="124" height="22" rx="8" fill="#F2A900"></rect>
+ <rect x="-78" y="70" width="156" height="40" rx="12" fill="#7C3AED"></rect><rect x="-78" y="70" width="156" height="10" rx="5" fill="#A78BFA" opacity="0.7"></rect>
+ <g transform="translate(0 -56)"><polygon points="0.0,-26.0 7.1,-9.7 24.7,-8.0 11.4,3.7 15.3,21.0 0.0,12.0 -15.3,21.0 -11.4,3.7 -24.7,-8.0 -7.1,-9.7" fill="#FFF1B8" stroke-linejoin="round"></polygon></g>
+ <path d="M-56 -100 C-56 -58 -44 -30 -26 -14" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity="0.45"></path></g></g></g>
+<g clip-path="url(#f9-clip)"><g id="f9-shine" transform="translate(180 0)"><polygon points="260,130 296,130 266,290 230,290" fill="#fff" opacity="0.5"></polygon></g></g>
+
+<g transform="translate(300 470)"><g id="f9-t1"><text x="0" y="0" font-size="58" fill="#7C3AED" text-anchor="middle" font-family="Nunito" font-weight="900">Champion!</text></g></g>
+<g id="f9-t2"><text x="300" y="520" font-size="26" fill="#64748B" text-anchor="middle" font-family="Nunito" font-weight="900">Lagos Junior League · Week 3</text></g>
+</svg>

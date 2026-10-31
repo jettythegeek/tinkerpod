@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" width="600" height="480" role="img" aria-label="No internet: Captain Jetty with a cloud and no signal">
+<title>No internet: Captain Jetty with a cloud and no signal</title>
+
+<circle cx="300" cy="226" r="196" fill="#E6F9F7"></circle>
+<circle cx="300" cy="226" r="196" fill="none" stroke="#CCF2EE" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round"></circle>
+<ellipse cx="300" cy="424" rx="230" ry="14" fill="#0F172A" opacity="0.05"></ellipse>
+<svg id="e2-p-rig" x="40" y="96" width="350" height="350" viewBox="-70 -110 540 540" overflow="visible"><defs>
+ <linearGradient id="e2-p-limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"></stop><stop offset=".4" stop-color="#22D9C7"></stop><stop offset="1" stop-color="#00A597"></stop></linearGradient>
+ <linearGradient id="e2-p-torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"></stop><stop offset=".32" stop-color="#2DDFCD"></stop><stop offset=".7" stop-color="#05C2B1"></stop><stop offset="1" stop-color="#009587"></stop></linearGradient>
+ <radialGradient id="e2-p-shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"></stop><stop offset=".45" stop-color="#0CC9B7"></stop><stop offset="1" stop-color="#009184"></stop></radialGradient>
+ <radialGradient id="e2-p-screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"></stop><stop offset="1" stop-color="#0D1838"></stop></radialGradient>
+ <radialGradient id="e2-p-earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"></stop><stop offset="1" stop-color="#F2A900"></stop></radialGradient>
+ <radialGradient id="e2-p-ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"></stop><stop offset=".6" stop-color="#FF8A1F"></stop><stop offset="1" stop-color="#E86A00"></stop></radialGradient>
+ <clipPath id="e2-p-podTop"><rect x="60" y="-20" width="280" height="112"></rect></clipPath>
+</defs>
+<ellipse id="e2-p-shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity="0.13"></ellipse>
+
+<g id="e2-p-pip" transform="translate(0 -3.6259)"><g id="e2-p-pip-squash">
+ <g id="e2-p-legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#e2-p-limb)"></rect><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"></rect><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity="0.25"></rect>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#e2-p-limb)"></rect><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"></rect><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity="0.25"></rect>
+ </g>
+ <g id="e2-p-torso" transform="matrix(1.0109 0 0 1.0227 -2.1755 -7.6597)">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#e2-p-torsoG)"></rect>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity="0.32"></rect>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity="0.28"></ellipse>
+  <g id="e2-p-chest-lights"><circle id="e2-p-led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"></circle><circle id="e2-p-led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"></circle><circle id="e2-p-led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"></circle></g>
+ </g>
+ <g id="e2-p-head" transform="matrix(0.9992 -0.0398 0.0398 0.9992 -9.2763 9.0529)">
+  <g id="e2-p-antenna" transform="matrix(0.9991 -0.0419 0.0419 0.9991 -3.3424 8.4495)">
+   <circle id="e2-p-antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity="0.36" transform="matrix(1.12 0 0 1.12 -23.9987 -3.3598)"></circle>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"></rect>
+   <circle id="e2-p-antenna-ball" cx="200" cy="28" r="13" fill="url(#e2-p-ballG)"></circle><circle cx="196" cy="23.5" r="4" fill="#fff" opacity="0.7"></circle>
+  </g>
+  <g id="e2-p-ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#e2-p-earG)"></ellipse><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity="0.45"></ellipse></g>
+  <g id="e2-p-ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#e2-p-earG)"></ellipse><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity="0.45"></ellipse></g>
+  <rect id="e2-p-shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#e2-p-shellG)"></rect>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity="0.35"></ellipse>
+  <ellipse id="e2-p-pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"></ellipse>
+  <g id="e2-p-toolkit" clip-path="url(#e2-p-podTop)">
+   <g id="e2-p-gear" transform="matrix(-0.766 -0.6428 0.6428 -0.766 222.7943 245.0905)"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"></path><circle cx="156" cy="82" r="8" fill="#E39A00"></circle><circle cx="153" cy="78" r="2.5" fill="#fff" opacity="0.5"></circle></g>
+   <g id="e2-p-code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"></rect><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></g>
+   <g id="e2-p-wrench"><g transform="matrix(1.1222 0.3646 -0.3646 1.1222 248 60)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"></path><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"></rect><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity="0.3"></rect></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"></path>
+  <rect id="e2-p-face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"></rect>
+  <rect id="e2-p-screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#e2-p-screenG)"></rect>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.12"></path>
+  <g id="e2-p-face">
+   
+   <g id="e2-p-eyes" transform="translate(-6 -9)"><g id="e2-p-eye-l"><g id="e2-p-eye-l-open">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity="0.16"></ellipse>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"></rect>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"></circle><circle cx="171" cy="166" r="2" fill="#fff" opacity="0.7"></circle></g></g><g id="e2-p-eye-r"><g id="e2-p-eye-r-open">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity="0.16"></ellipse>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"></rect>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"></circle><circle cx="239" cy="166" r="2" fill="#fff" opacity="0.7"></circle></g></g></g>
+   
+   <g id="e2-p-mouth" transform="matrix(0.5953 0 0 0.4047 88.1224 116.6834)">
+    <g id="e2-p-mouth-smile"><path d="M185 191 Q200 205 215 191" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"></path></g>
+    
+    
+    
+  </g>
+  </g>
+ </g>
+ <g id="e2-p-arm-l" transform="matrix(0.9531 -0.3028 0.3028 0.9531 -69.3577 56.6449)"><g transform="matrix(0.9272 0.3746 -0.3746 0.9272 105.1777 -37.0921)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#e2-p-limb)" stroke="#00968A" stroke-width="2"></rect>
+     <g id="e2-p-hand-l"><circle cx="148" cy="316" r="18.5" fill="url(#e2-p-limb)" stroke="#00968A" stroke-width="2"></circle>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#e2-p-limb)" stroke="#00968A" stroke-width="2"></ellipse>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity="0.35"></ellipse></g>
+    </g></g><g id="e2-p-arm-r" transform="matrix(-0.6947 0.7193 -0.7193 -0.6947 608.3275 245.7803)"><g transform="matrix(0.9272 -0.3746 0.3746 0.9272 -76.0512 112.7505)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#e2-p-limb)" stroke="#00968A" stroke-width="2"></rect>
+     <g id="e2-p-hand-r" transform="matrix(0.9679 -0.2514 0.2514 0.9679 -71.3524 73.5062)"><circle cx="252" cy="316" r="18.5" fill="url(#e2-p-limb)" stroke="#00968A" stroke-width="2"></circle>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#e2-p-limb)" stroke="#00968A" stroke-width="2"></ellipse>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity="0.35"></ellipse></g>
+    </g></g>
+</g></g>
+<g id="e2-p-fx-front"><g id="e2-p-q" transform="matrix(0.9969 -0.0783 0.0783 0.9969 1.0134 20.2236)"><path d="M318 -18 Q318 -34 332 -34 Q347 -34 347 -20 Q347 -10 336 -5 L334 4" fill="none" stroke="#7C3AED" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="334" cy="20" r="6" fill="#7C3AED"></circle></g><g id="e2-p-tb0" transform="matrix(0.8775 0 0 0.8775 35.2743 6.124)" opacity="0.494"><circle cx="288" cy="50" r="6" fill="#C4B5FD"></circle></g><g id="e2-p-tb1" transform="matrix(0.8042 0 0 0.8042 59.5153 5.8732)" opacity="0.358"><circle cx="304" cy="30" r="8" fill="#A78BFA"></circle></g></g>
+</svg><g transform="translate(436 232)"><g id="e2-cloud" transform="translate(0 -1.5999)">
+ <path d="M-92 46 Q-124 46 -124 16 Q-124 -14 -92 -16 Q-90 -62 -44 -64 Q-14 -92 26 -74 Q68 -88 84 -44 Q124 -40 124 2 Q124 46 84 46Z" fill="#fff"></path>
+ <path d="M-92 46 Q-124 46 -124 16 Q-124 -14 -92 -16 Q-90 -62 -44 -64 Q-14 -92 26 -74 Q68 -88 84 -44 Q124 -40 124 2 Q124 46 84 46Z" fill="none" stroke="#CBD5E1" stroke-width="4"></path>
+ <g transform="translate(0 14)" fill="none" stroke="#64748B" stroke-width="10" stroke-linecap="round">
+  <path id="e2-w3" d="M-58 -30 Q0 -76 58 -30" opacity="0.25"></path><path id="e2-w2" d="M-36 -8 Q0 -38 36 -8" opacity="0.25"></path><path id="e2-w1" d="M-14 14 Q0 2 14 14" opacity="0.25"></path>
+  <circle cx="0" cy="30" r="3" fill="#64748B" stroke="none"></circle></g>
+ <path id="e2-slash" d="M-62 -52 L62 60" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="0.00310631" fill="none" stroke="#FF6B6B" stroke-width="11" stroke-linecap="round"></path>
+</g></g><g transform="translate(330 120)"><g id="e2-sp1" transform="matrix(0.0001 0 0 0.0001 0 0)"><path d="M0 -12 Q2.4000000000000004 -2.4000000000000004 12 0 Q2.4000000000000004 2.4000000000000004 0 12 Q-2.4000000000000004 2.4000000000000004 -12 0 Q-2.4000000000000004 -2.4000000000000004 0 -12Z" fill="#FFB700"></path></g></g>
+</svg>

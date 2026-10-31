@@ -1,0 +1,37 @@
+[
+ {
+  "word": "Hello",
+  "start": 0.098791,
+  "dur": 0.333333
+ },
+ {
+  "word": "Let's",
+  "start": 1.34525,
+  "dur": 0.273791
+ },
+ {
+  "word": "continue",
+  "start": 1.678583,
+  "dur": 0.392875
+ },
+ {
+  "word": "your",
+  "start": 2.130958,
+  "dur": 0.083333
+ },
+ {
+  "word": "streak",
+  "start": 2.25,
+  "dur": 0.25
+ },
+ {
+  "word": "from",
+  "start": 2.511916,
+  "dur": 0.214291
+ },
+ {
+  "word": "yesterday",
+  "start": 2.738083,
+  "dur": 0.40475
+ }
+]

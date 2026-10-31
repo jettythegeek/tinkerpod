@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="TinkerPod">
+<title>TinkerPod</title>
+<g fill="#FFFFFF" fill-rule="evenodd">
+<circle cx="48" cy="13" r="7"/><rect x="45" y="16" width="6" height="14" rx="3"/>
+<path d="M48 27c22 0 36 9 36 29 0 19-14 29-36 29S12 75 12 56c0-20 14-29 36-29Z M30 44h36c6 0 9 4 9 10s-3 10-9 10H30c-6 0-9-4-9-10s3-10 9-10Z"/>
+<rect x="4" y="47" width="6" height="18" rx="3"/><rect x="86" y="47" width="6" height="18" rx="3"/>
+<path d="M33 54a4.5 4.5 0 1 1 9 0a4.5 4.5 0 1 1-9 0Z M54 54a4.5 4.5 0 1 1 9 0a4.5 4.5 0 1 1-9 0Z"/>
+</g></svg>

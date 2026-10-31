@@ -1,0 +1,50 @@
+{
+ "talk-01-welcome": {
+  "text": "Hello! Welcome back today!",
+  "voice": "en-NG-AbeoNeural",
+  "role": "main",
+  "T": 4.481,
+  "audio_duration": 2.539,
+  "gesture": "happy"
+ },
+ "talk-02-streak": {
+  "text": "Hello! Let's continue your streak from yesterday!",
+  "voice": "en-NG-AbeoNeural",
+  "role": "main",
+  "T": 5.353,
+  "audio_duration": 3.399,
+  "gesture": "cheer"
+ },
+ "talk-03-help": {
+  "text": "Hello! Do you need my help with anything?",
+  "voice": "en-NG-AbeoNeural",
+  "role": "main",
+  "T": 5.09,
+  "audio_duration": 3.067,
+  "gesture": "wave"
+ },
+ "talk-01-welcome-ezinne": {
+  "text": "Hello! Welcome back today!",
+  "voice": "en-NG-EzinneNeural",
+  "role": "alt",
+  "T": 4.416,
+  "audio_duration": 2.469,
+  "gesture": "happy"
+ },
+ "talk-02-streak-ezinne": {
+  "text": "Hello! Let's continue your streak from yesterday!",
+  "voice": "en-NG-EzinneNeural",
+  "role": "alt",
+  "T": 5.369,
+  "audio_duration": 3.452,
+  "gesture": "cheer"
+ },
+ "talk-03-help-ezinne": {
+  "text": "Hello! Do you need my help with anything?",
+  "voice": "en-NG-EzinneNeural",
+  "role": "alt",
+  "T": 5.054,
+  "audio_duration": 3.131,
+  "gesture": "wave"
+ }
+}

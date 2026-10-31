@@ -101,5 +101,370 @@
   "success": 2.15,
   "coin": 2.47,
   "msg": 2.3
+ },
+ "ui-tap": {
+  "T": 0.12,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-tap.wav",
+   "fx/audio/ui-tap.mp3",
+   "fx/audio/ui-tap.ogg"
+  ],
+  "haptic": "Haptics.selectionAsync()",
+  "volume": 0.6,
+  "purpose": "Any button / card tap"
+ },
+ "ui-toggle": {
+  "T": 0.16,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-toggle.wav",
+   "fx/audio/ui-toggle.mp3",
+   "fx/audio/ui-toggle.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Light)",
+  "volume": 0.6,
+  "purpose": "Switches, checkboxes, segmented controls"
+ },
+ "ui-back": {
+  "T": 0.22,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-back.wav",
+   "fx/audio/ui-back.mp3",
+   "fx/audio/ui-back.ogg"
+  ],
+  "haptic": "Haptics.selectionAsync()",
+  "volume": 0.5,
+  "purpose": "Back / navigate up, tab change"
+ },
+ "ui-sheet-open": {
+  "T": 0.32,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-sheet-open.wav",
+   "fx/audio/ui-sheet-open.mp3",
+   "fx/audio/ui-sheet-open.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Soft)",
+  "volume": 0.6,
+  "purpose": "Bottom sheet / modal opens"
+ },
+ "ui-sheet-close": {
+  "T": 0.28,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-sheet-close.wav",
+   "fx/audio/ui-sheet-close.mp3",
+   "fx/audio/ui-sheet-close.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Soft)",
+  "volume": 0.5,
+  "purpose": "Bottom sheet / modal closes"
+ },
+ "ui-error": {
+  "T": 0.42,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-error.wav",
+   "fx/audio/ui-error.mp3",
+   "fx/audio/ui-error.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Warning)",
+  "volume": 0.7,
+  "purpose": "Gentle \"not quite\" for form errors / failed actions (never shaming)"
+ },
+ "ui-success-small": {
+  "T": 0.55,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-success-small.wav",
+   "fx/audio/ui-success-small.mp3",
+   "fx/audio/ui-success-small.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 0.8,
+  "purpose": "Small success: saved, step done"
+ },
+ "ui-notification": {
+  "T": 0.8,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-notification.wav",
+   "fx/audio/ui-notification.mp3",
+   "fx/audio/ui-notification.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 0.8,
+  "purpose": "In-app notification / toast"
+ },
+ "ui-message-pop": {
+  "T": 0.26,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-message-pop.wav",
+   "fx/audio/ui-message-pop.mp3",
+   "fx/audio/ui-message-pop.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Light)",
+  "volume": 0.7,
+  "purpose": "New chat / mentor message bubble"
+ },
+ "ui-pin-digit": {
+  "T": 0.1,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-pin-digit.wav",
+   "fx/audio/ui-pin-digit.mp3",
+   "fx/audio/ui-pin-digit.ogg"
+  ],
+  "haptic": "Haptics.selectionAsync()",
+  "volume": 0.6,
+  "purpose": "Each PIN pad digit (kid login, parent gate)"
+ },
+ "ui-pin-wrong": {
+  "T": 0.4,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-pin-wrong.wav",
+   "fx/audio/ui-pin-wrong.mp3",
+   "fx/audio/ui-pin-wrong.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Warning)",
+  "volume": 0.7,
+  "purpose": "Wrong PIN (soft, with shake animation)"
+ },
+ "ui-pin-unlock": {
+  "T": 0.7,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-pin-unlock.wav",
+   "fx/audio/ui-pin-unlock.mp3",
+   "fx/audio/ui-pin-unlock.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 0.8,
+  "purpose": "Correct PIN / parent gate opened"
+ },
+ "ui-countdown-tick": {
+  "T": 0.22,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-countdown-tick.wav",
+   "fx/audio/ui-countdown-tick.mp3",
+   "fx/audio/ui-countdown-tick.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Medium)",
+  "volume": 0.8,
+  "purpose": "Match countdown 3-2-1"
+ },
+ "ui-countdown-go": {
+  "T": 0.7,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-countdown-go.wav",
+   "fx/audio/ui-countdown-go.mp3",
+   "fx/audio/ui-countdown-go.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Heavy)",
+  "volume": 0.9,
+  "purpose": "Countdown \"Go!\""
+ },
+ "ui-match-whistle": {
+  "T": 0.8,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-match-whistle.wav",
+   "fx/audio/ui-match-whistle.mp3",
+   "fx/audio/ui-match-whistle.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Medium)",
+  "volume": 0.8,
+  "purpose": "League match start"
+ },
+ "ui-match-win": {
+  "T": 2.3,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-match-win.wav",
+   "fx/audio/ui-match-win.mp3",
+   "fx/audio/ui-match-win.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 1.0,
+  "purpose": "League match won (fanfare)"
+ },
+ "ui-match-lose": {
+  "T": 1.5,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-match-lose.wav",
+   "fx/audio/ui-match-lose.mp3",
+   "fx/audio/ui-match-lose.ogg"
+  ],
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Soft)",
+  "volume": 0.9,
+  "purpose": "League match lost: encouraging \"next time\" motif"
+ },
+ "ui-badge-earned": {
+  "T": 1.4,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-badge-earned.wav",
+   "fx/audio/ui-badge-earned.mp3",
+   "fx/audio/ui-badge-earned.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 1.0,
+  "purpose": "Badge unlocked (pairs with fx08-badge-reveal)"
+ },
+ "ui-purchase-complete": {
+  "T": 1.1,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-purchase-complete.wav",
+   "fx/audio/ui-purchase-complete.mp3",
+   "fx/audio/ui-purchase-complete.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 0.9,
+  "purpose": "Parent purchase / subscription confirmed"
+ },
+ "ui-download-complete": {
+  "T": 0.95,
+  "kind": "ui-sound",
+  "files": [
+   "fx/audio/ui-download-complete.wav",
+   "fx/audio/ui-download-complete.mp3",
+   "fx/audio/ui-download-complete.ogg"
+  ],
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "volume": 0.8,
+  "purpose": "Content pack download finished (pairs with fx15)"
+ },
+ "fx06-confetti-burst": {
+  "T": 2.6,
+  "burst": 0.08,
+  "sound": "ui-success-small",
+  "sound_at": 0.02,
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "loop": false,
+  "kind": "fx"
+ },
+ "fx07-star-burst": {
+  "T": 1.8,
+  "pop": 0.04,
+  "rays": 0.1,
+  "shine": 0.45,
+  "sound": "ui-success-small",
+  "sound_at": 0.04,
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Medium)",
+  "loop": false,
+  "kind": "fx"
+ },
+ "fx08-badge-reveal": {
+  "T": 3.2,
+  "pop": 0.1,
+  "land": 0.58,
+  "ribbon": 0.5,
+  "shine": 0.75,
+  "title": 0.8,
+  "sound": "ui-badge-earned",
+  "sound_at": 0.02,
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "loop": false,
+  "kind": "fx"
+ },
+ "fx09-trophy-reveal": {
+  "T": 3.4,
+  "rise": [
+   0.15,
+   0.6
+  ],
+  "land": 0.74,
+  "confetti": 0.82,
+  "title": 1.0,
+  "sound": "ui-match-win",
+  "sound_at": 0.36,
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success)",
+  "loop": false,
+  "kind": "fx"
+ },
+ "fx10-streak-flame-idle": {
+  "T": 1.8,
+  "loop": true,
+  "sound": null,
+  "haptic": null,
+  "note": "silent ambient loop; pair with fx05 / ui-success-small when the streak increments",
+  "kind": "fx"
+ },
+ "fx11-loading-spinner": {
+  "T": 1.2,
+  "loop": true,
+  "sound": null,
+  "haptic": null,
+  "note": "silent loop; scales down to 32 px (use the static for < 32 px)",
+  "kind": "fx"
+ },
+ "fx12-pull-to-refresh": {
+  "T": 2.6,
+  "pull": [
+   0,
+   0.8
+  ],
+  "release": 0.8,
+  "spin": [
+   0.9,
+   1.9
+  ],
+  "done": 1.92,
+  "retract": [
+   2.2,
+   2.5
+  ],
+  "sound": "ui-tap",
+  "sound_at": 0.8,
+  "done_sound": "ui-success-small",
+  "haptic": "Haptics.impactAsync(ImpactFeedbackStyle.Light) on release",
+  "loop": false,
+  "note": "scrub 0\u20130.8 s with the pull distance; loop the spin segment while loading",
+  "kind": "fx"
+ },
+ "fx13-skeleton-shimmer": {
+  "T": 1.4,
+  "loop": true,
+  "sound": null,
+  "haptic": null,
+  "note": "skeleton colour #E2E8F0, band white 75 %; reduced motion = no band",
+  "kind": "fx"
+ },
+ "fx14-progress-ring": {
+  "T": 2.8,
+  "fill": [
+   0.2,
+   1.6
+  ],
+  "value": 75,
+  "done": 1.6,
+  "sound": "ui-success-small",
+  "sound_at": 1.6,
+  "haptic": "Haptics.selectionAsync() at done",
+  "loop": false,
+  "note": "drive with pathLength=100: strokeDashoffset = 100 - percent; rotate cap by 3.6 \u00d7 percent deg",
+  "kind": "fx"
+ },
+ "fx15-download-meter": {
+  "T": 3.6,
+  "progress": [
+   0.3,
+   2.4
+  ],
+  "done": 2.4,
+  "sound": "ui-download-complete",
+  "sound_at": 2.4,
+  "haptic": "Haptics.notificationAsync(NotificationFeedbackType.Success) at done",
+  "loop": false,
+  "note": "drive bar width = BW \u00d7 progress; swap busy/done labels at 100 %",
+  "kind": "fx"
  }
 }

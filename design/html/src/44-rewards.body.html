@@ -1,0 +1,46 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen">
+  <div style="position:absolute;inset:0 0 auto 0;height:262px;background:radial-gradient(120% 90% at 85% 0%,#A78BFA 0%,#7C3AED 45%,#5B21B6 100%);border-radius:0 0 32px 32px;box-shadow:0 10px 24px -12px rgba(30,0,80,.5)"></div>
+  <div data-statusbar="light"></div>
+  <div style="position:relative;padding:2px 20px 0;color:#fff">
+   <div class="flex items-center justify-between">
+    <div><div class="over" style="color:#DDD6FE">Amara · Coding Pod</div><div style="font-size:28px;font-weight:900;line-height:1.1">Rewards</div></div>
+    <div class="flex gap-1.5"><span class="stat" style="height:34px;color:#1E293B"><span data-ic="coin" data-s="20"></span>1,250</span><span class="stat" style="height:34px;color:#1E293B"><span data-ic="gem" data-s="18"></span>45</span></div>
+   </div>
+   <div class="flex items-center gap-3 mt-3" style="background:rgba(255,255,255,.14);border-radius:20px;padding:10px 12px">
+    <div style="width:56px;height:56px;border-radius:18px;background:#FFD25E;color:#5B21B6;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;box-shadow:0 3px 0 #C98F00"><span style="font-size:10px;font-weight:900;line-height:1">LEVEL</span><span style="font-size:24px;font-weight:900;line-height:1">12</span></div>
+    <div class="flex-1 min-w-0">
+     <div class="flex items-center gap-2"><i data-lucide="crown" style="width:18px;color:#FFD25E"></i><span style="font-size:19px;font-weight:900">Jango-Jango</span></div>
+     <div class="bar xp mt-1.5" style="height:10px;background:rgba(255,255,255,.25)"><i style="width:68%"></i></div>
+     <div class="flex justify-between mt-1" style="font-size:11.5px;font-weight:800;opacity:.9"><span>1,360 / 2,000 XP</span><span>Next: Design Sultan</span></div>
+    </div>
+   </div>
+  </div>
+  <div style="position:relative;padding:28px 16px 0">
+   <div class="card" style="padding:12px 14px;border-radius:22px">
+    <div class="flex items-center gap-3">
+     <img src="../fx/static/fx10-streak-flame-idle.png" style="width:54px;height:54px;object-fit:contain;flex:none">
+     <div class="flex-1 min-w-0"><div style="font-size:20px;font-weight:900;line-height:1.1">7-day streak</div><div class="cap" style="font-size:12px;margin-top:2px">Do 1 lesson today to make it 8</div></div>
+     <span class="st y nodot" style="height:26px">+20 XP</span>
+    </div>
+    <div class="grid grid-cols-7 mt-3" id="wk"></div>
+    <div class="flex items-center gap-1.5 mt-2.5" style="font-size:11.5px;font-weight:800;color:#64748B"><i data-lucide="clock-3" style="width:14px;flex:none"></i>Days run on Lagos time · resets at midnight WAT</div>
+   </div>
+   <div class="grid grid-cols-3 gap-2 mt-3">
+    <div class="card text-center" style="padding:9px 4px;border-radius:18px"><span data-ic="xp" data-s="24"></span><div style="font-weight:900;font-size:16px">14.2k</div><div class="cap" style="font-size:11px">Total XP</div></div>
+    <div class="card text-center" style="padding:9px 4px;border-radius:18px"><span data-ic="coin" data-s="24"></span><div style="font-weight:900;font-size:16px">1,250</div><div class="cap" style="font-size:11px">Coins · shop</div></div>
+    <div class="card text-center" style="padding:9px 4px;border-radius:18px"><span data-ic="gem" data-s="22"></span><div style="font-weight:900;font-size:16px">45</div><div class="cap" style="font-size:11px">Gems · rare</div></div>
+   </div>
+   <div class="flex justify-between items-end mt-4" style="padding:0 4px"><span class="h3">Badges</span><span class="cap" style="font-size:12px">9 of 24 · See all</span></div>
+   <div class="card mt-2" style="padding:12px 8px 10px;border-radius:22px"><div class="grid grid-cols-4 gap-y-3" id="badges"></div></div>
+  </div>
+  <div data-kidnav="rewards"></div>
+ </div>
+</div>
+</div>
+<script>
+const B=[['Loop Hero','repeat','#A855F7','#6D28D9'],['Bug Buster','bug','#FF8A8A','#D94848'],['7-Day Flame','flame','#FFB700','#E07B00'],['Gatekeeper','key-round','#FFB700','#C98F00'],['First Build','hammer','#14B8A6','#007A70'],['Quiz Ace','star','#60A5FA','#1D4ED8'],['League Top 4','medal','#A855F7','#5B21B6']];
+document.getElementById('badges').innerHTML=B.map(([n,i,a,b])=>`<div style="text-align:center"><div style="position:relative;width:50px;height:56px;margin:0 auto"><div class="badge-hex" style="position:absolute;inset:0;width:50px;height:56px;background:${b}"></div><div class="badge-hex" style="position:absolute;left:3px;top:3px;width:44px;height:50px;background:linear-gradient(160deg,${a},${b})"><i data-lucide="${i}" style="width:22px;height:22px"></i></div></div><div style="font-size:10.5px;font-weight:900;margin-top:4px;white-space:nowrap">${n}</div></div>`).join('')+`<div style="text-align:center"><div class="badge-hex" style="width:50px;height:56px;margin:0 auto;background:#E2E8F0"><span data-ic="lock" data-s="20"></span></div><div style="font-size:10.5px;font-weight:900;margin-top:4px;color:#94A3B8">Design Star</div></div>`;
+document.getElementById('wk').innerHTML=['d', 'd', 'd', 'd', 'd', 't', 'e'].map((s,i)=>`<div style="text-align:center"><div style="width:32px;height:32px;border-radius:999px;margin:0 auto;display:flex;align-items:center;justify-content:center;${s=='d'?'background:#FFB700;color:#fff;box-shadow:0 2px 0 #E07B00':s=='t'?'background:#fff;box-shadow:inset 0 0 0 2.5px #FFB700;color:#E07B00':s=='p'?'background:#E0E7FF;color:#6366F1':'background:#F1F5F9;color:#CBD5E1'}">${s=='d'?'<i data-lucide="flame" style="width:16px;height:16px"></i>':s=='t'?'<i data-lucide="flame" style="width:16px;height:16px"></i>':s=='p'?'<i data-lucide="moon" style="width:15px;height:15px"></i>':''}</div><div style="font-size:10.5px;font-weight:900;color:#94A3B8;margin-top:3px">${['M','T','W','T','F','S','S'][i]}</div></div>`).join('');
+</script>

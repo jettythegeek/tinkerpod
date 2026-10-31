@@ -1,0 +1,49 @@
+<div class="capture" style="padding:30px">
+<div class="phone theme-senior" style="background:#fff">
+ <div class="screen">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:4px 22px">
+   <i data-lucide="chevron-left"></i>
+   <div class="flex-1 flex gap-1.5"><i class="seg on"></i><i class="seg on"></i><i class="seg"></i></div>
+   <span class="cap">2 of 3</span>
+  </div>
+  <div style="padding:14px 22px 0">
+   <div class="over" style="color:#007A70">Add a child · Tobi, 10</div>
+   <div class="h1 mt-1" style="font-size:26px">Choose Tobi's pod</div>
+   <p class="mt-1" style="color:var(--ink-2);font-weight:600;line-height:1.4;font-size:14.5px">Tobi learns in one pod with a mentor and classmates.</p>
+   <div class="pod sel mt-4" style="padding:14px 14px 12px">
+    <span class="flag"><i data-lucide="sparkles" style="width:12px;height:12px"></i>Recommended for Tobi</span>
+    <div class="flex items-center gap-3">
+     <span data-podicon="coding:46"></span>
+     <div class="flex-1 min-w-0"><div class="h3">Coding Pod</div><div class="cap" style="font-size:12.5px">Ages 7–18 · games, apps, Python</div></div>
+     <span class="radio on"><i data-lucide="check"></i></span>
+    </div>
+    <div class="why mt-3">
+     <img src="../assets/mascot-happy.png" style="width:38px;flex:none">
+     <div><b>Why Coding?</b> Tobi picked <b>games</b> and <b>puzzles</b>. It's the best first pod at 10 and helps in AI and Robotics later.</div>
+    </div>
+   </div>
+   <div class="cap mt-4" style="color:var(--ink-2);font-weight:800">Other pods</div>
+   <div class="flex flex-col gap-2 mt-2" id="others"></div>
+   <div class="flex items-start gap-2 mt-3" style="background:#F1F5F9;border-radius:14px;padding:10px 12px;font-size:12.5px;font-weight:700;color:#334155;line-height:1.4">
+    <i data-lucide="info" style="width:16px;flex:none;color:#007A70;margin-top:1px"></i><span>Your plan includes <b>1 pod per child</b>. More pods depend on your plan.</span>
+   </div>
+  </div>
+  <div class="btn teal" style="position:absolute;left:22px;right:22px;bottom:36px">Continue with Coding Pod</div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<style>
+.seg{flex:1;height:6px;border-radius:9px;background:#E2E8F0}.seg.on{background:#007A70}
+.pod{position:relative;border-radius:16px;padding:10px 12px;box-shadow:0 0 0 1.5px #E2E8F0 inset}
+.pod.sel{box-shadow:0 0 0 2.5px #007A70 inset;background:#F3FCFB}
+.flag{position:absolute;top:-11px;left:14px;background:#FFB700;color:#0F172A;font-size:11px;font-weight:900;padding:3px 10px;border-radius:99px;display:flex;align-items:center;gap:4px}
+.radio{width:26px;height:26px;border-radius:99px;box-shadow:0 0 0 2px #CBD5E1 inset;display:flex;align-items:center;justify-content:center;flex:none}
+.radio.on{background:#007A70;box-shadow:none;color:#fff}.radio svg{width:15px;height:15px;stroke-width:3.2}
+.why{display:flex;gap:10px;align-items:center;background:#fff;border-radius:12px;padding:8px 10px;font-size:12.5px;font-weight:600;color:#334155;line-height:1.4;box-shadow:0 0 0 1px #D5F2EE inset}
+</style>
+<script>
+const O=[['ai','AI Pod','Ages 9–18 · chatbots, smart tools'],['design','Design Pod','Ages 5–18 · art, UI, animation'],['robotics','Robotics Pod','Ages 8–18 · kits & sensors'],['founder','Founder Pod','Ages 12–18 · ideas to business']];
+document.getElementById('others').innerHTML=O.map(([k,t,s])=>`<div class="pod flex items-center gap-3" style="${k=='founder'?'opacity:.55':''}"><span data-podicon="${k}:36"></span><div class="flex-1 min-w-0"><div style="font-weight:900;font-size:15px">${t}</div><div class="cap" style="font-size:12px">${s}</div></div>${k=='founder'?'<span class="st s nodot" style="height:22px;font-size:11px">From age 12</span>':'<span class="radio"></span>'}</div>`).join('');
+</script>

@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="47 -48 306 464" width="306" height="464" role="img" aria-label="Captain Jetty, the TinkerPod robot: Surprised">
+<title>Captain Jetty · Surprised</title>
+<defs>
+ <linearGradient id="limb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00A597"/><stop offset=".4" stop-color="#22D9C7"/><stop offset="1" stop-color="#00A597"/></linearGradient>
+ <linearGradient id="torsoG" x1="0" x2="1"><stop offset="0" stop-color="#00A194"/><stop offset=".32" stop-color="#2DDFCD"/><stop offset=".7" stop-color="#05C2B1"/><stop offset="1" stop-color="#009587"/></linearGradient>
+ <radialGradient id="shellG" cx=".34" cy=".25" r=".9"><stop offset="0" stop-color="#5BF2E3"/><stop offset=".45" stop-color="#0CC9B7"/><stop offset="1" stop-color="#009184"/></radialGradient>
+ <radialGradient id="screenG" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#22336B"/><stop offset="1" stop-color="#0D1838"/></radialGradient>
+ <radialGradient id="earG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#F2A900"/></radialGradient>
+ <radialGradient id="ballG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFC48A"/><stop offset=".6" stop-color="#FF8A1F"/><stop offset="1" stop-color="#E86A00"/></radialGradient>
+ <clipPath id="podTop"><rect x="60" y="-20" width="280" height="112"/></clipPath>
+</defs>
+<style>
+:root{--dur:2.0s}
+#pip *{transform-box:view-box}
+.v{opacity:0} .v.on{opacity:1}
+#pip,#pip-squash{transform-origin:200px 384px}
+#shadow{transform-box:view-box;transform-origin:200px 392px}
+#head{transform-origin:200px 238px} #antenna{transform-origin:200px 84px} #antenna-glow{transform-origin:200px 28px}
+#arm-l{transform-origin:148px 252px} #arm-r{transform-origin:252px 252px}
+#hand-l{transform-origin:148px 316px} #hand-r{transform-origin:252px 316px}
+#eyes{transform-origin:200px 160px} #mouth{transform-origin:200px 196px} #torso{transform-origin:200px 338px}
+#cheeks{opacity:0} #tear,#burst,.spark,#ha-l,#ha-r{opacity:0}
+#gear{transform-origin:156px 82px} #wrench{transform-origin:246px 96px}
+.spark{transform-box:fill-box;transform-origin:50% 50%}
+#mouth-smile{opacity:0}#mouth-o{opacity:1}
+@keyframes su-j{0%,8%{transform:translateY(0);animation-timing-function:cubic-bezier(.22,1,.36,1)} 20%{transform:translateY(-26px);animation-timing-function:cubic-bezier(.55,0,.9,.4)} 32%{transform:translateY(0)} 100%{transform:translateY(0)}}
+#pip{animation:su-j var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-s{0%{transform:scale(1,1)} 8%{transform:scale(1.07,.92)} 14%{transform:scale(.94,1.08)} 24%{transform:scale(1,1)} 32%{transform:scale(1.08,.92);animation-timing-function:cubic-bezier(.34,1.6,.64,1)} 42%,100%{transform:scale(1,1)}}
+#pip-squash{animation:su-s var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-sh{0%,8%,32%,100%{transform:scale(1);opacity:.13} 20%{transform:scale(.8);opacity:.08}}
+#shadow{animation:su-sh var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-e{0%,6%{transform:scale(1)} 14%{transform:scale(1.28,1.34)} 24%,74%{transform:scale(1.2,1.24)} 77%{transform:scale(1.2,.1)} 80%,92%{transform:scale(1.18,1.22)} 100%{transform:scale(1)}}
+#eyes{animation:su-e var(--dur) cubic-bezier(.34,1.6,.64,1) 0s infinite}
+@keyframes su-m{0%,6%{transform:scale(.5)} 16%{transform:scale(1.25)} 30%,90%{transform:scale(1)} 100%{transform:scale(.5)}}
+#mouth{animation:su-m var(--dur) cubic-bezier(.34,1.6,.64,1) 0s infinite}
+@keyframes su-h{0%,6%{transform:translateY(0)} 12%{transform:translateY(-8px) rotate(-3deg)} 30%{transform:translateY(2px)} 44%,100%{transform:translateY(0) rotate(0)}}
+#head{animation:su-h var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-ant{0%,8%{transform:rotate(0)} 14%{transform:rotate(-20deg)} 22%{transform:rotate(16deg)} 30%{transform:rotate(-10deg)} 38%{transform:rotate(6deg)} 46%{transform:rotate(-3deg)} 54%,100%{transform:rotate(0)}}
+#antenna{animation:su-ant var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-glow{0%,8%{opacity:.2;transform:scale(.9)} 14%{opacity:.8;transform:scale(1.6)} 50%,100%{opacity:.25;transform:scale(1)}}
+#antenna-glow{animation:su-glow var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-al{0%,6%{transform:rotate(0)} 14%{transform:rotate(58deg)} 24%,80%{transform:rotate(48deg)} 100%{transform:rotate(0)}}
+#arm-l{animation:su-al var(--dur) cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes su-ar{0%,6%{transform:rotate(0)} 14%{transform:rotate(-58deg)} 24%,80%{transform:rotate(-48deg)} 100%{transform:rotate(0)}}
+#arm-r{animation:su-ar var(--dur) cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes su-hl{0%,6%,100%{transform:rotate(0)} 14%,80%{transform:rotate(-24deg)}}
+#hand-l{animation:su-hl var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-hr{0%,6%,100%{transform:rotate(0)} 14%,80%{transform:rotate(24deg)}}
+#hand-r{animation:su-hr var(--dur) cubic-bezier(.45,0,.55,1) 0s infinite}
+@keyframes su-bang{0%,8%{opacity:0;transform:scale(0) rotate(-20deg)} 16%{opacity:1;transform:scale(1.25) rotate(8deg)} 24%,80%{opacity:1;transform:scale(1) rotate(0deg)} 92%,100%{opacity:0;transform:scale(.6) rotate(0deg)}}
+#bang{animation:su-bang var(--dur) cubic-bezier(.22,1,.36,1) 0s infinite}
+@keyframes su-pops{0%,10%{opacity:0;transform:scale(.5)} 16%{opacity:1;transform:scale(1)} 34%,100%{opacity:0;transform:scale(1.4)}}
+#pops{animation:su-pops var(--dur) cubic-bezier(.22,1,.36,1) 0s infinite}
+
+
+@media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-iteration-count:1!important}}
+*{animation-play-state:paused!important;animation-delay:-0.6s!important}
+</style>
+<ellipse id="shadow" cx="200" cy="392" rx="78" ry="11" fill="#0F172A" opacity=".13"/>
+<g id="fx-back"></g>
+<g id="pip"><g id="pip-squash">
+ <g id="legs">
+  <rect x="165" y="318" width="28" height="56" rx="14" fill="url(#limb)"/><rect x="155" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="161" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+  <rect x="207" y="318" width="28" height="56" rx="14" fill="url(#limb)"/><rect x="203" y="360" width="42" height="24" rx="12" fill="#00978A"/><rect x="221" y="363" width="18" height="6" rx="3" fill="#fff" opacity=".25"/>
+ </g>
+ <g id="torso">
+  <rect x="138" y="226" width="124" height="114" rx="46" fill="url(#torsoG)"/>
+  <rect x="148" y="300" width="104" height="34" rx="17" fill="#7FF5E9" opacity=".32"/>
+  <ellipse cx="166" cy="252" rx="14" ry="7" fill="#fff" opacity=".28"/>
+  <g id="chest-lights"><circle id="led-1" cx="180" cy="266" r="6.5" fill="#FF6B6B"/><circle id="led-2" cx="200" cy="266" r="6.5" fill="#FFC21A"/><circle id="led-3" cx="220" cy="266" r="6.5" fill="#A78BFA"/></g>
+ </g>
+ <g id="head">
+  <g id="antenna">
+   <circle id="antenna-glow" cx="200" cy="28" r="24" fill="#FFB066" opacity=".3"/>
+   <rect x="196.5" y="30" width="7" height="56" rx="3.5" fill="#FF9A3C"/>
+   <circle id="antenna-ball" cx="200" cy="28" r="13" fill="url(#ballG)"/><circle id="antenna-dim" cx="200" cy="28" r="13" fill="#7C8799" opacity="0"/><circle cx="196" cy="23.5" r="4" fill="#fff" opacity=".7"/>
+  </g>
+  <g id="ear-l"><ellipse cx="93" cy="160" rx="18" ry="33" fill="url(#earG)"/><ellipse cx="89" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <g id="ear-r"><ellipse cx="307" cy="160" rx="18" ry="33" fill="url(#earG)"/><ellipse cx="311" cy="160" rx="7" ry="20" fill="#E39A00" opacity=".45"/></g>
+  <rect id="shell" x="92" y="76" width="216" height="168" rx="78" fill="url(#shellG)"/>
+  <ellipse cx="102" cy="150" rx="4.5" ry="22" fill="#fff" opacity=".35"/>
+  <ellipse id="pod-opening" cx="200" cy="92" rx="72" ry="11" fill="#06655D"/>
+  <g id="toolkit" clip-path="url(#podTop)">
+   <g id="gear"><path d="M175.5,82.0 L181.6,86.5 L180.4,90.9 L172.9,91.8 L170.9,94.5 L172.7,101.9 L169.0,104.5 L162.7,100.3 L159.4,101.2 L156.0,108.0 L151.5,107.6 L149.3,100.3 L146.2,98.9 L139.3,101.9 L136.1,98.7 L139.1,91.8 L137.7,88.7 L130.4,86.5 L130.0,82.0 L136.8,78.6 L137.7,75.3 L133.5,69.0 L136.1,65.3 L143.5,67.1 L146.2,65.1 L147.1,57.6 L151.5,56.4 L156.0,62.5 L159.4,62.8 L164.9,57.6 L169.0,59.5 L168.5,67.1 L170.9,69.5 L178.5,69.0 L180.4,73.1 L175.2,78.6Z" fill="#FFC21A"/><circle cx="156" cy="82" r="8" fill="#E39A00"/><circle cx="153" cy="78" r="2.5" fill="#fff" opacity=".5"/></g>
+   <g id="code-chip"><rect x="181" y="66" width="38" height="28" rx="8" fill="#ECFFFB"/><path d="M193 73 l-6 6 6 6 M205 72 l-6 15 M209 73 l6 6 -6 6" fill="none" stroke="#22B455" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+   <g id="wrench"><g transform="translate(248 60) rotate(18) scale(1.18)"><path d="M-15 -2 L-15 -15 L-6 -15 L-6 -5 L6 -5 L6 -15 L15 -15 L15 -2 Q15 13 0 13 Q-15 13 -15 -2Z" fill="#8B5CF6"/><rect x="-6.5" y="8" width="13" height="46" rx="6.5" fill="#7C3AED"/><rect x="-3" y="12" width="3" height="30" rx="1.5" fill="#fff" opacity=".3"/></g></g>
+  </g>
+  <path d="M128 93 A72 11 0 0 0 272 93" fill="none" stroke="#F3FFFD" stroke-width="4.5" stroke-linecap="round"/>
+  <rect id="face-rim" x="106" y="104" width="188" height="126" rx="56" fill="#F2FFFD"/>
+  <rect id="screen" x="118" y="114" width="164" height="106" rx="46" fill="url(#screenG)"/>
+  <path d="M140 132 Q150 120 172 119" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".12"/>
+  <g id="face">
+   <g id="brows"></g>
+   <g id="eyes"><g id="eye-l"><g id="eye-l-open" class="v on">
+      <ellipse cx="166" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="153" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="162" cy="152" r="4.6" fill="#fff"/><circle cx="171" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="eye-l-happy" class="v"><path d="M152 165 Q166 145 180 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="eye-l-sad" class="v">
+      <rect x="154" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="163" cy="165" r="3.6" fill="#fff"/>
+      <path d="M149 139 L183 139 L183 147 L149 159Z" fill="#14234F"/>
+      <path d="M153 145 L178 135" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="eye-l-squint" class="v"><path d="M156 149 L175 160 L156 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="eye-l-star" class="v">
+      <ellipse cx="166" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="151" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M163 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="172" cy="168" r="2.4" fill="#fff"/></g></g><g id="eye-r"><g id="eye-r-open" class="v on">
+      <ellipse cx="234" cy="160" rx="21" ry="25" fill="#5EEAD4" opacity=".16"/>
+      <rect x="221" y="143" width="26" height="34" rx="13" fill="#5EEAD4"/>
+      <circle cx="230" cy="152" r="4.6" fill="#fff"/><circle cx="239" cy="166" r="2" fill="#fff" opacity=".7"/></g><g id="eye-r-happy" class="v"><path d="M220 165 Q234 145 248 165" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round"/></g><g id="eye-r-sad" class="v">
+      <rect x="222" y="148" width="24" height="29" rx="12" fill="#5EEAD4" opacity=".9"/>
+      <circle cx="231" cy="165" r="3.6" fill="#fff"/>
+      <path d="M217 139 L251 139 L251 159 L217 147Z" fill="#14234F"/>
+      <path d="M222 135 L247 145" stroke="#5EEAD4" stroke-width="5" stroke-linecap="round"/></g><g id="eye-r-squint" class="v"><path d="M244 149 L225 160 L244 171" fill="none" stroke="#5EEAD4" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></g><g id="eye-r-star" class="v">
+      <ellipse cx="234" cy="160" rx="24" ry="28" fill="#5EEAD4" opacity=".18"/>
+      <rect x="219" y="141" width="30" height="38" rx="15" fill="#5EEAD4"/>
+      <path d="M231 146 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#fff"/><circle cx="240" cy="168" r="2.4" fill="#fff"/></g></g></g>
+   <g id="cheeks"><ellipse cx="139" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/><ellipse cx="261" cy="190" rx="10" ry="6" fill="#FF7FA8" opacity=".55"/></g>
+   <g id="mouth">
+    <g id="mouth-smile" class="v on"><path d="M185 191 Q200 205 215 191" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="mouth-grin" class="v"><path d="M181 188 Q200 185 219 188 Q217 211 200 211 Q183 211 181 188Z" fill="#FF6B7D"/>
+      <path d="M190 205 Q200 197 210 205 Q206 211 200 211 Q194 211 190 205Z" fill="#FFB3BC"/></g>
+    <g id="mouth-frown" class="v"><path d="M187 200 Q200 189 213 200" fill="none" stroke="#5EEAD4" stroke-width="6" stroke-linecap="round"/></g>
+    <g id="mouth-o" class="v"><ellipse cx="200" cy="197" rx="12" ry="14" fill="#FF6B7D"/><ellipse cx="200" cy="204" rx="7" ry="5" fill="#FFB3BC"/></g>
+  </g>
+  </g>
+ </g>
+ <g id="arm-l"><g transform="rotate(22 148 252)">
+     <rect x="134" y="242" width="28" height="64" rx="14" fill="url(#limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="hand-l"><circle cx="148" cy="316" r="18.5" fill="url(#limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="159" cy="306" rx="8" ry="7" fill="url(#limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="143" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g><g id="arm-r"><g transform="rotate(-22 252 252)">
+     <rect x="238" y="242" width="28" height="64" rx="14" fill="url(#limb)" stroke="#00968A" stroke-width="2"/>
+     <g id="hand-r"><circle cx="252" cy="316" r="18.5" fill="url(#limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="241" cy="306" rx="8" ry="7" fill="url(#limb)" stroke="#00968A" stroke-width="2"/>
+       <ellipse cx="257" cy="309" rx="5" ry="3.5" fill="#fff" opacity=".35"/></g>
+    </g></g>
+</g></g>
+<g id="fx-front"><g id="bang" style="transform-box:view-box;transform-origin:330px 10px"><path d="M330 -30 L330 4" stroke="#FF6B6B" stroke-width="13" stroke-linecap="round"/><circle cx="330" cy="24" r="7.5" fill="#FF6B6B"/></g><g id="pops" style="transform-box:view-box;transform-origin:200px 40px"><path d="M150 18 l-14 -14 M200 -8 v-20 M250 18 l14 -14 M120 60 h-20 M280 60 h20" stroke="#FFB700" stroke-width="7" stroke-linecap="round"/></g></g>
+</svg>

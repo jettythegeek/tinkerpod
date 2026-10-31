@@ -1,0 +1,64 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tp.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="tp.js"></script>
+</head>
+<body><div class="capture" style="padding:30px">
+<div class="phone theme-junior">
+ <div class="screen" style="background:linear-gradient(#EAF7E2,#F8FAFC 36%)">
+  <div data-statusbar></div>
+  <div class="flex items-center gap-3" style="padding:4px 20px">
+   <div style="width:40px;height:40px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #E2E8F0 inset"><i data-lucide="chevron-left"></i></div>
+   <div class="flex-1"><div class="over" style="color:var(--green-text)">Unit 3 assignment</div><div style="font-weight:900;font-size:19px;line-height:1.1">Jollof Timer App</div></div>
+   <span class="st g" style="height:26px;background:#fff;box-shadow:0 0 0 1.5px #CDEBBE inset">Reviewed</span>
+  </div>
+  <!-- tracker -->
+  <div class="flex items-center gap-1.5" style="padding:12px 22px 0" id="trk"></div>
+  <!-- result hero -->
+  <div class="flex items-center gap-2" style="padding:6px 18px 0">
+   <img src="../assets/pip/pip-celebrate.png" style="width:112px;flex:none;margin:-4px -6px -6px -8px">
+   <div class="flex-1">
+    <div class="flex gap-0.5"><span data-ic="star" data-s="34"></span><span data-ic="star" data-s="34"></span><span data-ic="star" data-s="34"></span></div>
+    <div style="font-size:22px;font-weight:900;line-height:1.1;margin-top:4px">3 stars! Sharp work.</div>
+    <div class="cap" style="margin-top:2px">Captain Jetty saved it to your Build shelf</div>
+   </div>
+  </div>
+  <div style="padding:10px 18px 0">
+   <!-- mentor feedback -->
+   <div class="card" style="padding:12px 14px;border-radius:22px">
+    <div class="flex items-center gap-2.5"><img src="../assets/av5.png" style="width:38px;height:38px;border-radius:99px"><div class="flex-1"><div style="font-weight:900;font-size:15px;line-height:1.15">Mr. Femi</div><div class="cap" style="font-size:12px">Your mentor · reviewed today, 5:12 PM</div></div><i data-lucide="message-circle" style="color:#7C3AED;width:20px"></i></div>
+    <div style="margin-top:10px;background:#F3EEFF;border-radius:6px 18px 18px 18px;padding:10px 12px;font-weight:700;font-size:14px;line-height:1.45;color:#1E293B">“Great countdown, Amara! Your loop is clean and the message shows at the right time. Next time try adding a ding sound at 0.”</div>
+    <div class="grid grid-cols-2 gap-2 mt-2.5">
+     <div style="background:#EAF7E2;border-radius:14px;padding:8px 10px"><div class="flex items-center gap-1.5" style="font-size:11.5px;font-weight:900;color:#2F7D16"><i data-lucide="thumbs-up" style="width:14px"></i>WENT WELL</div><div style="font-size:12.5px;font-weight:800;margin-top:2px;line-height:1.3">Used range() with a step</div></div>
+     <div style="background:#FFF6DB;border-radius:14px;padding:8px 10px"><div class="flex items-center gap-1.5" style="font-size:11.5px;font-weight:900;color:#8A5A00"><i data-lucide="lightbulb" style="width:14px"></i>TRY NEXT</div><div style="font-size:12.5px;font-weight:800;margin-top:2px;line-height:1.3">Add a sound at the end</div></div>
+    </div>
+   </div>
+   <!-- rewards -->
+   <div class="flex items-center gap-2 mt-3" style="background:linear-gradient(90deg,#FFF6DB,#F3EEFF);border-radius:18px;padding:9px 12px">
+    <span class="over" style="color:#64748B;font-size:10px;flex:1">You earned</span>
+    <span class="stat" style="height:30px;font-size:13px"><span data-ic="xp" data-s="22"></span>+150</span>
+    <span class="stat" style="height:30px;font-size:13px"><span data-ic="coin" data-s="22"></span>+40</span>
+    <span class="stat" style="height:30px;font-size:13px"><span data-ic="gem" data-s="20"></span>+3</span>
+   </div>
+   <!-- saved to build -->
+   <div class="card flex items-center gap-3 mt-3" style="padding:10px 12px 10px 10px;border-radius:20px">
+    <div style="width:52px;height:52px;border-radius:16px;background:#1E1B4B;flex:none;padding:8px 7px;display:flex;flex-direction:column;gap:4px"><i style="height:4px;width:70%;border-radius:4px;background:#C4B5FD"></i><i style="height:4px;width:50%;margin-left:6px;border-radius:4px;background:#5EEAD4"></i><i style="height:4px;width:85%;border-radius:4px;background:#86EFAC"></i><i style="height:4px;width:40%;border-radius:4px;background:#FFD25E"></i></div>
+    <div class="flex-1 min-w-0"><div class="flex items-center gap-1.5" style="font-weight:900;font-size:15px"><i data-lucide="hammer" style="width:16px;color:#7C3AED"></i>Saved to Build</div><div class="cap" style="font-size:12px">Jollof Timer App · Coding Pod</div></div>
+    <i data-lucide="chevron-right" style="color:#94A3B8"></i>
+   </div>
+  </div>
+  <div style="position:absolute;left:16px;right:16px;bottom:30px" class="flex gap-3">
+   <div class="btn ghost" style="flex:none;width:118px;font-size:15px"><i data-lucide="rotate-ccw" style="width:17px"></i>Improve</div>
+   <div class="btn flex-1">Next: Unit 4<i data-lucide="arrow-right" style="width:20px"></i></div>
+  </div>
+  <div class="homebar"></div>
+ </div>
+</div>
+</div>
+<script>
+const K=[['Made','pencil'],['Sent','send'],['Reviewed','badge-check']];
+document.getElementById('trk').innerHTML=K.map(([n,ic],i)=>`${i?'<i style="flex:1;height:3px;border-radius:3px;background:#63C132"></i>':''}<span class="flex items-center gap-1.5" style="font-size:12.5px;font-weight:900;color:#2F7D16"><span style="width:24px;height:24px;border-radius:99px;background:#63C132;color:#fff;display:flex;align-items:center;justify-content:center"><i data-lucide="${ic}" style="width:13px;height:13px"></i></span>${n}</span>`).join('');
+</script>
+<script>tpInit()</script></body></html>
