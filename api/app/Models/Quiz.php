@@ -92,4 +92,12 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizQuestion::class, 'quiz_id')->orderBy('sort_order');
     }
+
+    /**
+     * @return HasMany<QuizAttempt, $this>
+     */
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(QuizAttempt::class, 'quiz_id');
+    }
 }

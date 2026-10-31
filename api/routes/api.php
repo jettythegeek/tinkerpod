@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Kid\KidAuthController;
 use App\Http\Controllers\Api\V1\Kid\KidCatalogueController;
 use App\Http\Controllers\Api\V1\Kid\KidLessonProgressController;
 use App\Http\Controllers\Api\V1\Kid\KidProfileController;
+use App\Http\Controllers\Api\V1\Kid\KidQuizController;
 use App\Http\Controllers\Api\V1\Parent\ParentChildController;
 use App\Support\ApiResponse;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +84,9 @@ Route::prefix('v1')->group(function (): void {
             Route::put('/lessons/{lesson}/progress', [KidLessonProgressController::class, 'update'])->name('api.v1.kid.lessons.progress.update');
             Route::get('/lessons/{lesson}/quiz', [KidCatalogueController::class, 'lessonQuiz'])->name('api.v1.kid.lessons.quiz');
             Route::get('/quizzes/{quiz}', [KidCatalogueController::class, 'quizDetail'])->name('api.v1.kid.quizzes.show');
+            Route::post('/quizzes/{quiz}/check', [KidQuizController::class, 'check'])->name('api.v1.kid.quizzes.check');
+            Route::post('/quizzes/{quiz}/attempts', [KidQuizController::class, 'submit'])->name('api.v1.kid.quizzes.attempts');
+            Route::post('/quizzes/{quiz}/submit', [KidQuizController::class, 'submit'])->name('api.v1.kid.quizzes.submit');
         });
     });
 });
